@@ -1,0 +1,814 @@
+[
+    {
+        "capacity": 1327, 
+        "items": [
+            {
+                "item": 0, 
+                "property": {
+                    "profit": 65, 
+                    "ratio": 0.71, 
+                    "weight": 92
+                }
+            }, 
+            {
+                "item": 1, 
+                "property": {
+                    "profit": 11, 
+                    "ratio": 0.34, 
+                    "weight": 32
+                }
+            }, 
+            {
+                "item": 2, 
+                "property": {
+                    "profit": 66, 
+                    "ratio": 1.27, 
+                    "weight": 52
+                }
+            }, 
+            {
+                "item": 3, 
+                "property": {
+                    "profit": 99, 
+                    "ratio": 1.06, 
+                    "weight": 93
+                }
+            }, 
+            {
+                "item": 4, 
+                "property": {
+                    "profit": 96, 
+                    "ratio": 1.63, 
+                    "weight": 59
+                }
+            }, 
+            {
+                "item": 5, 
+                "property": {
+                    "profit": 27, 
+                    "ratio": 1.12, 
+                    "weight": 24
+                }
+            }, 
+            {
+                "item": 6, 
+                "property": {
+                    "profit": 6, 
+                    "ratio": 0.08, 
+                    "weight": 71
+                }
+            }, 
+            {
+                "item": 7, 
+                "property": {
+                    "profit": 6, 
+                    "ratio": 0.29, 
+                    "weight": 21
+                }
+            }, 
+            {
+                "item": 8, 
+                "property": {
+                    "profit": 80, 
+                    "ratio": 1.45, 
+                    "weight": 55
+                }
+            }, 
+            {
+                "item": 9, 
+                "property": {
+                    "profit": 66, 
+                    "ratio": 8.25, 
+                    "weight": 8
+                }
+            }, 
+            {
+                "item": 10, 
+                "property": {
+                    "profit": 78, 
+                    "ratio": 1.5, 
+                    "weight": 52
+                }
+            }, 
+            {
+                "item": 11, 
+                "property": {
+                    "profit": 79, 
+                    "ratio": 4.16, 
+                    "weight": 19
+                }
+            }, 
+            {
+                "item": 12, 
+                "property": {
+                    "profit": 69, 
+                    "ratio": 13.8, 
+                    "weight": 5
+                }
+            }, 
+            {
+                "item": 13, 
+                "property": {
+                    "profit": 74, 
+                    "ratio": 1.0, 
+                    "weight": 74
+                }
+            }, 
+            {
+                "item": 14, 
+                "property": {
+                    "profit": 45, 
+                    "ratio": 0.62, 
+                    "weight": 72
+                }
+            }, 
+            {
+                "item": 15, 
+                "property": {
+                    "profit": 31, 
+                    "ratio": 0.34, 
+                    "weight": 90
+                }
+            }, 
+            {
+                "item": 16, 
+                "property": {
+                    "profit": 30, 
+                    "ratio": 0.32, 
+                    "weight": 94
+                }
+            }, 
+            {
+                "item": 17, 
+                "property": {
+                    "profit": 74, 
+                    "ratio": 1.07, 
+                    "weight": 69
+                }
+            }, 
+            {
+                "item": 18, 
+                "property": {
+                    "profit": 97, 
+                    "ratio": 1.14, 
+                    "weight": 85
+                }
+            }, 
+            {
+                "item": 19, 
+                "property": {
+                    "profit": 10, 
+                    "ratio": 0.17, 
+                    "weight": 59
+                }
+            }, 
+            {
+                "item": 20, 
+                "property": {
+                    "profit": 35, 
+                    "ratio": 0.56, 
+                    "weight": 63
+                }
+            }, 
+            {
+                "item": 21, 
+                "property": {
+                    "profit": 43, 
+                    "ratio": 0.8, 
+                    "weight": 54
+                }
+            }, 
+            {
+                "item": 22, 
+                "property": {
+                    "profit": 78, 
+                    "ratio": 0.96, 
+                    "weight": 81
+                }
+            }, 
+            {
+                "item": 23, 
+                "property": {
+                    "profit": 49, 
+                    "ratio": 1.53, 
+                    "weight": 32
+                }
+            }, 
+            {
+                "item": 24, 
+                "property": {
+                    "profit": 80, 
+                    "ratio": 1.9, 
+                    "weight": 42
+                }
+            }, 
+            {
+                "item": 25, 
+                "property": {
+                    "profit": 92, 
+                    "ratio": 3.07, 
+                    "weight": 30
+                }
+            }, 
+            {
+                "item": 26, 
+                "property": {
+                    "profit": 40, 
+                    "ratio": 0.57, 
+                    "weight": 70
+                }
+            }, 
+            {
+                "item": 27, 
+                "property": {
+                    "profit": 9, 
+                    "ratio": 3.0, 
+                    "weight": 3
+                }
+            }, 
+            {
+                "item": 28, 
+                "property": {
+                    "profit": 10, 
+                    "ratio": 0.18, 
+                    "weight": 57
+                }
+            }, 
+            {
+                "item": 29, 
+                "property": {
+                    "profit": 11, 
+                    "ratio": 0.14, 
+                    "weight": 81
+                }
+            }, 
+            {
+                "item": 30, 
+                "property": {
+                    "profit": 99, 
+                    "ratio": 1.9, 
+                    "weight": 52
+                }
+            }, 
+            {
+                "item": 31, 
+                "property": {
+                    "profit": 32, 
+                    "ratio": 0.48, 
+                    "weight": 67
+                }
+            }, 
+            {
+                "item": 32, 
+                "property": {
+                    "profit": 76, 
+                    "ratio": 1.81, 
+                    "weight": 42
+                }
+            }, 
+            {
+                "item": 33, 
+                "property": {
+                    "profit": 76, 
+                    "ratio": 4.0, 
+                    "weight": 19
+                }
+            }, 
+            {
+                "item": 34, 
+                "property": {
+                    "profit": 41, 
+                    "ratio": 0.41, 
+                    "weight": 99
+                }
+            }, 
+            {
+                "item": 35, 
+                "property": {
+                    "profit": 41, 
+                    "ratio": 20.5, 
+                    "weight": 2
+                }
+            }, 
+            {
+                "item": 36, 
+                "property": {
+                    "profit": 56, 
+                    "ratio": 2.95, 
+                    "weight": 19
+                }
+            }, 
+            {
+                "item": 37, 
+                "property": {
+                    "profit": 70, 
+                    "ratio": 0.88, 
+                    "weight": 80
+                }
+            }, 
+            {
+                "item": 38, 
+                "property": {
+                    "profit": 31, 
+                    "ratio": 0.33, 
+                    "weight": 95
+                }
+            }, 
+            {
+                "item": 39, 
+                "property": {
+                    "profit": 96, 
+                    "ratio": 24.0, 
+                    "weight": 4
+                }
+            }, 
+            {
+                "item": 40, 
+                "property": {
+                    "profit": 34, 
+                    "ratio": 0.59, 
+                    "weight": 58
+                }
+            }, 
+            {
+                "item": 41, 
+                "property": {
+                    "profit": 80, 
+                    "ratio": 0.82, 
+                    "weight": 97
+                }
+            }, 
+            {
+                "item": 42, 
+                "property": {
+                    "profit": 2, 
+                    "ratio": 0.05, 
+                    "weight": 37
+                }
+            }, 
+            {
+                "item": 43, 
+                "property": {
+                    "profit": 34, 
+                    "ratio": 0.52, 
+                    "weight": 66
+                }
+            }, 
+            {
+                "item": 44, 
+                "property": {
+                    "profit": 85, 
+                    "ratio": 14.17, 
+                    "weight": 6
+                }
+            }, 
+            {
+                "item": 45, 
+                "property": {
+                    "profit": 94, 
+                    "ratio": 2.94, 
+                    "weight": 32
+                }
+            }, 
+            {
+                "item": 46, 
+                "property": {
+                    "profit": 80, 
+                    "ratio": 1.21, 
+                    "weight": 66
+                }
+            }, 
+            {
+                "item": 47, 
+                "property": {
+                    "profit": 13, 
+                    "ratio": 0.14, 
+                    "weight": 93
+                }
+            }, 
+            {
+                "item": 48, 
+                "property": {
+                    "profit": 83, 
+                    "ratio": 6.38, 
+                    "weight": 13
+                }
+            }, 
+            {
+                "item": 49, 
+                "property": {
+                    "profit": 27, 
+                    "ratio": 0.39, 
+                    "weight": 69
+                }
+            }
+        ], 
+        "knapsack": 1
+    }, 
+    {
+        "capacity": 1305, 
+        "items": [
+            {
+                "item": 0, 
+                "property": {
+                    "profit": 91, 
+                    "ratio": 1.0, 
+                    "weight": 91
+                }
+            }, 
+            {
+                "item": 1, 
+                "property": {
+                    "profit": 79, 
+                    "ratio": 1.93, 
+                    "weight": 41
+                }
+            }, 
+            {
+                "item": 2, 
+                "property": {
+                    "profit": 91, 
+                    "ratio": 0.97, 
+                    "weight": 94
+                }
+            }, 
+            {
+                "item": 3, 
+                "property": {
+                    "profit": 10, 
+                    "ratio": 0.12, 
+                    "weight": 86
+                }
+            }, 
+            {
+                "item": 4, 
+                "property": {
+                    "profit": 61, 
+                    "ratio": 3.05, 
+                    "weight": 20
+                }
+            }, 
+            {
+                "item": 5, 
+                "property": {
+                    "profit": 59, 
+                    "ratio": 1.07, 
+                    "weight": 55
+                }
+            }, 
+            {
+                "item": 6, 
+                "property": {
+                    "profit": 24, 
+                    "ratio": 3.0, 
+                    "weight": 8
+                }
+            }, 
+            {
+                "item": 7, 
+                "property": {
+                    "profit": 38, 
+                    "ratio": 1.27, 
+                    "weight": 30
+                }
+            }, 
+            {
+                "item": 8, 
+                "property": {
+                    "profit": 77, 
+                    "ratio": 2.14, 
+                    "weight": 36
+                }
+            }, 
+            {
+                "item": 9, 
+                "property": {
+                    "profit": 57, 
+                    "ratio": 1.3, 
+                    "weight": 44
+                }
+            }, 
+            {
+                "item": 10, 
+                "property": {
+                    "profit": 53, 
+                    "ratio": 0.77, 
+                    "weight": 69
+                }
+            }, 
+            {
+                "item": 11, 
+                "property": {
+                    "profit": 17, 
+                    "ratio": 0.25, 
+                    "weight": 67
+                }
+            }, 
+            {
+                "item": 12, 
+                "property": {
+                    "profit": 65, 
+                    "ratio": 2.71, 
+                    "weight": 24
+                }
+            }, 
+            {
+                "item": 13, 
+                "property": {
+                    "profit": 89, 
+                    "ratio": 1.89, 
+                    "weight": 47
+                }
+            }, 
+            {
+                "item": 14, 
+                "property": {
+                    "profit": 79, 
+                    "ratio": 4.65, 
+                    "weight": 17
+                }
+            }, 
+            {
+                "item": 15, 
+                "property": {
+                    "profit": 39, 
+                    "ratio": 0.45, 
+                    "weight": 86
+                }
+            }, 
+            {
+                "item": 16, 
+                "property": {
+                    "profit": 57, 
+                    "ratio": 0.66, 
+                    "weight": 87
+                }
+            }, 
+            {
+                "item": 17, 
+                "property": {
+                    "profit": 3, 
+                    "ratio": 0.04, 
+                    "weight": 76
+                }
+            }, 
+            {
+                "item": 18, 
+                "property": {
+                    "profit": 29, 
+                    "ratio": 0.46, 
+                    "weight": 63
+                }
+            }, 
+            {
+                "item": 19, 
+                "property": {
+                    "profit": 94, 
+                    "ratio": 1.18, 
+                    "weight": 80
+                }
+            }, 
+            {
+                "item": 20, 
+                "property": {
+                    "profit": 90, 
+                    "ratio": 3.91, 
+                    "weight": 23
+                }
+            }, 
+            {
+                "item": 21, 
+                "property": {
+                    "profit": 55, 
+                    "ratio": 1.34, 
+                    "weight": 41
+                }
+            }, 
+            {
+                "item": 22, 
+                "property": {
+                    "profit": 82, 
+                    "ratio": 41.0, 
+                    "weight": 2
+                }
+            }, 
+            {
+                "item": 23, 
+                "property": {
+                    "profit": 16, 
+                    "ratio": 0.24, 
+                    "weight": 66
+                }
+            }, 
+            {
+                "item": 24, 
+                "property": {
+                    "profit": 16, 
+                    "ratio": 0.33, 
+                    "weight": 48
+                }
+            }, 
+            {
+                "item": 25, 
+                "property": {
+                    "profit": 85, 
+                    "ratio": 1.57, 
+                    "weight": 54
+                }
+            }, 
+            {
+                "item": 26, 
+                "property": {
+                    "profit": 71, 
+                    "ratio": 1.77, 
+                    "weight": 40
+                }
+            }, 
+            {
+                "item": 27, 
+                "property": {
+                    "profit": 99, 
+                    "ratio": 1.12, 
+                    "weight": 88
+                }
+            }, 
+            {
+                "item": 28, 
+                "property": {
+                    "profit": 94, 
+                    "ratio": 2.76, 
+                    "weight": 34
+                }
+            }, 
+            {
+                "item": 29, 
+                "property": {
+                    "profit": 16, 
+                    "ratio": 0.33, 
+                    "weight": 48
+                }
+            }, 
+            {
+                "item": 30, 
+                "property": {
+                    "profit": 43, 
+                    "ratio": 2.53, 
+                    "weight": 17
+                }
+            }, 
+            {
+                "item": 31, 
+                "property": {
+                    "profit": 10, 
+                    "ratio": 0.42, 
+                    "weight": 24
+                }
+            }, 
+            {
+                "item": 32, 
+                "property": {
+                    "profit": 31, 
+                    "ratio": 0.51, 
+                    "weight": 61
+                }
+            }, 
+            {
+                "item": 33, 
+                "property": {
+                    "profit": 14, 
+                    "ratio": 0.15, 
+                    "weight": 94
+                }
+            }, 
+            {
+                "item": 34, 
+                "property": {
+                    "profit": 29, 
+                    "ratio": 0.88, 
+                    "weight": 33
+                }
+            }, 
+            {
+                "item": 35, 
+                "property": {
+                    "profit": 60, 
+                    "ratio": 0.79, 
+                    "weight": 76
+                }
+            }, 
+            {
+                "item": 36, 
+                "property": {
+                    "profit": 37, 
+                    "ratio": 3.36, 
+                    "weight": 11
+                }
+            }, 
+            {
+                "item": 37, 
+                "property": {
+                    "profit": 37, 
+                    "ratio": 0.42, 
+                    "weight": 88
+                }
+            }, 
+            {
+                "item": 38, 
+                "property": {
+                    "profit": 83, 
+                    "ratio": 0.89, 
+                    "weight": 93
+                }
+            }, 
+            {
+                "item": 39, 
+                "property": {
+                    "profit": 81, 
+                    "ratio": 0.95, 
+                    "weight": 85
+                }
+            }, 
+            {
+                "item": 40, 
+                "property": {
+                    "profit": 23, 
+                    "ratio": 0.36, 
+                    "weight": 64
+                }
+            }, 
+            {
+                "item": 41, 
+                "property": {
+                    "profit": 70, 
+                    "ratio": 0.8, 
+                    "weight": 88
+                }
+            }, 
+            {
+                "item": 42, 
+                "property": {
+                    "profit": 68, 
+                    "ratio": 2.0, 
+                    "weight": 34
+                }
+            }, 
+            {
+                "item": 43, 
+                "property": {
+                    "profit": 71, 
+                    "ratio": 1.73, 
+                    "weight": 41
+                }
+            }, 
+            {
+                "item": 44, 
+                "property": {
+                    "profit": 6, 
+                    "ratio": 0.2, 
+                    "weight": 30
+                }
+            }, 
+            {
+                "item": 45, 
+                "property": {
+                    "profit": 3, 
+                    "ratio": 0.05, 
+                    "weight": 57
+                }
+            }, 
+            {
+                "item": 46, 
+                "property": {
+                    "profit": 86, 
+                    "ratio": 1.48, 
+                    "weight": 58
+                }
+            }, 
+            {
+                "item": 47, 
+                "property": {
+                    "profit": 77, 
+                    "ratio": 1.26, 
+                    "weight": 61
+                }
+            }, 
+            {
+                "item": 48, 
+                "property": {
+                    "profit": 39, 
+                    "ratio": 1.86, 
+                    "weight": 21
+                }
+            }, 
+            {
+                "item": 49, 
+                "property": {
+                    "profit": 49, 
+                    "ratio": 4.9, 
+                    "weight": 10
+                }
+            }
+        ], 
+        "knapsack": 2
+    }
+]
