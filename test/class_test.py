@@ -25,9 +25,16 @@ class B(A):
     def show(self, string):
         print self.id, self.name + string
         
+def update(refer, pos):
+    tmp = []
+    for ref, p in zip(refer, pos):
+        tmp.append(ref if ref < p else p)
+    return tmp
+
 
 if __name__ == '__main__':
-    a = A()
-    b = a.copy()
+    a = [2, 5]
+    b = [1, 12]
     
-    print a is b
+    print update(a, b)
+    

@@ -33,6 +33,8 @@ def trim_solution(topo):
         else:
             obj = item['delay']
             
+    
+            
     with open(PATH4, 'w') as f:
         f.write(json.dumps(solutions, indent=4))
         f.close()

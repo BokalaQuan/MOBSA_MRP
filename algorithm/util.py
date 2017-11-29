@@ -97,3 +97,6 @@ def plot_ps(topo, types, colors, describe):
         temp = os.getcwd() + '\\solution\\' + topo + '\\pf_' + type + '.json'
         plot_pf(temp, type, color,describe)
     plt.show()
+    
+if __name__ == '__main__':
+    print func_trans_S1(2)

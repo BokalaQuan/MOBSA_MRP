@@ -171,36 +171,59 @@ class MultiObjectiveParticleSwarmOptimization(object):
             
 
 if __name__ == '__main__':
-    topo = 'topo5'
-    problem = MRP()
-    problem.initialize(topo)
+    # topo = 'topo5'
+    # problem = MRP()
+    # problem.initialize(topo)
+    #
+    # # print problem.src
+    # # print problem.dst
+    #
+    #
+    # pideal = read_json_as_list(topo, 'ideal')
+    # x = pideal[0]['delay'] + (pideal[0]['delay'] - pideal[len(pideal) - 1]['delay']) * 0.1
+    # y = pideal[len(pideal) - 1]['loss'] + (pideal[len(pideal) - 1]['loss'] - pideal[0]['loss']) * 0.1
+    # ref = [x, y]
+    #
+    # IGD = []
+    # GD = []
+    # HV = []
+    # for i in range(10):
+    #     print 'Runtime >>> ', i+1
+    #     test = MultiObjectiveParticleSwarmOptimization(problem)
+    #     test.main()
+    #     write_list_to_json(topo, 'mopso', test.external_population)
+    #
+    #     preal = read_json_as_list(topo, 'mopso')
+    #
+    #     IGD.append(cal_IGD(pideal, preal))
+    #     GD.append(cal_GD(pideal, preal))
+    #     HV.append(cal_HV(preal, ref))
+    #
+    # per = {'IGD':IGD,
+    #        'GD': GD,
+    #        'HV': HV}
+    #
+    # write_performance('performance', topo, 'mopso', per)
+
+    topo = ['topo2', 'topo6']
+
+    for item in topo:
+        print "Topo init", item
+        problem = MRP()
+        problem.initialize(item)
     
-    # print problem.src
-    # print problem.dst
+        pf_list = []
     
+        for i in range(10):
+            print "Runtime >>> ", i + 1
+            test = MultiObjectiveParticleSwarmOptimization(problem)
+            test.main()
+            pf_list.extend(test.external_population)
     
-    pideal = read_json_as_list(topo, 'ideal')
-    x = pideal[0]['delay'] + (pideal[0]['delay'] - pideal[len(pideal) - 1]['delay']) * 0.1
-    y = pideal[len(pideal) - 1]['loss'] + (pideal[len(pideal) - 1]['loss'] - pideal[0]['loss']) * 0.1
-    ref = [x, y]
-
-    IGD = []
-    GD = []
-    HV = []
-    for i in range(10):
-        print 'Runtime >>> ', i+1
-        test = MultiObjectiveParticleSwarmOptimization(problem)
-        test.main()
-        write_list_to_json(topo, 'mopso', test.external_population)
-
-        preal = read_json_as_list(topo, 'mopso')
-
-        IGD.append(cal_IGD(pideal, preal))
-        GD.append(cal_GD(pideal, preal))
-        HV.append(cal_HV(preal, ref))
-
-    per = {'IGD':IGD,
-           'GD': GD,
-           'HV': HV}
-
-    write_performance('performance', topo, 'mopso', per)
+        pf_ = fast_nondominated_sort(pf_list)[0]
+        for i in range(0, len(pf_)):
+            for j in range(len(pf_) - 1, i + 1, -1):
+                if pf_[i].is_equal(pf_[j]):
+                    pf_.pop(j)
+    
+        write_list_to_json(item, 'mopso', pf_)

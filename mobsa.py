@@ -122,65 +122,65 @@ class MultiObjectiveBeetleSearchAlgorithm(object):
     
 
 if __name__ == '__main__':
-    topo = 'topo1'
-    problem = MRP()
-    problem.initialize(topo)
-
-    # pf_list = []
-    pideal = read_json_as_list(topo, 'ideal')
-    x = pideal[0]['delay'] + (pideal[0]['delay'] - pideal[len(pideal) - 1]['delay']) * 0.1
-    y = pideal[len(pideal) - 1]['loss'] + (pideal[len(pideal) - 1]['loss'] - pideal[0]['loss']) * 0.1
-    ref = [x, y]
-
-    IGD = []
-    GD = []
-    HV = []
-    for i in range(10):
-        
-        begin = time.time()
-        test = MultiObjectiveBeetleSearchAlgorithm(problem)
-        test.main()
-        end = time.time()
-        print '>>>>>> ', i + 1, '  Runtime = ', int(end - begin)
-        
-        write_list_to_json(topo, 'mobas', test.external_population)
-        
-        preal = read_json_as_list(topo, 'mobas')
-
-        IGD.append(cal_IGD(pideal, preal))
-        GD.append(cal_GD(pideal, preal))
-        HV.append(cal_HV(preal, ref))
-
-    per = {'IGD': IGD,
-           'GD': GD,
-           'HV': HV}
-    
-    print 'IGD >>> ', round(numpy.array(IGD).mean(),2), round(numpy.array(IGD).min(),2), round(numpy.array(IGD).std(), 2)
-    print 'GD >>> ', round(numpy.array(GD).mean(),2), round(numpy.array(GD).min(),2), round(numpy.array(GD).std(), 2)
-    print 'HV >>> ', round(numpy.array(HV).mean(),2), round(numpy.array(HV).min(),2), round(numpy.array(HV).std(), 2)
-
+    # topo = 'topo1'
+    # problem = MRP()
+    # problem.initialize(topo)
+    #
+    # # pf_list = []
+    # pideal = read_json_as_list(topo, 'ideal')
+    # x = pideal[0]['delay'] + (pideal[0]['delay'] - pideal[len(pideal) - 1]['delay']) * 0.1
+    # y = pideal[len(pideal) - 1]['loss'] + (pideal[len(pideal) - 1]['loss'] - pideal[0]['loss']) * 0.1
+    # ref = [x, y]
+    #
+    # IGD = []
+    # GD = []
+    # HV = []
+    # for i in range(10):
+    #
+    #     begin = time.time()
+    #     test = MultiObjectiveBeetleSearchAlgorithm(problem)
+    #     test.main()
+    #     end = time.time()
+    #     print '>>>>>> ', i + 1, '  Runtime = ', int(end - begin)
+    #
+    #     write_list_to_json(topo, 'mobas', test.external_population)
+    #
+    #     preal = read_json_as_list(topo, 'mobas')
+    #
+    #     IGD.append(cal_IGD(pideal, preal))
+    #     GD.append(cal_GD(pideal, preal))
+    #     HV.append(cal_HV(preal, ref))
+    #
+    # per = {'IGD': IGD,
+    #        'GD': GD,
+    #        'HV': HV}
+    #
+    # print 'IGD >>> ', round(numpy.array(IGD).mean(),2), round(numpy.array(IGD).min(),2), round(numpy.array(IGD).std(), 2)
+    # print 'GD >>> ', round(numpy.array(GD).mean(),2), round(numpy.array(GD).min(),2), round(numpy.array(GD).std(), 2)
+    # print 'HV >>> ', round(numpy.array(HV).mean(),2), round(numpy.array(HV).min(),2), round(numpy.array(HV).std(), 2)
+    #
     # write_performance('performance', topo, 'mobas', per)
     #
-    # topo = ['topo2', 'topo3', 'topo4', 'topo5', 'topo6']
-    #
-    # for item in topo:
-    #     print "Topo init", item
-    #     problem = MRP()
-    #     problem.initialize(item)
-    #
-    #     pf_list = []
-    #
-    #     for i in range(10):
-    #         print "Runtime >>> ", i + 1
-    #         test = MultiObjectiveBeetleSearchAlgorithm(problem)
-    #         test.main()
-    #         pf_list.extend(test.external_population)
-    #
-    #     pf_ = fast_nondominated_sort(pf_list)[0]
-    #     for i in range(0, len(pf_)):
-    #         for j in range(len(pf_) - 1, i + 1, -1):
-    #             if pf_[i].is_equal(pf_[j]):
-    #                 pf_.pop(j)
-    #
-    #     write_list_to_json(item, 'mobas', pf_)
+    topo = ['topo2', 'topo6']
+
+    for item in topo:
+        print "Topo init", item
+        problem = MRP()
+        problem.initialize(item)
+
+        pf_list = []
+
+        for i in range(10):
+            print "Runtime >>> ", i + 1
+            test = MultiObjectiveBeetleSearchAlgorithm(problem)
+            test.main()
+            pf_list.extend(test.external_population)
+
+        pf_ = fast_nondominated_sort(pf_list)[0]
+        for i in range(0, len(pf_)):
+            for j in range(len(pf_) - 1, i + 1, -1):
+                if pf_[i].is_equal(pf_[j]):
+                    pf_.pop(j)
+
+        write_list_to_json(item, 'mobso', pf_)
     

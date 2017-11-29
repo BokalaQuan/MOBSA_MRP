@@ -19,16 +19,11 @@ import json
 
 import matplotlib.pyplot as plot
 
-INF = float(65535)
-
 class IndividualNSGA(IndividualMRP):
     
     def __init__(self):
         super(IndividualNSGA, self).__init__()
     
-    
-    
-        
 
 class NondominatedSortGeneticAlgorithm2(object):
     

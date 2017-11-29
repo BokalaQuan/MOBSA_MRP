@@ -1,5 +1,5 @@
 from problem.mrp.multicast_routing_problem import MulticastRoutingProblem as MRP
-from problem.kp import knapsack_problem as KP
+from problem.kp.knapsack_problem import MultiObjectiveKnapsackProblem as MOKP
 from parameter import INF, PM, PC
 
 import random
@@ -30,15 +30,7 @@ class Individual(object):
         self.crowding_distance = 0
     
     def copy(self):
-        ind = Individual()
-        ind.problem = self.problem
-        ind.chromosome = copy.copy(self.chromosome)
-        ind.fitness = copy.copy(self.fitness)
-        ind.num_dominated = self.num_dominated
-        ind.dominating_list = []
-        ind.pareto_rank = self.pareto_rank
-        ind.crowding_distance = self.crowding_distance
-        return ind
+        pass
     
     def initialize(self, chromosome, problem):
         pass
@@ -61,13 +53,7 @@ class Individual(object):
         else:
             return False
         
-    # def crossover(self, ind):
-    #     pass
-    #
-    # def mutation(self):
-    #     pass
-    
-    def clear_property(self):
+    def clear_dominated_property(self):
         self.num_dominated = 0
         self.dominating_list = []
         self.pareto_rank = 0
@@ -102,6 +88,7 @@ class IndividualMRP(Individual):
         self.bandwidth = INF
         
     def copy(self):
+        # ind = self.__class__()
         ind = IndividualMRP()
         ind.problem = self.problem
         ind.chromosome = copy.copy(self.chromosome)
@@ -111,8 +98,6 @@ class IndividualMRP(Individual):
         ind.loss = self.loss
         ind.bandwidth = self.bandwidth
         ind.crowding_distance = self.crowding_distance
-        ind.dominating_list = []
-        ind.num_dominated = self.num_dominated
         ind.pareto_rank = self.pareto_rank
 
         return ind
@@ -199,15 +184,15 @@ class IndividualMRP(Individual):
                 self.chromosome[i] = ind.chromosome[i]
                 ind.chromosome[i] = obj
     
-        self.fitness = self.cal_fitness()
-        ind.fitness = ind.cal_fitness()
+        # self.fitness = self.cal_fitness()
+        # ind.fitness = ind.cal_fitness()
 
     def mutation(self):
         for i in range(len(self.chromosome)):
             self.chromosome[i] = 1 - self.chromosome[i] \
                 if random.random() < PM else self.chromosome[i]
     
-        # self.fitness = self.cal_fitness()
+        self.fitness = self.cal_fitness()
     
     def to_dict(self):
         return {
@@ -216,25 +201,60 @@ class IndividualMRP(Individual):
             'bandwidth': self.bandwidth,
             'paths': str(self.paths)
         }
-        # return self.fitness
 
 
-# class IndividualKP(Individual):
-#
-#     def __init__(self):
-#         super(IndividualKP, self).__init__()
-#
+class IndividualKP(Individual):
 
-if __name__ == '__main__':
-    problem = MRP()
-    problem.initialize('topo1')
-    chroms = []
-    for i in range(10):
-        chrom = []
-        for x in range(problem.num_link): chrom.append(1 if random.random() < 0.6 else 0)
-        ind = IndividualMRP()
-        ind.initialize(chrom, problem)
-        print ind.fitness, ind.bandwidth
-        print ind.paths
+    def __init__(self):
+        super(IndividualKP, self).__init__()
         
+        
+    def copy(self):
+        ind = IndividualKP()
+        ind.problem = self.problem
+        ind.chromosome = copy.copy(self.chromosome)
+        ind.fitness = copy.copy(self.fitness)
+        return ind
     
+    def initialize(self, chromosome, problem):
+        self.problem = problem
+        self.chromosome = chromosome
+        self.fitness = self.cal_fitness(chromosome)
+    #
+    
+    def cal_fitness(self, chromosome):
+        profits = []
+        weights = []
+        ratios = []
+        
+        for x in range(2):
+            profit = []
+            weight = []
+            ratio = []
+            for y in range(len(chromosome)):
+                if chromosome[y]:
+                    profit.append(self.problem[x]['items'][y]['profit'])
+                    weight.append(self.problem[x]['items'][y]['weight'])
+                    ratio.append(self.problem[x]['items'][y]['ratio'])
+                    
+            profits.append(profit)
+            weights.append(weight)
+            ratios.append(ratio)
+            
+        capacity = [self.problem[0]['capacity'], self.problem[1]['capacity']]
+        self.greedy_repair_heuristic(profits, weights, ratios, capacity, chromosome)
+        return [sum(profits[0]), sum(profits[1])]
+    
+        
+    def greedy_repair_heuristic(self, profits, weights, ratios, capacity, chromosome):
+        for weight, profit, ratio, cap in zip(weights, profits, ratios, capacity):
+            weight_sum = sum(weight)
+            while weight_sum > cap:
+                min_ratio = min(ratio)
+                id_delete = ratio.index(min_ratio)
+                chromosome[id_delete] = 0
+                profit.pop(id_delete)
+                weight.pop(id_delete)
+                ratio.pop(id_delete)
+                weight_sum = sum(weight)
+                
