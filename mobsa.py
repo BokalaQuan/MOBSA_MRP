@@ -1,7 +1,7 @@
 """
-Xiangyuan Jiang, Shuai Li.
-"BAS: Beetle Antennae Search Algorithm for Optimization Problems."
-arXiv:1710.10724[cs.NE]
+@author  Xiangyuan Jiang, Shuai Li.
+@title "BAS: Beetle Antennae Search Algorithm for Optimization Problems."
+@date 2017
 """
 
 from algorithm.individual import IndividualMRP
@@ -16,7 +16,7 @@ import random
 import time
 
 class IndividualBeetle(IndividualMRP):
-    
+
     def __init__(self):
         super(IndividualBeetle, self).__init__()
         # self.position = []
@@ -24,21 +24,21 @@ class IndividualBeetle(IndividualMRP):
         self.alpha = 0
         # step size
         self.beta = 0
-        
+
     def generate_direction_vector(self):
         direct = numpy.random.rand(self.problem.num_link)
         # temp = numpy.linalg.norm(direct)
         # direct /= temp
         return direct
-    
+
     def update_position(self, direct):
         xleft = []
         xright = []
-        
+
         for bi, di in zip(self.chromosome, direct):
             xleft.append(1 if random.random() <= func_trans_S1(bi - self.beta * di) else 0)
             xright.append(1 if random.random() <= func_trans_S1(bi + self.beta * di) else 0)
-            
+
         ind_left = IndividualMRP()
         ind_right = IndividualMRP()
         ind_left.initialize(xleft, self.problem)
@@ -63,8 +63,8 @@ class IndividualBeetle(IndividualMRP):
                     self.chromosome = chrom
         else:
             self.mutation()
-        
-        
+
+
         self.fitness = self.cal_fitness()
 
     def update_parameters(self, gen):
@@ -80,12 +80,12 @@ class IndividualBeetle(IndividualMRP):
 
 
 class MultiObjectiveBeetleSearchAlgorithm(object):
-    
+
     def __init__(self, problem):
         self.problem = problem
         self.current_population = []
         self.external_population = []
-        
+
     def init_population(self):
         # Initialize current population and external population
         for i in range(POPULATION_SIZE):
@@ -105,13 +105,13 @@ class MultiObjectiveBeetleSearchAlgorithm(object):
                     self.external_population.remove(exter)
                 elif ind.is_dominated(exter) or exter.is_same(ind):
                     flag += 1
-        
+
             if flag == 0: self.external_population.append(ind.copy())
 
 
     def main(self):
         self.init_population()
-        
+
         gen = 0
         while gen < MAX_NUMBER_FUNCTION_EVAL:
             # print "Gen >>> ", gen
@@ -119,7 +119,7 @@ class MultiObjectiveBeetleSearchAlgorithm(object):
                 ind.update_beetle(gen)
                 self.update_external_population(ind)
             gen += 1
-    
+
 
 if __name__ == '__main__':
     # topo = 'topo1'
@@ -183,4 +183,4 @@ if __name__ == '__main__':
                     pf_.pop(j)
 
         write_list_to_json(item, 'mobso', pf_)
-    
+
