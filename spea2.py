@@ -1,6 +1,7 @@
 '''
-Zitzler, et al.
-"SPEA2: Improving the Strength Pareto Evolutionary Algorithm." (2001).
+@author Zitzler, et al.
+@title "SPEA2: Improving the Strength Pareto Evolutionary Algorithm."
+@date 2001.
 '''
 
 from algorithm.individual import IndividualMRP
@@ -26,7 +27,7 @@ class IndividualSPEA(IndividualMRP):
         self.fit = 0.0
         
     
-    def clear_property(self):
+    def clear_dominated_property(self):
         self.dominating_list = []
         self.dominated_list = []
         self.strength = 0
@@ -41,11 +42,6 @@ class IndividualSPEA(IndividualMRP):
             
         self.fit = raw_fit + density
         
-    def is_fit_less(self, ind):
-        if ind.fit > self.fit:
-            return True
-        return False
-    
 
 class SPEA2(object):
     
@@ -104,23 +100,47 @@ class SPEA2(object):
             for i in range(-1, -num-1, -1):
                 self.external_archive.append(union_list.pop(i))
         elif len(self.external_archive) > EXTERNAL_ARCHIVE_SIZE:
-            pass
+            for i in range(len(self.external_archive)-1):
+                for j in range(i+1, len(self.external_archive)):
+                    if self.external_archive[i].is_euqal(self.external_archive[j]):
+                        self.external_archive.pop(j)
         
+    def selection_evolution(self):
+        index1 = 0
+        index2 = 0
+        while index1 == index2:
+            index1 = random.randint(0, POPULATION_SIZE-1)
+            index2 = random.randint(0, POPULATION_SIZE-1)
+    
+        ind1 = self.external_archive[index1]
+        ind2 = self.external_archive[index2]
+    
+        if ind1.fit > ind2.fit:
+            self.current_population.append(ind2.copy())
+        else:
+            self.current_population.append(ind1.copy())
+            
+        for i in range(POPULATION_SIZE/2):
+            if random.random() < PC:
+                self.current_population[i].crossover(self.current_population[POPULATION_SIZE-i-1])
         
+        for ind in self.current_population:
+            ind.mutation()
+            
+    def main(self):
+        self.init_population()
         
+        gen = 0
+        while gen < MAX_NUMBER_FUNCTION_EVAL:
+            temp_list = self.fitness_assignment()
+            self.environment_select(temp_list)
+            self.selection_evolution()
+            gen += 1
+
+
 if __name__ == '__main__':
     
-    l = range(10)
-    ll = []
-    
-    for i in range(len(l)-1, -1, -1):
-        if l[i] > 5:
-            ll.append(l.pop(i))
-        
-    print l
-    print ll
-        
-        
+    pass
         
     
 

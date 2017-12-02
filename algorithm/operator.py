@@ -4,6 +4,11 @@ import math
 
 INF = float('inf')
 
+'''
+@author K. Deb, et al.
+@title "A fast and elitist multiobjective genetic algorithm: NSGA-II".
+@date 2002.
+'''
 def fast_nondominated_sort(poplist):
     pareto_rank_set_list = []
     first_pareto_rank_set = []
@@ -44,6 +49,11 @@ def fast_nondominated_sort(poplist):
 
     return pareto_rank_set_list
 
+'''
+@author K. Deb, et al.
+@title "A fast and elitist multiobjective genetic algorithm: NSGA-II".
+@date 2002.
+'''
 def crowding_distance_sort(pareto_rank_set_list):
     for pareto_rank_set in pareto_rank_set_list:
         if pareto_rank_set is not None or len(pareto_rank_set) != 0:
@@ -124,3 +134,70 @@ def object_shell_sort(lst, obj):
                 j -= count
             lst[j] = val
         count /= 2
+
+'''
+@author Joshua Knowles, et al.
+@title "Approximating the non-dominated front using the Pareto Archived Evolution Strategy."
+@date 1999
+'''
+
+class HyperCube(object):
+    
+    def __init__(self, solution):
+        self.num_grid = None
+        self.solution = solution
+        
+    
+
+class AdaptiveGrid(object):
+    
+    def __init__(self, num_grid):
+        self.num_grid = num_grid
+        self.upper = [0.0, 0.0]
+        self.lower = [INF, INF]
+        self.grid = []
+    
+    def init_grid(self, cube_list):
+        for cube in cube_list:
+            self.upper[0] = cube.solution.fitness[0] if cube.solution.fitness[0] > self.upper[0] \
+                else self.upper[0]
+            self.upper[1] = cube.solution.fitness[1] if cube.solution.fitness[1] > self.upper[1] \
+                else self.upper[1]
+            self.lower[0] = cube.solution.fitness[0] if cube.solution.fitness[0] < self.lower[0] \
+                else self.lower[0]
+            self.lower[1] = cube.solution.fitness[1] if cube.solution.fitness[1] < self.lower[1] \
+                else self.lower[1]
+        
+        mod = [float(self.upper[0] - self.lower[0]) / self.num_grid,
+               float(self.upper[1] - self.lower[1]) / self.num_grid]
+        
+        for cube in cube_list:
+            cube.num_grid = [int((cube.solution.fitness[0] - self.lower[0]) / mod[0]),
+                             int((cube.solution.fitness[1] - self.lower[1]) / mod[1])]
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        

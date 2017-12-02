@@ -1,7 +1,7 @@
 '''
-Deb, Kalyanmoy, et al.
-"A Fast Elitist Non-dominated Sorting Genetic Algorithm for Multi-objective Optimisation: NSGA-II."
-International Conference on Parallel Problem Solving From Nature Springer-Verlag, 2000:849-858.
+@author K. Deb, et al.
+@title "A fast and elitist multiobjective genetic algorithm: NSGA-II".
+@date 2002.
 '''
 from algorithm.individual import IndividualMRP
 from algorithm.parameter import PM, PC, POPULATION_SIZE, MAX_NUMBER_FUNCTION_EVAL

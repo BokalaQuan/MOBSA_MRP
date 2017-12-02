@@ -138,8 +138,11 @@ class IndividualMRP(Individual):
         
         if state: self._init_tree_by_subgraph(self.problem, graph)
         else:
-            self.delay = INF
-            self.loss = INF
+            # self.delay = INF
+            # self.loss = INF
+            self.delay = float(500)
+            self.loss = float(1)
+            
             
     def _init_tree_by_subgraph(self, mrp, graph):
         self.paths = []

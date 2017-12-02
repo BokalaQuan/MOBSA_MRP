@@ -1,7 +1,7 @@
 '''
-Coello, C. A. C, et. al.
-"Handling multiple objectives with particle swarm optimization."
-IEEE Transactions on Evolutionary Computation 8.3(2004):256-279.
+@author Coello, C. A. C, et. al.
+@title "Handling multiple objectives with particle swarm optimization."
+@date 2004.
 '''
 
 from algorithm.individual import IndividualMRP

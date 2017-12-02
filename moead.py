@@ -1,8 +1,8 @@
-'''
-Zhang, Qingfu, and H. Li.
-"MOEA/D: A Multiobjective Evolutionary Algorithm Based on Decomposition."
-IEEE Transactions on Evolutionary Computation 11.6(2007):712-731.
-'''
+"""
+@author Zhang, Qingfu, and H. Li.
+@title "MOEA/D: A Multiobjective Evolutionary Algorithm Based on Decomposition."
+@date 2007)
+"""
 
 from algorithm.individual import IndividualMRP
 from algorithm.parameter import POPULATION_SIZE, MAX_NUMBER_FUNCTION_EVAL, PC, PM, INF
@@ -23,12 +23,19 @@ class WeightVector(object):
         self.N = POPULATION_SIZE
         self.T = NumOfNeighbor
         
+    '''
+    @function for create N weight vectors.
+    '''
     def create_weight_vector(self):
         # lambda vector
         lv = numpy.array(range(0, self.N)) / self.H
         for i in range(self.N):
             vector = [lv[i], lv[self.N - i - 1]]
             self.weight_vector.append(vector)
+    
+    '''
+    @function for create each vector's neighbors, due to the distance od two vector
+    '''
     
     def create_neighborhood(self):
         for vec in self.weight_vector:
@@ -51,25 +58,35 @@ class WeightVector(object):
         self.create_neighborhood()
     
 class SubProblem(object):
+    '''
+    The sub_problem in MOEA/D
+    @member the weight vector
+    @member the list of neighbor solutions' index
+    @member one solution
+    
+    '''
     
     def __init__(self, weight_vector, index_neighbor, solution):
         self.weight_vector = weight_vector
         self.index_neighbor = index_neighbor
         self.solution = solution
     
+    '''
+    @method Weighted Sum Approach, key='WS'
+    @method Tchebycheff Approach, key='TF'
+    '''
+    
     @staticmethod
     def cal_fit(ind, weight_vector, str_func_type, reference_point):
         fit = 0.0
-        if str_func_type == 'WEIGHTEDSUM':
+        if str_func_type == 'WS':
             fit += weight_vector[0] * ind.fitness[0] + weight_vector[1] * ind.fitness[1]
-        elif str_func_type == 'TCHEBYCHEFF':
+        elif str_func_type == 'TF':
             x = weight_vector[0] * abs(ind.fitness[0] - reference_point[0])
             y = weight_vector[1] * abs(ind.fitness[1] - reference_point[1])
             fit = max(x, y)
-        
         return fit
     
-
 
 class MultiObjectiveEvolutionaryAlgorithmBasedOnDecomposition(object):
     
@@ -161,17 +178,6 @@ class MultiObjectiveEvolutionaryAlgorithmBasedOnDecomposition(object):
         
 
 if __name__ == '__main__':
-    # topo = 'topo1'
-    # problem = MRP()
-    # problem.initialize(topo)
-    #
-    # test = MultiObjectiveEvolutionaryAlgorithmBasedOnDecomposition(problem)
-    # test.main()
-    #
-    # write_list_to_json(topo, 'MOEAD', test.external_archive)
-    #
-    # plot_ps(topo, ['MOEAD'], ['r+'], '')
-    #
     pass
     
     
