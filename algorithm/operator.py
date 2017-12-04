@@ -1,3 +1,5 @@
+from algorithm.parameter import EXTERNAL_ARCHIVE_SIZE
+
 import random
 import copy
 import math
@@ -88,7 +90,6 @@ def object_merge_sort(lst, obj):
     right = object_merge_sort(lst[len(lst) / 2:len(lst)], obj)
     result = []
     while len(left) > 0 and len(right) > 0:
-        # if (left[0] > right[0]):
         if compare_to(left[0], right[0], obj):
             result.append(copy.deepcopy(right.pop(0)))
         else:
@@ -99,6 +100,7 @@ def object_merge_sort(lst, obj):
     else:
         result.extend(copy.deepcopy(object_merge_sort(right, obj)))
     return result
+
 
 def compare_to(ind0, ind1, obj):
     if obj == 0:
@@ -145,20 +147,29 @@ class HyperCube(object):
     
     def __init__(self, solution):
         self.num_grid = None
-        self.solution = solution
+        self.solution = solution.copy()
         
-    
+    def update_cube(self, num_grid):
+        self.num_grid = copy.copy(num_grid)
 
 class AdaptiveGrid(object):
     
-    def __init__(self, num_grid):
-        self.num_grid = num_grid
+    def __init__(self, grid_size):
+        self.grid_size = grid_size
         self.upper = [0.0, 0.0]
         self.lower = [INF, INF]
         self.grid = []
+        self.p_select = []
+        self.archive = []
     
-    def init_grid(self, cube_list):
-        for cube in cube_list:
+    def init_grid(self, poplist):
+        for ind in poplist:
+            self.archive.append(HyperCube(ind))
+        self.grid_adjust()
+        
+    def grid_adjust(self):
+        self.clear_grid_property()
+        for cube in self.archive:
             self.upper[0] = cube.solution.fitness[0] if cube.solution.fitness[0] > self.upper[0] \
                 else self.upper[0]
             self.upper[1] = cube.solution.fitness[1] if cube.solution.fitness[1] > self.upper[1] \
@@ -167,37 +178,48 @@ class AdaptiveGrid(object):
                 else self.lower[0]
             self.lower[1] = cube.solution.fitness[1] if cube.solution.fitness[1] < self.lower[1] \
                 else self.lower[1]
-        
-        mod = [float(self.upper[0] - self.lower[0]) / self.num_grid,
-               float(self.upper[1] - self.lower[1]) / self.num_grid]
-        
-        for cube in cube_list:
+    
+        mod = [float(self.upper[0] - self.lower[0]) / self.grid_size,
+               float(self.upper[1] - self.lower[1]) / self.grid_size]
+    
+        for cube in self.archive:
             cube.num_grid = [int((cube.solution.fitness[0] - self.lower[0]) / mod[0]),
                              int((cube.solution.fitness[1] - self.lower[1]) / mod[1])]
+    
+        for i in range(self.grid_size):
+            for j in range(self.grid_size):
+                cubes = []
+                for index in range(len(self.archive)):
+                    if self.archive[index].num_grid == [i, j]:
+                        cubes.append(self.archive[index])
+            
+                if len(cubes) != 0:
+                    self.grid.append(cubes)
+                    self.p_select.append(len(cubes))
         
+        if len(self.archive) > EXTERNAL_ARCHIVE_SIZE:
+            index_select = max(self.p_select)
+            tmp = random.randint(0, len(self.grid[index_select])-1)
+            self.grid[index_select].pop(tmp)
         
+                    
+    def update_grid(self, ind):
+        flag = 0
+        for i in range(len(self.archive)):
+            if ind.is_dominated(self.archive[i].solution) or \
+                    ind.is_equal(self.archive[i].solution):
+                flag += 1
+            elif self.archive[i].solution.is_dominated(ind):
+                self.archive.pop(i)
+                i -= 1
+                
+        if flag != 0:
+            self.archive.append(HyperCube(ind))
         
+        self.grid_adjust()
         
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
+    def clear_grid_property(self):
+        self.grid = []
+        self.upper = [0.0, 0.0]
+        self.lower = [INF, INF]
+        self.p_select = []

@@ -59,6 +59,12 @@ class Individual(object):
         self.pareto_rank = 0
         self.crowding_distance = 0
     
+    def distance_to(self, ind):
+        fit1 = numpy.array(self.fitness)
+        fit2 = numpy.array(ind.fitness)
+        
+        return numpy.linalg.norm(fit1 - fit2)
+    
     def to_dict(self):
         return {'fitness': self.fitness,
                 'chromosome': self.fitness}

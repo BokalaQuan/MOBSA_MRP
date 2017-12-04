@@ -1,6 +1,3 @@
-from problem.mrp.multicast_routing_problem import MulticastRoutingProblem as MRP
-from mobsa import IndividualBeetle
-
 import numpy
 import random
 import os
