@@ -21,7 +21,7 @@ if __name__ == '__main__':
     problem.initialize(topo)
     
     pf_list = []
-    for i in range(2):
+    for i in range(5):
         test = NSGA2(problem)
         start = time.time()
         tmp = test.run()

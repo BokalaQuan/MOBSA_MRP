@@ -161,10 +161,10 @@ class IndividualMRP(Individual):
             delay = 0.0
             loss = 1.0
             for index in range(len(path) - 1):
-                delay += graph.edge[path[index]][path[index + 1]]['delay']
-                loss *= 1 - graph.edge[path[index]][path[index + 1]]['loss']
-                if self.bandwidth > graph.edge[path[index]][path[index + 1]]['band']:
-                    self.bandwidth = graph.edge[path[index]][path[index + 1]]['band']
+                delay += graph.edges[path[index], path[index + 1]]['delay']
+                loss *= 1 - graph.edges[path[index], path[index + 1]]['loss']
+                if self.bandwidth > graph.edges[path[index], path[index + 1]]['band']:
+                    self.bandwidth = graph.edges[path[index], path[index + 1]]['band']
                     
             max_delay += delay
             max_loss += 1 - loss

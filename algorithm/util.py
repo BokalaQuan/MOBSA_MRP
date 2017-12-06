@@ -1,5 +1,4 @@
 from algorithm.operator import object_shell_sort
-from algorithm.parameter import PROJECT_PATH as PATH
 
 import json
 import math
@@ -49,7 +48,7 @@ def func_levy(d):
     return 0.01 * r1 * sigma / math.pow(r2, (1 / beta))
 
 def read_json_as_list(topo, algorithm):
-    path = PATH + '\\solution\\' + topo + '\\PF-' + algorithm + '.json'
+    path = os.getcwd()   + '/solution/' + topo + '/PF-' + algorithm + '.json'
     list_ = []
     with open(path, 'r') as f:
         conf = json.load(f)
@@ -60,7 +59,7 @@ def read_json_as_list(topo, algorithm):
     return list_
 
 def write_list_to_json(topo, algorithm, solutions):
-    path = PATH + '\\solution\\' + topo + '\\PF-' + algorithm + '.json'
+    path = os.getcwd() + '/solution/' + topo + '/PF-' + algorithm + '.json'
     solution = []
     for sol in solutions:
         solution.append(sol.to_dict())
@@ -78,7 +77,7 @@ def write_list_to_json(topo, algorithm, solutions):
         f.close()
         
 def write_performance(property, topo, algorithm, lst):
-    path = PATH + '\\solution\\' + topo + '\\' + property + '-' + algorithm + '.json'
+    path = os.getcwd() + '/solution/' + topo + '/' + property + '-' + algorithm + '.json'
     with open(path, 'wb') as f:
         f.write(json.dumps(lst, indent=4))
         f.close()
@@ -99,7 +98,7 @@ def plot_pf(filename, type, color, describe):
     
 def plot_ps(topo, types, colors, describe):
     for type, color in zip(types, colors):
-        temp = os.getcwd() + '\\solution\\' + topo + '\\PF-' + type + '.json'
+        temp = os.getcwd() + '/solution/' + topo + '/PF-' + type + '.json'
         plot_pf(temp, type, color,describe)
     plt.show()
     

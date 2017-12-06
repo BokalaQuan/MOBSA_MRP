@@ -7,5 +7,4 @@ PM = 0.08
 P_INIT = 0.5
 
 INF = float(65535)
-PROJECT_PATH = 'C:\\Users\\quanw\\PycharmProjects\\MOBSA_MRP'
 

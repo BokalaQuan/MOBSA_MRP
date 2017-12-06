@@ -16,8 +16,8 @@ class MulticastRoutingProblem(object):
         self.dst = []
     
     def initialize(self, filename):
-        SWITCH_PATH = PATH + '\\topo_file\\' + filename + '\\switch_info.json'
-        LINK_PATH = PATH + '\\topo_file\\' + filename + '\\link_info.json'
+        SWITCH_PATH = PATH + '/topo_file/' + filename + '/switch_info.json'
+        LINK_PATH = PATH + '/topo_file/' + filename + '/link_info.json'
     
         with open(SWITCH_PATH, 'r') as f:
             conf = json.load(f)
