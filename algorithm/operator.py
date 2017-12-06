@@ -2,7 +2,6 @@ from algorithm.parameter import EXTERNAL_ARCHIVE_SIZE
 
 import random
 import copy
-import math
 
 INF = float('inf')
 
@@ -16,7 +15,7 @@ def fast_nondominated_sort(poplist):
     first_pareto_rank_set = []
 
     for ind in poplist:
-        ind.clear_property()
+        ind.clear_dominated_property()
 
     for ind_pre in poplist:
         for ind_beh in poplist:
@@ -83,7 +82,6 @@ def crowding_distance_sort(pareto_rank_set_list):
 
         object_shell_sort(pareto_rank_set, 'cd')
 
-
 def object_merge_sort(lst, obj):
     if (len(lst) <= 1): return lst
     left = object_merge_sort(lst[:len(lst) / 2], obj)
@@ -142,7 +140,6 @@ def object_shell_sort(lst, obj):
 @title "Approximating the non-dominated front using the Pareto Archived Evolution Strategy."
 @date 1999
 '''
-
 class HyperCube(object):
     
     def __init__(self, solution):

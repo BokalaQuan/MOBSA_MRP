@@ -162,7 +162,7 @@ class MultiObjectiveEvolutionaryAlgorithmBasedOnDecomposition(object):
             if fit1 < fit2:
                 ind_select.solution = new_solution.copy()
     
-    def main(self):
+    def run(self):
         self.init_population()
         
         gen = 0

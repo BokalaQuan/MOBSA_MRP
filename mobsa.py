@@ -109,7 +109,7 @@ class MultiObjectiveBeetleSearchAlgorithm(object):
             if flag == 0: self.external_population.append(ind.copy())
 
 
-    def main(self):
+    def run(self):
         self.init_population()
 
         gen = 0

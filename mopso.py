@@ -155,7 +155,7 @@ class MultiObjectiveParticleSwarmOptimization(object):
             if flag == 0: self.external_population.append(ind.copy())
             
     
-    def main(self):
+    def run(self):
         self.initialize_population()
         
         gen = 0

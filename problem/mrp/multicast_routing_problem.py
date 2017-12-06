@@ -1,6 +1,5 @@
 import json
 import os
-import random
 
 PATH = os.path.split(os.path.realpath(__file__))[0]
 
@@ -54,8 +53,6 @@ class Edge(object):
         self.dst = int(link["dst"])
         self.delay = link["delay"]
         self.loss = link["loss"]
-        # self.delay = random.random()
-        # self.loss = random.random()
         self.bandwidth = link["bandwidth"]
                 
 

@@ -40,7 +40,6 @@ Hypervolume
 '''
 def cal_HV(pReal, ref):
     hv = (ref[0] - pReal[0]['delay']) * (ref[1] - pReal[0]['loss'])
-    
     for i in range(1, len(pReal)):
         hv += (pReal[i-1]['delay'] - pReal[i]['delay']) * (ref[1] - pReal[i]['loss'])
         

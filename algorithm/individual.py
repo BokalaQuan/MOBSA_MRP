@@ -1,6 +1,4 @@
-from problem.mrp.multicast_routing_problem import MulticastRoutingProblem as MRP
-from problem.kp.knapsack_problem import MultiObjectiveKnapsackProblem as MOKP
-from parameter import INF, PM, PC
+from parameter import INF, PM
 
 import random
 import copy
@@ -32,13 +30,13 @@ class Individual(object):
     def copy(self):
         pass
     
-    def initialize(self, chromosome, problem):
+    def initialize(self):
         pass
     
     def cal_fitness(self):
         pass
         
-    def is_dominated(self, ind):
+    def is_dominated(self):
         pass
     
     def is_equal(self, ind):
@@ -66,12 +64,11 @@ class Individual(object):
         return numpy.linalg.norm(fit1 - fit2)
     
     def to_dict(self):
-        return {'fitness': self.fitness,
-                'chromosome': self.fitness}
-    
+        return {'fitness': self.fitness}
+
     def to_dict_fitness(self):
         return {'f1': self.fitness[0],
-                'f2': self.fitness[1]}
+                    'f2': self.fitness[1]}
     
     def show(self):
         pass
@@ -94,7 +91,6 @@ class IndividualMRP(Individual):
         self.bandwidth = INF
         
     def copy(self):
-        # ind = self.__class__()
         ind = IndividualMRP()
         ind.problem = self.problem
         ind.chromosome = copy.copy(self.chromosome)
@@ -109,8 +105,8 @@ class IndividualMRP(Individual):
         return ind
 
     def initialize(self, chromosome, problem):
-        self.chromosome = chromosome
         self.problem = problem
+        self.chromosome = chromosome
         self.fitness = self.cal_fitness()
         
     def cal_fitness(self):
@@ -135,11 +131,9 @@ class IndividualMRP(Individual):
                 for dst in mrp.dst:
                     if dst not in graph.node: state = False
         
-        # if state: state = True if nx.is_connected(graph) else False
-        
         if state:
             for dst in mrp.dst:
-                if not nx.has_path(graph,source=mrp.src,target=dst):
+                if not nx.has_path(G=graph,source=mrp.src,target=dst):
                     state = False
         
         if state: self._init_tree_by_subgraph(self.problem, graph)
@@ -210,7 +204,7 @@ class IndividualMRP(Individual):
             'bandwidth': self.bandwidth,
             'paths': str(self.paths)
         }
-
+    
 
 class IndividualKP(Individual):
 

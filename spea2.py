@@ -43,7 +43,7 @@ class IndividualSPEA(IndividualMRP):
         self.fit = raw_fit + density
         
 
-class SPEA2(object):
+class StrengthParetoEvolutionaryAlgorithm2(object):
     
     def __init__(self, problem):
         self.problem = problem
@@ -127,7 +127,7 @@ class SPEA2(object):
         for ind in self.current_population:
             ind.mutation()
             
-    def main(self):
+    def run(self):
         self.init_population()
         
         gen = 0

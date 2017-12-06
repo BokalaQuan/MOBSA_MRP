@@ -1,28 +1,14 @@
 from algorithm.operator import object_shell_sort
+from algorithm.util import read_json_as_list
 
 import json
 import os
 
-def read_solution(path):
-    sols = []
-    with open(path, 'r') as f:
-        conf = json.load(f)
-        for item in conf:
-            sols.append(item)
-        f.close()
-    return sols
-    
-def trim_solution(topo):
-    PATH1 = os.getcwd() + '\\' + topo + '\\pf_' + 'nsga2' + '.json'
-    PATH2 = os.getcwd() + '\\' + topo + '\\pf_' + 'mobas' + '.json'
-    PATH3 = os.getcwd() + '\\' + topo + '\\pf_' + 'mopso' + '.json'
-    PATH4 = os.getcwd() + '\\' + topo + '\\pf_ideal.json'
-    
+def trim_solution(topo, algorithms):
+    path = os.getcwd() + '\\' + topo + '\\PF-IDEAL'  + '.json'
     solutions = []
-    solutions.extend(read_solution(PATH1))
-    solutions.extend(read_solution(PATH2))
-    solutions.extend(read_solution(PATH3))
-    solutions.extend(read_solution(PATH4))
+    for al in algorithms:
+        solutions.extend(read_json_as_list(topo, al))
     
     object_shell_sort(solutions, 'loss')
     
@@ -33,9 +19,7 @@ def trim_solution(topo):
         else:
             obj = item['delay']
             
-    
-            
-    with open(PATH4, 'w') as f:
+    with open(path, 'wb') as f:
         f.write(json.dumps(solutions, indent=4))
         f.close()
         

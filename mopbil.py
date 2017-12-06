@@ -71,23 +71,25 @@ class SubPopulation(object):
 '''
 class PopulationBasedIncrementalLearning(object):
     
-    def __init__(self, problem):
+    def __init__(self, problem, num_subpop, grid_size):
         self.problem = problem
+        self.num_subpop = num_subpop
+        self.grid_size = grid_size
         self.sub_populations = []
         self.current_population = []
         self.external_archive = None
         
     def init_population(self):
-        for i in range(POPULATION_SIZE / 5):
+        for i in range(self.num_subpop):
             pv = ProbabilityVector()
             pv.init(self.problem.num_link)
             sub = SubPopulation(pv)
-            sub.create_sub_population(5, self.problem)
+            sub.create_sub_population(POPULATION_SIZE / self.num_subpop, self.problem)
             self.sub_populations.append(sub)
             self.current_population.extend(sub.population)
 
         archive = fast_nondominated_sort(self.current_population)[0]
-        self.external_archive = AdaptiveGrid(10)
+        self.external_archive = AdaptiveGrid(grid_size=self.grid_size)
         self.external_archive.init_grid(archive)
         
     
@@ -126,9 +128,8 @@ class PopulationBasedIncrementalLearning(object):
         for sub in self.sub_populations:
             sub.pv.update_vector(self.external_archive.archive[index_select].chromosome)
     
-    def main(self):
-        self.init_population()
-    
+    def run(self):
+        pass
         
     
     
@@ -182,7 +183,7 @@ class MultiObjectivePopulationBasedIncrementalLearning(object):
             for i in range(delete_num):
                 self.external_archive.pop(neighbor_distance_set.index(tmp[i]))
             
-    def main(self):
+    def run(self):
         pass
     
 

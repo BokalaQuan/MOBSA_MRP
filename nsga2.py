@@ -86,19 +86,19 @@ class NondominatedSortGeneticAlgorithm2(object):
         
         for ind in self.current_poplist:
             ind.mutation()
-        
-    def main(self):
+            
+    def run(self):
         self.init_population()
         self.copy_current_to_pre()
         
         gen = 0
         while gen < MAX_NUMBER_FUNCTION_EVAL:
-            # print "Gen >>> ", gen
             self.make_new_population()
             self.copy_current_to_pre()
             self.evolution()
             gen += 1
-            
+         
+        return self.pre_poplist
         
 if __name__ == '__main__':
     topo = 'topo1'
@@ -116,7 +116,7 @@ if __name__ == '__main__':
     for i in range(10):
         print 'Runtime >>> ', i + 1
         test = NondominatedSortGeneticAlgorithm2(problem)
-        test.main()
+        test.run()
         write_list_to_json(topo, 'nsga2', test.pre_poplist)
         
         preal = read_json_as_list(topo, 'nsga2')
