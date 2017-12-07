@@ -55,15 +55,16 @@ def read_json_as_list(topo, algorithm):
         for item in conf:
             list_.append(item)
         f.close()
-    
+
     return list_
 
-def write_list_to_json(topo, algorithm, solutions):
-    path = os.getcwd() + '/solution/' + topo + '/PF-' + algorithm + '.json'
+def write_list_to_json(topo, algorithm, runtime, solutions):
+    path = os.getcwd() + '/solution/' + topo + '/PF-' + algorithm + \
+            '-' +str(runtime)  + '.json'
     solution = []
     for sol in solutions:
         solution.append(sol.to_dict())
-    
+
     object_shell_sort(solution, 'loss')
     obj = solution[0]['delay']
     for item in solution[:]:
@@ -71,18 +72,19 @@ def write_list_to_json(topo, algorithm, solutions):
             solution.remove(item)
         else:
             obj = item['delay']
-    
+
     with open(path, 'wb') as f:
         f.write(json.dumps(solution, indent=4))
         f.close()
-        
-def write_performance(property, topo, algorithm, lst):
-    path = os.getcwd() + '/solution/' + topo + '/' + property + '-' + algorithm + '.json'
+
+def write_performance(property, topo, algorithm, runtime,lst):
+    path = os.getcwd() + '/solution/' + topo + '/' + property + \
+            '-' + algorithm + str(runtime)  + '.json'
     with open(path, 'wb') as f:
         f.write(json.dumps(lst, indent=4))
         f.close()
 
-def plot_pf(filename, type, color, describe):
+def plot_pf(filename, color, describe):
     x = []
     y = []
     with open(filename, 'r') as f:
@@ -95,12 +97,24 @@ def plot_pf(filename, type, color, describe):
     plt.ylabel('Ave_delay (ms)')
     plt.legend(describe, numpoints=2)
     plt.plot(x, y, color)
-    
+
 def plot_ps(topo, types, colors, describe):
     for type, color in zip(types, colors):
-        temp = os.getcwd() + '/solution/' + topo + '/PF-' + type + '.json'
+        temp = os.getcwd() + '/solution/' + topo + '/PF-' + \
+                type + '-' +   + '.json'
         plot_pf(temp, type, color,describe)
     plt.show()
-    
+
+def plot_ps_by_same_algorithm(topo, algorithm, runtime):
+    for i in range(runtime):
+        tmp = os.getcwd() + '/solution/' + topo + '/PF-' + \
+                algorithm + '-' + str(i + 1) + '.json'
+        plot_pf(tmp, 'r*', 'NSGA-II')
+    plt.show()
+
+
+
+
+
 if __name__ == '__main__':
     pass

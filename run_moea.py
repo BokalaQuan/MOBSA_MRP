@@ -15,18 +15,19 @@ import time
 import os
 
 if __name__ == '__main__':
-    
+
     topo = 'topo1'
     problem = MRP()
     problem.initialize(topo)
-    
+
     pf_list = []
-    for i in range(5):
+    for i in range(10):
         test = NSGA2(problem)
         start = time.time()
         tmp = test.run()
         end = time.time()
         print "Run >>>>>> ", i+1, ' ACT = ', end - start, ' s'
+        write_list_to_json(topo, 'NSGA-II', i + 1, tmp)
         pf_list.extend(tmp)
-    
-    write_list_to_json(topo, 'NSGA-II', pf_list)
+
+    write_list_to_json(topo, 'NSGA-II', 10,pf_list)
