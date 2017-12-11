@@ -4,6 +4,7 @@ import json
 import math
 import random
 import os
+import numpy as np
 import matplotlib.pyplot as plt
 
 '''
@@ -47,37 +48,76 @@ def func_levy(d):
 
     return 0.01 * r1 * sigma / math.pow(r2, (1 / beta))
 
-def read_json_as_list(topo, algorithm):
-    path = os.getcwd()   + '/solution/' + topo + '/PF-' + algorithm + '.json'
+
+def read_json_as_list(topo, algorithm, runtime=None):
     list_ = []
-    with open(path, 'r') as f:
-        conf = json.load(f)
-        for item in conf:
-            list_.append(item)
+    if runtime is None:
+        path = os.getcwd() + '/solution/' + topo + '/PF-' + algorithm + '.json'
+
+        with open(path, 'r') as f:
+            conf = json.load(f)
+            for item in conf:
+                list_.append(item)
         f.close()
+    else:
+        for i in range(runtime):
+            path = os.getcwd() + '/solution/' + topo + '/PF-' + algorithm + \
+                '-' +str(runtime)  + '.json'
+            tmp = []
+            with open(path, 'r') as f:
+                conf = json.load(f)
+                for item in conf:
+                    tmp.append(item)
+            f.close()
+            list_.extend(tmp)
 
     return list_
 
-def write_list_to_json(topo, algorithm, runtime, solutions):
-    path = os.getcwd() + '/solution/' + topo + '/PF-' + algorithm + \
+def write_list_to_json(topo=None, algorithm=None, runtime=None, solutions=None):
+    if runtime is None:
+        path = os.getcwd() + '/solution/' + topo + '/PF-' + algorithm + '.json'
+    else:
+        path = os.getcwd() + '/solution/' + topo + '/PF-' + algorithm + \
             '-' +str(runtime)  + '.json'
+    
     solution = []
-    for sol in solutions:
-        solution.append(sol.to_dict())
+    if algorithm == 'IDEAL':
+        solution = solutions
+    else:
+        for sol in solutions:
+            solution.append(sol.to_dict())
 
     object_shell_sort(solution, 'loss')
-    obj = solution[0]['delay']
+    
+    obj_delay = solution[0]['delay']
+    obj_loss = solution[0]['loss']
     for item in solution[:]:
-        if item['delay'] >= obj:
+        if item['delay'] > obj_delay:
+            solution.remove(item)
+        elif item['delay'] == obj_delay and item['loss'] == obj_loss:
             solution.remove(item)
         else:
-            obj = item['delay']
+            obj_delay = item['delay']
+            obj_loss = item['loss']
 
     with open(path, 'wb') as f:
         f.write(json.dumps(solution, indent=4))
         f.close()
 
-def write_performance(property, topo, algorithm, runtime,lst):
+def update_ideal_pf(topo, algorithms, runtime=None):
+    union_pf = []
+    for al in algorithms:
+        if runtime is None:
+            union_pf.extend(read_json_as_list(topo=topo, algorithm=al))
+        else:
+            union_pf.extend(read_json_as_list(topo=topo, algorithm=al, runtime=runtime))
+    
+    union_pf.extend(read_json_as_list(topo=topo, algorithm='IDEAL'))
+    
+    write_list_to_json(topo=topo, algorithm='IDEAL', solutions=union_pf)
+    
+    
+def write_performance(property=None, topo=None, algorithm=None, runtime=None, lst=None):
     path = os.getcwd() + '/solution/' + topo + '/' + property + \
             '-' + algorithm + str(runtime)  + '.json'
     with open(path, 'wb') as f:
@@ -85,6 +125,7 @@ def write_performance(property, topo, algorithm, runtime,lst):
         f.close()
 
 def plot_pf(filename, color, describe):
+    plt.subplot()
     x = []
     y = []
     with open(filename, 'r') as f:
@@ -95,26 +136,27 @@ def plot_pf(filename, color, describe):
         f.close()
     plt.xlabel('Ave_plr (%)')
     plt.ylabel('Ave_delay (ms)')
-    plt.legend(describe, numpoints=2)
+    plt.legend(describe)
     plt.plot(x, y, color)
 
-def plot_ps(topo, types, colors, describe):
-    for type, color in zip(types, colors):
-        temp = os.getcwd() + '/solution/' + topo + '/PF-' + \
-                type + '-' +   + '.json'
-        plot_pf(temp, type, color,describe)
-    plt.show()
+# def plot_ps(topo, types, colors, describe):
+#     for type, color in zip(types, colors):
+#         temp = os.getcwd() + '/solution/' + topo + '/PF-' + \
+#                 type + '-' +   + '.json'
+#         plot_pf(temp, type, color,describe)
+#     plt.show()
 
-def plot_ps_by_same_algorithm(topo, algorithm, runtime):
+def plot_ps_by_same_algorithm(topo, algorithm, runtime, styles):
     for i in range(runtime):
         tmp = os.getcwd() + '/solution/' + topo + '/PF-' + \
                 algorithm + '-' + str(i + 1) + '.json'
-        plot_pf(tmp, 'r*', 'NSGA-II')
+        plot_pf(tmp, styles[i], 'NSGA-II')
     plt.show()
 
 
-
-
-
 if __name__ == '__main__':
-    pass
+    x = np.linspace(-10, 10, 1000)
+    y = np.array([func_trans_V4(i) for i in x])
+    
+    plt.plot(x, y)
+    plt.show()

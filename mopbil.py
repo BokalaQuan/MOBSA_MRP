@@ -2,7 +2,7 @@ from algorithm.individual import IndividualMRP
 from algorithm.parameter import *
 from problem.mrp.multicast_routing_problem import MulticastRoutingProblem as MRP
 from problem.kp.knapsack_problem import MultiObjectiveKnapsackProblem as MOKP
-from algorithm.util import write_list_to_json, write_performance, read_json_as_list, plot_ps
+from algorithm.util import write_list_to_json, write_performance, read_json_as_list
 from algorithm.operator import AdaptiveGrid, fast_nondominated_sort
 
 
@@ -78,6 +78,9 @@ class PopulationBasedIncrementalLearning(object):
         self.sub_populations = []
         self.current_population = []
         self.external_archive = None
+    
+    def name(self):
+        return 'MOPBIL'
         
     def init_population(self):
         for i in range(self.num_subpop):

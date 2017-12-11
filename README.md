@@ -10,6 +10,9 @@ __@version 1.1__
 * [__SPEA2__][4] (Strength Pareto Evolutionary Algorithm 2)
 * [__PBIL__][5] (Population-Based Incremental Learning)
 * [__MOPBIL__][6] (Multi-objective Population-Based Incremental Learning)
+* [__EAG-MOEA/D__][7] (External Archive Guided Multiobjective Evolutionary Algorithm Based on Decomposition)
+* [__MOSFLA-MRRP__][8] (Multi-Objective Shuffled Frog-Leaping Algorithm applied to Mobile Robot Path Planning)
+* [__EMOABC__][9] (Elite-guided multi-objective artificial bee colony algorithm)
 
 
 
@@ -20,3 +23,6 @@ __@version 1.1__
 [4]: https://www.researchgate.net/publication/2386811_SPEA2_Improving_the_Strength_Pareto_Evolutionary_Algorithm
 [5]: https://link.springer.com/chapter/10.1007%2F978-3-540-70706-6_21
 [6]: http://ieeexplore.ieee.org/document/4762308/?arnumber=4762308
+[7]: http://ieeexplore.ieee.org/document/6882229/
+[8]: http://www.sciencedirect.com/science/article/pii/S0952197615001220
+[9]: http://www.sciencedirect.com/science/article/pii/S1568494615001982

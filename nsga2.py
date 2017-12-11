@@ -7,8 +7,7 @@ from algorithm.individual import IndividualMRP
 from algorithm.parameter import PM, PC, POPULATION_SIZE, MAX_NUMBER_FUNCTION_EVAL
 from problem.mrp.multicast_routing_problem import MulticastRoutingProblem as MRP
 from algorithm.operator import fast_nondominated_sort, crowding_distance_sort
-from algorithm.util import write_list_to_json, plot_pf, plot_ps, write_performance, read_json_as_list
-from solution.solution_trim import trim_solution
+from algorithm.util import write_list_to_json, plot_pf, write_performance, read_json_as_list
 from algorithm.performance import cal_IGD, cal_GD, cal_HV
 
 import numpy
@@ -16,8 +15,6 @@ import random
 import copy
 import os
 import json
-
-import matplotlib.pyplot as plot
 
 class IndividualNSGA(IndividualMRP):
     
@@ -27,10 +24,13 @@ class IndividualNSGA(IndividualMRP):
 
 class NondominatedSortGeneticAlgorithm2(object):
     
-    def __init__(self, problem):
+    def __init__(self, problem=None):
         self.problem = problem
         self.current_poplist = []
         self.pre_poplist = []
+    
+    def name(self):
+        return 'NSGA-II'
     
     def init_population(self):
         for i in xrange(POPULATION_SIZE):
@@ -70,6 +70,7 @@ class NondominatedSortGeneticAlgorithm2(object):
             while x == y:
                 x = random.randint(0, POPULATION_SIZE-1)
                 y = random.randint(0, POPULATION_SIZE-1)
+                
             ind1 = self.pre_poplist[x]
             ind2 = self.pre_poplist[y]
             
@@ -86,6 +87,7 @@ class NondominatedSortGeneticAlgorithm2(object):
         
         for ind in self.current_poplist:
             ind.mutation()
+            ind.fitness = ind.cal_fitness()
             
     def run(self):
         self.init_population()
@@ -131,35 +133,3 @@ if __name__ == '__main__':
     
     write_performance('performance', topo, 'nsga2', per)
     
-    # topo = ['topo2','topo3','topo4','topo5','topo6']
-    #
-    # for item in topo:
-    #     print "Topo init", item
-    #     problem = MRP()
-    #     problem.initialize(item)
-    #
-    #     pf_list = []
-    #
-    #     for i in range(10):
-    #         print "Runtime >>> ",i+1
-    #         test = NondominatedSortGeneticAlgorithm2(problem)
-    #         test.main()
-    #         pf_list.extend(test.pre_poplist)
-    #
-    #     pf_ = fast_nondominated_sort(pf_list)[0]
-    #     for i in range(0, len(pf_)):
-    #         for j in range(len(pf_) - 1, i + 1, -1):
-    #             if pf_[i].is_equal(pf_[j]):
-    #                 pf_.pop(j)
-    #
-    #     write_list_to_json(item, 'nsga2', pf_)
-    
-    
-    # # trim_solution('topo1')
-    #
-
-
-    # # plot_pf('topo1', 'nsga2')
-    #
-    # plot_ps('topo1', ['nsga2', 'mobas', 'ideal'], ['r+', 'go', 'b*'], '')
-    # plot_ps('topo1', ['nsga2'], ['g.--'], 'NSGA2')

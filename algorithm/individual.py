@@ -187,15 +187,10 @@ class IndividualMRP(Individual):
                 self.chromosome[i] = ind.chromosome[i]
                 ind.chromosome[i] = obj
     
-        # self.fitness = self.cal_fitness()
-        # ind.fitness = ind.cal_fitness()
-
     def mutation(self):
         for i in range(len(self.chromosome)):
             self.chromosome[i] = 1 - self.chromosome[i] \
                 if random.random() < PM else self.chromosome[i]
-    
-        self.fitness = self.cal_fitness()
     
     def to_dict(self):
         return {

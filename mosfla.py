@@ -104,6 +104,9 @@ class MultiObjectiveShuffledFrogLeapingAlgorithm(object):
         self.current_population = []
         self.external_archive = []
     
+    def name(self):
+        return 'MOSFLA'
+    
     def init_population(self):
         for i in range(self.num_memeplex):
             memeplex = Memeplex(POPULATION_SIZE / self.num_memeplex)

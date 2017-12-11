@@ -50,6 +50,9 @@ class StrengthParetoEvolutionaryAlgorithm2(object):
         self.current_population = []
         self.external_archive = []
         
+    def name(self):
+        return 'SPEA2'
+    
     def init_population(self):
         for i in range(POPULATION_SIZE):
             ind = IndividualSPEA()

@@ -134,6 +134,9 @@ class MultiObjectiveParticleSwarmOptimization(object):
         self.current_population = []
         self.external_population = []
         
+    def name(self):
+        return 'MOPSO'
+    
     def initialize_population(self):
         for i in range(POPULATION_SIZE):
             ind = IndividualParticle()

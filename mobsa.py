@@ -85,6 +85,9 @@ class MultiObjectiveBeetleSearchAlgorithm(object):
         self.problem = problem
         self.current_population = []
         self.external_population = []
+    
+    def name(self):
+        return 'MOBSO'
 
     def init_population(self):
         # Initialize current population and external population

@@ -33,8 +33,6 @@ def update(refer, pos):
 
 
 if __name__ == '__main__':
-    a = [2, 5]
-    b = [1, 12]
     
-    print update(a, b)
-    
+    a = B()
+    print type(a.__class__.__name__)
