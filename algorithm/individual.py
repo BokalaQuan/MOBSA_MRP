@@ -179,6 +179,11 @@ class IndividualMRP(Individual):
             return True
         return False
 
+    def is_feasible(self):
+        if self.fitness != [float(500), float(1)]:
+            return True
+        return False
+    
     def crossover(self, ind):
         temp = self.create_chromosome(self.problem.num_link)
         for i in range(len(temp)):

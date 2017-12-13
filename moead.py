@@ -6,10 +6,12 @@
 
 from algorithm.individual import IndividualMRP
 from algorithm.parameter import POPULATION_SIZE, MAX_NUMBER_FUNCTION_EVAL, PC, PM, INF
+from algorithm.operator import fast_nondominated_sort
 
 import random
 import copy
 import numpy
+import math
 
 class WeightVector(object):
 
@@ -102,7 +104,7 @@ class MultiObjectiveEvolutionaryAlgorithmBasedOnDecomposition(object):
         return 'MOEAD'
     
     def init_population(self):
-        vectors = WeightVector(POPULATION_SIZE/10)
+        vectors = WeightVector(int(math.sqrt(POPULATION_SIZE)))
         vectors.initialize_vector()
         for i in range(POPULATION_SIZE):
             ind = IndividualMRP()
@@ -112,7 +114,7 @@ class MultiObjectiveEvolutionaryAlgorithmBasedOnDecomposition(object):
                                  index_neighbor=vectors.index_neighbor[i],
                                  solution=ind)
             self.current_population.append(sub_sol)
-            self.update_external_archive(ind)
+            # self.update_external_archive(ind)
             self.update_reference_point(ind)
     
     def update_external_archive(self, ind):
@@ -127,6 +129,14 @@ class MultiObjectiveEvolutionaryAlgorithmBasedOnDecomposition(object):
                     flag += 1
             if flag == 0:
                 self.external_archive.append(ind)
+                
+    def update_archive(self, poplist):
+        union_list = []
+        union_list.extend(poplist)
+        union_list.extend(self.external_archive)
+        
+        self.external_archive = fast_nondominated_sort(union_list)[0]
+        
     
     def update_reference_point(self, ind):
         tmp = []
@@ -176,19 +186,30 @@ class MultiObjectiveEvolutionaryAlgorithmBasedOnDecomposition(object):
         
         gen = 0
         while gen < MAX_NUMBER_FUNCTION_EVAL:
+            pop_list = []
             for ind in self.current_population:
                 new_solution = self.reproduction(ind)
                 self.update_reference_point(new_solution)
                 self.update_neighbor_solution(new_solution, ind)
-                self.update_external_archive(new_solution)
-                
+                pop_list.append(new_solution)
+                # self.update_external_archive(new_solution)
+            self.update_archive(pop_list)
             gen += 1
         
         return self.external_archive
         
 
 if __name__ == '__main__':
-    pass
+    import math
+    test = WeightVector(NumOfNeighbor=int(math.sqrt(POPULATION_SIZE)))
+    test.initialize_vector()
+
+    print int(POPULATION_SIZE / 6), int(POPULATION_SIZE / 3), int(POPULATION_SIZE / 2)
+    print int(POPULATION_SIZE * 2 / 3), int(POPULATION_SIZE * 5 / 6)
+    
+    for ii in test.index_neighbor:
+        print ii
+    
     
     
     

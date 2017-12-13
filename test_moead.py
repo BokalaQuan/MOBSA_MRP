@@ -5,6 +5,7 @@ from algorithm.individual import IndividualMRP
 
 import random
 import copy
+import math
 
 class Candidate(IndividualMRP):
     
@@ -15,20 +16,35 @@ class Candidate(IndividualMRP):
 
 class SubPopulation(object):
     
-    def __init__(self, pv, sub_problem):
+    def __init__(self, pv, sub_problem, problem):
+        self.problem = problem
         self.pv = pv
         self.sub_problem = sub_problem
         
         self.tabu_set = []
         self.tabu_len = None
         self.candidates = []
+        self.neighbors = []
         
     def init_subpop(self):
-        pass
+        for i in range(int(math.sqrt(POPULATION_SIZE))):
+            ind = Candidate()
+            while not ind.is_feasible():
+                ind.initialize(self.pv.generate_chromosome(), self.problem)
+            self.neighbors.append(ind)
+        
+    def tabu_search_in_subpop(self):
+        for i in range(int(math.sqrt(POPULATION_SIZE))):
+            pass
         
     
-    def tabu_search_in_subpop(self):
+    
+
+
+class ALMOEAD(object):
+    '''
+    Augmented Learning Multi-Objective Evolutionary Algorithm Based on Decomposition
+    '''
+    def __init__(self):
         pass
-    
-    
     
