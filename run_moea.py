@@ -25,8 +25,8 @@ if __name__ == '__main__':
     al_list = []
     for i in range(5):
         # test = MOEAD_SFLA(problem)
-        # test = MOEAD(problem)
-        test = NSGA2(problem)
+        test = MOEAD(problem)
+        # test = NSGA2(problem)
         start = time.time()
         #
         tmp = test.run()
@@ -36,8 +36,8 @@ if __name__ == '__main__':
         pf_list.extend(tmp)
     #
     # write_list_to_json(topo=topo, algorithm='MOEAD-SFLA', solutions=pf_list)
-    # write_list_to_json(topo=topo, algorithm='MOEAD', solutions=pf_list)
-    write_list_to_json(topo=topo, algorithm='NSGA-II', solutions=pf_list)
+    write_list_to_json(topo=topo, algorithm='MOEAD', solutions=pf_list)
+    # write_list_to_json(topo=topo, algorithm='NSGA-II', solutions=pf_list)
     #
     # al_list.append('MOEAD-SFLA')
     # al_list.append('MOEAD')

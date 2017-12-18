@@ -83,7 +83,7 @@ def write_list_to_json(topo=None, algorithm=None, runtime=None, solutions=None):
     else:
         path = os.getcwd() + '/solution/' + topo + '/PF-' + algorithm + \
             '-' +str(runtime)  + '.json'
-    
+
     solution = []
     if algorithm == 'IDEAL':
         solution = solutions
@@ -92,7 +92,7 @@ def write_list_to_json(topo=None, algorithm=None, runtime=None, solutions=None):
             solution.append(sol.to_dict())
 
     object_shell_sort(solution, 'loss')
-    
+
     obj_delay = solution[0]['delay']
     obj_loss = solution[0]['loss']
     for item in solution[:]:
@@ -115,12 +115,12 @@ def update_ideal_pf(topo, algorithms, runtime=None):
             union_pf.extend(read_json_as_list(topo=topo, algorithm=al))
         else:
             union_pf.extend(read_json_as_list(topo=topo, algorithm=al, runtime=runtime))
-    
+
     union_pf.extend(read_json_as_list(topo=topo, algorithm='IDEAL'))
-    
+
     write_list_to_json(topo=topo, algorithm='IDEAL', solutions=union_pf)
-    
-    
+
+
 def write_performance(property=None, topo=None, algorithm=None, runtime=None, lst=None):
     path = os.getcwd() + '/solution/' + topo + '/' + property + \
             '-' + algorithm + str(runtime)  + '.json'
@@ -187,7 +187,7 @@ def plot_ps_by_different_algorithm(topo=None, algorithms=None, title=None):
     plt.xlabel('Ave_plr (%)', fontsize=12)
     plt.ylabel('Ave_delay (ms)', fontsize=12)
     plt.legend(algorithms, fontsize=10)
-    plt.savefig(title+".png",dpi=1200)
+    plt.savefig(title+".jpg",dpi=1200)
     plt.show()
 
 
@@ -197,6 +197,6 @@ def plot_ps_by_different_algorithm(topo=None, algorithms=None, title=None):
 if __name__ == '__main__':
     x = np.linspace(-10, 10, 1000)
     y = np.array([func_trans_V4(i) for i in x])
-    
+
     plt.plot(x, y)
     plt.show()
