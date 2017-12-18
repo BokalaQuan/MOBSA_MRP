@@ -115,7 +115,7 @@ class MultiObjectiveEvolutionaryAlgorithmBasedOnDecomposition(object):
             
             self.current_population.append(sub_sol)
             self.update_external_archive(ind)
-            self.update_reference_point(ind)
+            # self.update_reference_point(ind)
     
     def update_external_archive(self, ind):
         if len(self.external_archive) == 0:
@@ -173,11 +173,18 @@ class MultiObjectiveEvolutionaryAlgorithmBasedOnDecomposition(object):
     def update_neighbor_solution(self, new_solution, ind):
         for i in ind.index_neighbor:
             ind_select = self.current_population[i]
-            fit1 = ind.cal_fit(new_solution, ind_select.weight_vector,
-                               'TF', self.reference_point)
-            fit2 = ind.cal_fit(ind_select.solution, ind_select.weight_vector,
-                               'TF', self.reference_point)
-            
+            # fit1 = ind.cal_fit(new_solution, ind_select.weight_vector,
+            #                    'TF', self.reference_point)
+            #
+            # fit2 = ind.cal_fit(ind_select.solution, ind_select.weight_vector,
+            #                    'TF', self.reference_point)
+
+            fit1 = SubProblem.cal_fit(new_solution, ind_select.weight_vector,
+                                      'WS')
+
+            fit2 = SubProblem.cal_fit(ind_select.solution, ind_select.weight_vector,
+                                      'WS')
+
             if fit1 < fit2:
                 ind_select.solution = new_solution
     
@@ -189,7 +196,7 @@ class MultiObjectiveEvolutionaryAlgorithmBasedOnDecomposition(object):
             pop_list = []
             for ind in self.current_population:
                 new_solution = self.reproduction(ind)
-                self.update_reference_point(new_solution)
+                # self.update_reference_point(new_solution)
                 self.update_neighbor_solution(new_solution, ind)
                 pop_list.append(new_solution)
                 self.update_external_archive(new_solution)

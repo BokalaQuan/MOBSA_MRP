@@ -38,6 +38,10 @@ class MulticastRoutingProblem(object):
                 self.num_link += 1
                 
         f.close()
+
+        print "Topo initialized success!"
+        print "Number of switches is ", self.num_switch, ", Number of links is ", self.num_link
+        print "Source node is", self.src, ", Destination is ", self.dst
         
 class Node(object):
     

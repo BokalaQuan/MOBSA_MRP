@@ -54,11 +54,15 @@ def read_json_as_list(topo, algorithm, runtime=None):
     if runtime is None:
         path = os.getcwd() + '/solution/' + topo + '/PF-' + algorithm + '.json'
 
-        with open(path, 'r') as f:
-            conf = json.load(f)
-            for item in conf:
-                list_.append(item)
-        f.close()
+        try:
+            with open(path, 'r') as f:
+                conf = json.load(f)
+                for item in conf:
+                    list_.append(item)
+            f.close()
+        except IOError:
+            print path, 'not found!'
+
     else:
         for i in range(runtime):
             path = os.getcwd() + '/solution/' + topo + '/PF-' + algorithm + \
@@ -125,13 +129,14 @@ def write_performance(property=None, topo=None, algorithm=None, runtime=None, ls
         f.close()
 
 def func(topo=None, algorithm=None, runtime=None):
-    x = []
-    y = []
     data = []
 
     if runtime is None:
         tmp = os.getcwd() + '/solution/' + topo + '/PF-' + \
             algorithm + '.json'
+
+        x = []
+        y = []
 
         with open(tmp, 'r') as f:
             conf = json.load(f)
@@ -145,6 +150,9 @@ def func(topo=None, algorithm=None, runtime=None):
             tmp = os.getcwd() + '/solution/' + topo + '/PF-' + \
                 algorithm + '-' + str(i + 1) + '.json'
 
+            x = []
+            y = []
+
             with open(tmp, 'r') as f:
                 conf = json.load(f)
                 for item in conf:
@@ -156,27 +164,30 @@ def func(topo=None, algorithm=None, runtime=None):
     return data
 
 def plot_ps_by_same_algorithm(topo=None, algorithm=None, runtime=None):
-    with plt.style.context('Solarize_Light2'):
-        data = func(topo=topo, algorithm=algorithm, runtime=runtime)
-        for i in range(runtime):
-            plt.plot(data[i][0], data[i][1])
+    plt.figure()
+    data = func(topo=topo, algorithm=algorithm, runtime=runtime)
+    for i in range(runtime):
+        plt.scatter(data[i][0], data[i][1], alpha=0.5, label=str(i))
 
-        plt.title(algorithm)
-        plt.xlabel('Ave_plr (%)', fontsize=14)
-        plt.ylabel('Ave_delay (ms)', fontsize=14)
-
+    plt.title(algorithm)
+    plt.xlabel('Ave_plr (%)', fontsize=12)
+    plt.ylabel('Ave_delay (ms)', fontsize=12)
+    plt.legend(loc='upper right')
+    plt.savefig("N1.png", dpi=1200)
     plt.show()
 
 
-def plot_ps_by_different_algorithm(topo=None, algorithms=None):
-    styles = ['r^', 'ko']
-    for item, sty in zip(algorithms, styles):
+def plot_ps_by_different_algorithm(topo=None, algorithms=None, title=None):
+    plt.figure()
+    for item in algorithms:
         data = func(topo=topo, algorithm=item)
-        plt.plot(data[0], data[1], sty)
+        plt.scatter(data[0], data[1], alpha=0.7)
 
-    plt.xlabel('Ave_plr (%)', fontsize=14)
-    plt.ylabel('Ave_delay (ms)', fontsize=14)
-    plt.legend(algorithms)
+
+    plt.xlabel('Ave_plr (%)', fontsize=12)
+    plt.ylabel('Ave_delay (ms)', fontsize=12)
+    plt.legend(algorithms, fontsize=10)
+    plt.savefig(title+".png",dpi=1200)
     plt.show()
 
 

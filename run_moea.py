@@ -17,28 +17,30 @@ import os
 
 if __name__ == '__main__':
 
-    topo = 'topo2'
-    # problem = MRP()
-    # problem.initialize(topo)
+    topo = 'topo6'
+    problem = MRP()
+    problem.initialize(topo)
     #
-    # pf_list = []
-    # al_list = []
-    # for i in range(5):
-    #     test = MOEAD_SFLA(problem)
-    #     start = time.time()
-    #
-    #     tmp = test.run()
-    #     end = time.time()
-    #     print "Run >>>>>> ", i+1, ' ACT = ', end - start, ' s'
-    #     write_list_to_json(topo, test.name(), i + 1, tmp)
-    #     pf_list.extend(tmp)
+    pf_list = []
+    al_list = []
+    for i in range(5):
+        # test = MOEAD_SFLA(problem)
+        # test = MOEAD(problem)
+        test = NSGA2(problem)
+        start = time.time()
+        #
+        tmp = test.run()
+        end = time.time()
+        print "Run ", test.name()," >>>>>> ", i+1, ' ACT = ', end - start, ' s'
+        write_list_to_json(topo, test.name(), i + 1, tmp)
+        pf_list.extend(tmp)
     #
     # write_list_to_json(topo=topo, algorithm='MOEAD-SFLA', solutions=pf_list)
+    # write_list_to_json(topo=topo, algorithm='MOEAD', solutions=pf_list)
+    write_list_to_json(topo=topo, algorithm='NSGA-II', solutions=pf_list)
     #
-    # # al_list.append('MOEAD')
     # al_list.append('MOEAD-SFLA')
+    # al_list.append('MOEAD')
+    # al_list.append('NSGA-II')
     # update_ideal_pf(topo=topo, algorithms=al_list, runtime=5)
-    #
-    # plot_ps_by_same_algorithm(topo,'MOEAD',2)
-    plot_ps_by_different_algorithm(topo, ['MOEAD-SFLA', 'MOEAD'])
-    
+
