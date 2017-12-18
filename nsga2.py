@@ -7,7 +7,7 @@ from algorithm.individual import IndividualMRP
 from algorithm.parameter import PM, PC, POPULATION_SIZE, MAX_NUMBER_FUNCTION_EVAL
 from problem.mrp.multicast_routing_problem import MulticastRoutingProblem as MRP
 from algorithm.operator import fast_nondominated_sort, crowding_distance_sort
-from algorithm.util import write_list_to_json, plot_pf, write_performance, read_json_as_list
+from algorithm.util import *
 from algorithm.performance import cal_IGD, cal_GD, cal_HV
 
 import numpy

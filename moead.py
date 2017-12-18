@@ -91,7 +91,6 @@ class SubProblem(object):
             fit = max(x, y)
         return fit
     
-
 class MultiObjectiveEvolutionaryAlgorithmBasedOnDecomposition(object):
     
     def __init__(self, problem):
@@ -113,8 +112,9 @@ class MultiObjectiveEvolutionaryAlgorithmBasedOnDecomposition(object):
             sub_sol = SubProblem(weight_vector=vectors.weight_vector[i],
                                  index_neighbor=vectors.index_neighbor[i],
                                  solution=ind)
+            
             self.current_population.append(sub_sol)
-            # self.update_external_archive(ind)
+            self.update_external_archive(ind)
             self.update_reference_point(ind)
     
     def update_external_archive(self, ind):
@@ -141,7 +141,7 @@ class MultiObjectiveEvolutionaryAlgorithmBasedOnDecomposition(object):
     def update_reference_point(self, ind):
         tmp = []
         for fit, ref in zip(ind.fitness, self.reference_point):
-            tmp.append(fit if fit < ref else ref)
+            tmp.append(min(fit, ref))
         self.reference_point = tmp
     
     def reproduction(self, ind):
@@ -192,8 +192,8 @@ class MultiObjectiveEvolutionaryAlgorithmBasedOnDecomposition(object):
                 self.update_reference_point(new_solution)
                 self.update_neighbor_solution(new_solution, ind)
                 pop_list.append(new_solution)
-                # self.update_external_archive(new_solution)
-            self.update_archive(pop_list)
+                self.update_external_archive(new_solution)
+            # self.update_archive(pop_list)
             gen += 1
         
         return self.external_archive

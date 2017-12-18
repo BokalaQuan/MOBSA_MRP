@@ -29,8 +29,7 @@ class SubPopulation(object):
     def init_subpop(self):
         for i in range(int(math.sqrt(POPULATION_SIZE))):
             ind = Candidate()
-            while not ind.is_feasible():
-                ind.initialize(self.pv.generate_chromosome(), self.problem)
+            ind.initialize(self.pv.generate_chromosome(), self.problem)
             self.neighbors.append(ind)
         
     def tabu_search_in_subpop(self):

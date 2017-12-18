@@ -70,11 +70,12 @@ class StrengthParetoEvolutionaryAlgorithm2(object):
             distance = []
             for ind1 in union_population:
                 distance.append(numpy.linalg.norm(numpy.mat(ind0.fitness) - numpy.mat(ind1.fitness)))
-            distance_matrix.append(distance_matrix)
+            distance_matrix.append(distance)
             
         for dis, ind in zip(distance_matrix, union_population):
-            ind.k_distance = dis.sort()[k]
-            ind.clear_property()
+            dis.sort()
+            ind.k_distance = dis[k]
+            ind.clear_dominated_property()
             
         self.current_population = []
         self.external_archive = []

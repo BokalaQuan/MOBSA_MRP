@@ -117,7 +117,7 @@ def compare_to(ind0, ind1, obj):
         if ind0['loss'] > ind1['loss']:
             return True
     elif obj == 'fit':
-        if ind0['fit'] < ind1['fit']:
+        if ind0.fit < ind1.fit:
             return True
 
     return False

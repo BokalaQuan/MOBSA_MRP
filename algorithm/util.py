@@ -124,34 +124,63 @@ def write_performance(property=None, topo=None, algorithm=None, runtime=None, ls
         f.write(json.dumps(lst, indent=4))
         f.close()
 
-def plot_pf(filename, color, describe):
-    plt.subplot()
+def func(topo=None, algorithm=None, runtime=None):
     x = []
     y = []
-    with open(filename, 'r') as f:
-        conf = json.load(f)
-        for item in conf:
-            x.append(item['loss'])
-            y.append(item['delay'])
-        f.close()
-    plt.xlabel('Ave_plr (%)')
-    plt.ylabel('Ave_delay (ms)')
-    plt.legend(describe)
-    plt.plot(x, y, color)
+    data = []
 
-# def plot_ps(topo, types, colors, describe):
-#     for type, color in zip(types, colors):
-#         temp = os.getcwd() + '/solution/' + topo + '/PF-' + \
-#                 type + '-' +   + '.json'
-#         plot_pf(temp, type, color,describe)
-#     plt.show()
-
-def plot_ps_by_same_algorithm(topo, algorithm, runtime, styles):
-    for i in range(runtime):
+    if runtime is None:
         tmp = os.getcwd() + '/solution/' + topo + '/PF-' + \
+            algorithm + '.json'
+
+        with open(tmp, 'r') as f:
+            conf = json.load(f)
+            for item in conf:
+                x.append(item['loss'])
+                y.append(item['delay'])
+        f.close()
+        data = [x, y]
+    else:
+        for i in range(runtime):
+            tmp = os.getcwd() + '/solution/' + topo + '/PF-' + \
                 algorithm + '-' + str(i + 1) + '.json'
-        plot_pf(tmp, styles[i], 'NSGA-II')
+
+            with open(tmp, 'r') as f:
+                conf = json.load(f)
+                for item in conf:
+                    x.append(item['loss'])
+                    y.append(item['delay'])
+            f.close()
+            data.append([x, y])
+
+    return data
+
+def plot_ps_by_same_algorithm(topo=None, algorithm=None, runtime=None):
+    with plt.style.context('Solarize_Light2'):
+        data = func(topo=topo, algorithm=algorithm, runtime=runtime)
+        for i in range(runtime):
+            plt.plot(data[i][0], data[i][1])
+
+        plt.title(algorithm)
+        plt.xlabel('Ave_plr (%)', fontsize=14)
+        plt.ylabel('Ave_delay (ms)', fontsize=14)
+
     plt.show()
+
+
+def plot_ps_by_different_algorithm(topo=None, algorithms=None):
+    styles = ['r^', 'ko']
+    for item, sty in zip(algorithms, styles):
+        data = func(topo=topo, algorithm=item)
+        plt.plot(data[0], data[1], sty)
+
+    plt.xlabel('Ave_plr (%)', fontsize=14)
+    plt.ylabel('Ave_delay (ms)', fontsize=14)
+    plt.legend(algorithms)
+    plt.show()
+
+
+
 
 
 if __name__ == '__main__':

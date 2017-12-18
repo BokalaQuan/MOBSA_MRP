@@ -94,8 +94,8 @@ class IndividualMRP(Individual):
         ind = IndividualMRP()
         ind.problem = self.problem
         ind.chromosome = copy.copy(self.chromosome)
-        ind.fitness = copy.copy(self.fitness)
         ind.paths = copy.deepcopy(self.paths)
+        ind.fitness  = copy.copy(self.fitness)
         ind.delay = self.delay
         ind.loss = self.loss
         ind.bandwidth = self.bandwidth
@@ -142,7 +142,6 @@ class IndividualMRP(Individual):
             # self.loss = INF
             self.delay = float(500)
             self.loss = float(1)
-            
             
     def _init_tree_by_subgraph(self, mrp, graph):
         self.paths = []
