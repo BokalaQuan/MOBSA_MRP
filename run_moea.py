@@ -17,7 +17,7 @@ import os
 
 if __name__ == '__main__':
 
-    topo = 'topo6'
+    topo = 'topo1'
     problem = MRP()
     problem.initialize(topo)
     #

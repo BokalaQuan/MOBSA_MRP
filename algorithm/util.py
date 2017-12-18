@@ -187,7 +187,7 @@ def plot_ps_by_different_algorithm(topo=None, algorithms=None, title=None):
     plt.xlabel('Ave_plr (%)', fontsize=12)
     plt.ylabel('Ave_delay (ms)', fontsize=12)
     plt.legend(algorithms, fontsize=10)
-    plt.savefig(title+".jpg",dpi=1200)
+    plt.savefig(title+".png", dpi=900)
     plt.show()
 
 
