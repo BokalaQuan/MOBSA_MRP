@@ -5,58 +5,66 @@ import copy
 import numpy
 import networkx as nx
 
-class Individual(object):
-    '''
-    '''
-    problem = None
-    chromosome = []
-    fitness = None
 
-    #
-    num_dominated = 0
-    dominating_list = []
-    pareto_rank = 0
-    crowding_distance = 0
-    
+class Individual(object):
+    """
+    Minimization.
+    """
+
     def __init__(self):
         self.problem = None
         self.chromosome = None
         self.fitness = None
-        self.num_dominated = 0
-        self.dominating_list = []
-        self.pareto_rank = 0
-        self.crowding_distance = 0
-    
+
+    def __lt__(self, other):
+        for i, j in zip(self.fitness, other.fitness):
+            if i > j:
+                return False
+        return True
+
+    def __gt__(self, other):
+        for i, j in zip(self.fitness, other.fitness):
+            if i < j:
+                return False
+        return True
+
+    def __eq__(self, other):
+        if self.fitness == other.fitness:
+            return True
+        return False
+
+    def __ne__(self, other):
+        if self.fitness != other.fitness:
+            return True
+        return False
+
+    def __le__(self, other):
+        for i, j in zip(self.fitness, other.fitness):
+            if i >= j:
+                return False
+
+        if self == other: return False
+        return True
+
+    def __ge__(self, other):
+        for i, j in zip(self.fitness, other.fitness):
+            if i <= j:
+                return False
+        if self == other: return False
+        return True
+
+    def __str__(self):
+        return "id : " + str(id(self)) + " Fitness : " + str(self.fitness)
+
     def copy(self):
         pass
-    
-    def initialize(self):
+
+    def init_ind(self):
         pass
     
     def cal_fitness(self):
         pass
         
-    def is_dominated(self):
-        pass
-    
-    def is_equal(self, ind):
-        if self.fitness == ind.fitness:
-            return True
-        else:
-            return False
-    
-    def is_same(self, ind):
-        if self.chromosome == ind.chromosome:
-            return True
-        else:
-            return False
-        
-    def clear_dominated_property(self):
-        self.num_dominated = 0
-        self.dominating_list = []
-        self.pareto_rank = 0
-        self.crowding_distance = 0
-    
     def distance_to(self, ind):
         fit1 = numpy.array(self.fitness)
         fit2 = numpy.array(ind.fitness)
@@ -68,17 +76,12 @@ class Individual(object):
 
     def to_dict_fitness(self):
         return {'f1': self.fitness[0],
-                    'f2': self.fitness[1]}
+                'f2': self.fitness[1]}
     
-    def show(self):
-        pass
-
     @staticmethod
-    def create_chromosome(length):
-        chromosome = []
-        for i in range(length):
-            chromosome.append(1 if random.random() <= 0.5 else 0)
-        return chromosome
+    def create_chromosome(length, probability):
+        temp = [1 if random.uniform(0,1) < probability else 0 for i in range(length)]
+        return temp
 
 class IndividualMRP(Individual):
     
@@ -94,19 +97,18 @@ class IndividualMRP(Individual):
         ind = IndividualMRP()
         ind.problem = self.problem
         ind.chromosome = copy.copy(self.chromosome)
-        ind.paths = copy.deepcopy(self.paths)
         ind.fitness  = copy.copy(self.fitness)
+
+        ind.paths = copy.deepcopy(self.paths)
         ind.delay = self.delay
         ind.loss = self.loss
         ind.bandwidth = self.bandwidth
-        ind.crowding_distance = self.crowding_distance
-        ind.pareto_rank = self.pareto_rank
 
         return ind
 
-    def initialize(self, chromosome, problem):
+    def init_ind(self, problem):
         self.problem = problem
-        self.chromosome = chromosome
+        self.chromosome = Individual.create_chromosome(problem.num_link, 0.5)
         self.fitness = self.cal_fitness()
         
     def cal_fitness(self):
@@ -123,7 +125,8 @@ class IndividualMRP(Individual):
                 link_select.append(mrp.links[x])
         
         for link in link_select:
-            graph.add_edge(link.src, link.dst, delay=link.delay, band=link.bandwidth, loss=link.loss)
+            graph.add_edge(link.src, link.dst, delay=link.delay,
+                           band=link.bandwidth, loss=link.loss)
         
         if state:
             if mrp.src not in graph.node: state = False
@@ -171,26 +174,24 @@ class IndividualMRP(Individual):
         self.delay = float(max_delay / len(mrp.dst))
         self.loss = float(max_loss / len(mrp.dst))
 
-    def is_dominated(self, ind):
-        if ind.loss <= self.loss and ind.delay < self.delay:
-            return True
-        elif ind.loss < self.loss and ind.delay <= self.delay:
-            return True
-        return False
-
     def is_feasible(self):
         if self.fitness != [float(500), float(1)]:
             return True
         return False
     
     def crossover(self, ind):
-        temp = self.create_chromosome(self.problem.num_link)
+        '''
+        @function Uniform crossover
+        :param ind:
+        :return:
+        '''
+        temp = self.create_chromosome(self.problem.num_link, 0.5)
         for i in range(len(temp)):
             if temp[i]:
                 obj = self.chromosome[i]
                 self.chromosome[i] = ind.chromosome[i]
                 ind.chromosome[i] = obj
-    
+
     def mutation(self):
         for i in range(len(self.chromosome)):
             self.chromosome[i] = 1 - self.chromosome[i] \
@@ -218,10 +219,10 @@ class IndividualKP(Individual):
         ind.fitness = copy.copy(self.fitness)
         return ind
     
-    def initialize(self, chromosome, problem):
+    def init_ind(self, problem):
         self.problem = problem
-        self.chromosome = chromosome
-        self.fitness = self.cal_fitness(chromosome)
+        self.chromosome = Individual.create_chromosome(problem.num_item, 0.5)
+        self.fitness = self.cal_fitness(self.chromosome)
     #
     
     def cal_fitness(self, chromosome):

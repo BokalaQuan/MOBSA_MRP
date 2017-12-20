@@ -1,5 +1,3 @@
-from algorithm.operator import object_shell_sort
-
 import json
 import math
 import random
@@ -91,7 +89,7 @@ def write_list_to_json(topo=None, algorithm=None, runtime=None, solutions=None):
         for sol in solutions:
             solution.append(sol.to_dict())
 
-    object_shell_sort(solution, 'loss')
+    solution.sort(cmp=None, key=lambda x:x['loss'], reverse=False)
 
     obj_delay = solution[0]['delay']
     obj_loss = solution[0]['loss']
@@ -174,7 +172,7 @@ def plot_ps_by_same_algorithm(topo=None, algorithm=None, runtime=None):
     plt.ylabel('Ave_delay (ms)', fontsize=12)
     plt.legend(loc='upper right')
     plt.savefig("N1.png", dpi=1200)
-    plt.show()
+    # plt.show()
 
 
 def plot_ps_by_different_algorithm(topo=None, algorithms=None, title=None):
@@ -190,13 +188,31 @@ def plot_ps_by_different_algorithm(topo=None, algorithms=None, title=None):
     plt.savefig(title+".png", dpi=900)
     plt.show()
 
-
-
-
-
 if __name__ == '__main__':
-    x = np.linspace(-10, 10, 1000)
-    y = np.array([func_trans_V4(i) for i in x])
+    plt.figure()
+    x = np.linspace(-15, 15, 1000)
+    y1 = np.array([func_trans_V1(i) for i in x])
+    y2 = np.array([func_trans_V2(i) for i in x])
+    y3 = np.array([func_trans_V3(i) for i in x])
+    y4 = np.array([func_trans_V4(i) for i in x])
+    y5 = np.array([func_trans_S1(i) for i in x])
+    y6 = np.array([func_trans_S2(i) for i in x])
+    y7 = np.array([func_trans_S3(i) for i in x])
+    y8 = np.array([func_trans_S4(i) for i in x])
 
-    plt.plot(x, y)
-    plt.show()
+    plt.plot(x, y1)
+    plt.plot(x, y2)
+    plt.plot(x, y3)
+    plt.plot(x, y4)
+    plt.plot(x, y5)
+    plt.plot(x, y6)
+    plt.plot(x, y7)
+    plt.plot(x, y8)
+    plt.title('Transfer Function Set')
+    plt.legend(['V1', 'V2', 'V3', 'V4', 'S1', 'S2', 'S3', 'S4'])
+    plt.xlabel('x')
+    plt.ylabel('y')
+    plt.grid()
+    plt.savefig("Transfer-Function.pdf",dpi=900)
+
+    # plt.show()

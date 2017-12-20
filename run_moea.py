@@ -27,17 +27,21 @@ if __name__ == '__main__':
         # test = MOEAD_SFLA(problem)
         test = MOEAD(problem)
         # test = NSGA2(problem)
+        # test = EAG_MOEAD(problem=problem)
+        # test = SPEA2(problem=problem)
         start = time.time()
         #
         tmp = test.run()
         end = time.time()
         print "Run ", test.name()," >>>>>> ", i+1, ' ACT = ', end - start, ' s'
-        write_list_to_json(topo, test.name(), i + 1, tmp)
+        write_list_to_json(topo, test.name(), i+1, tmp)
         pf_list.extend(tmp)
     #
     # write_list_to_json(topo=topo, algorithm='MOEAD-SFLA', solutions=pf_list)
     write_list_to_json(topo=topo, algorithm='MOEAD', solutions=pf_list)
     # write_list_to_json(topo=topo, algorithm='NSGA-II', solutions=pf_list)
+    # write_list_to_json(topo=topo, algorithm='SPEA2', solutions=pf_list)
+    # write_list_to_json(topo=topo, algorithm='EAG-MOEAD', solutions=pf_list)
     #
     # al_list.append('MOEAD-SFLA')
     # al_list.append('MOEAD')
