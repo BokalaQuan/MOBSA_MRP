@@ -21,10 +21,8 @@ class MOEAD_SFLA(MultiObjectiveEvolutionaryAlgorithmBasedOnDecomposition):
     def reproduction(self, ind):
         fit = []
         for i in ind.index_neighbor:
-            # fit.append(SubProblem.cal_fit(self.current_population[i].solution, ind.weight_vector,
-            #                               'TF', self.reference_point))
-
-            fit.append(SubProblem.cal_fit(self.current_population[i].solution, ind.weight_vector, 'WS'))
+            fit.append(SubProblem.cal_fit(self.current_population[i].solution,
+                                          ind.weight_vector, 'WS'))
 
         fit_worst = max(fit)
         index_worst = fit.index(fit_worst)
@@ -36,19 +34,14 @@ class MOEAD_SFLA(MultiObjectiveEvolutionaryAlgorithmBasedOnDecomposition):
         # fit_new = SubProblem.cal_fit(ind_new, ind.weight_vector,
         #                              'TF', self.reference_point)
 
-        fit_new = SubProblem.cal_fit(ind_new, ind.weight_vector,
-                                     'WS')
+        fit_new = SubProblem.cal_fit(ind_new, ind.weight_vector, 'WS')
         
         if fit_new < fit_worst:
             return ind_new
-        elif not ind_new.is_dominated(ind_worst):
+        elif not ind_new >= ind_worst:
             ind_new.mutation()
             ind_new.fitness = ind_new.cal_fitness()
-            # fit_new = SubProblem.cal_fit(ind_new, ind.weight_vector,
-            #                              'TF', self.reference_point)
-
-            fit_new = SubProblem.cal_fit(ind_new, ind.weight_vector,
-                                         'WS')
+            fit_new = SubProblem.cal_fit(ind_new, ind.weight_vector, 'WS')
 
             if fit_new < fit_worst:
                 return ind_new

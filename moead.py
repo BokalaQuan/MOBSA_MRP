@@ -5,8 +5,8 @@
 """
 
 from algorithm.individual import IndividualMRP
-from algorithm.parameter import POPULATION_SIZE, MAX_NUMBER_FUNCTION_EVAL, PC, PM, INF
-from algorithm.operator import fast_nondominated_sort
+from algorithm.moea import MultiObjectiveEvolutionaryAlgorithm as MOEA
+from algorithm.parameter import *
 
 import random
 import copy
@@ -91,12 +91,10 @@ class SubProblem(object):
             fit = max(x, y)
         return fit
     
-class MultiObjectiveEvolutionaryAlgorithmBasedOnDecomposition(object):
+class MultiObjectiveEvolutionaryAlgorithmBasedOnDecomposition(MOEA):
     
     def __init__(self, problem):
-        self.problem = problem
-        self.current_population = []
-        self.external_archive = []
+        super(MultiObjectiveEvolutionaryAlgorithmBasedOnDecomposition, self).__init__(problem)
         self.reference_point = [INF, INF]
     
     def name(self):
@@ -107,37 +105,30 @@ class MultiObjectiveEvolutionaryAlgorithmBasedOnDecomposition(object):
         vectors.initialize_vector()
         for i in range(POPULATION_SIZE):
             ind = IndividualMRP()
-            ind.initialize(IndividualMRP.create_chromosome(self.problem.num_link), self.problem)
+            ind.init_ind(self.problem)
             
             sub_sol = SubProblem(weight_vector=vectors.weight_vector[i],
                                  index_neighbor=vectors.index_neighbor[i],
                                  solution=ind)
             
             self.current_population.append(sub_sol)
-            self.update_external_archive(ind)
+            self.update_archive(ind)
             # self.update_reference_point(ind)
     
-    def update_external_archive(self, ind):
+    def update_archive(self, ind):
         if len(self.external_archive) == 0:
             self.external_archive.append(ind)
         else:
             flag = 0
             for sol in self.external_archive[:]:
-                if sol.is_dominated(ind):
+                if ind <= sol:
                     self.external_archive.remove(sol)
-                elif ind.is_dominated(sol) or ind.is_equal(sol):
+                elif ind >=sol or ind == sol:
                     flag += 1
             if flag == 0:
                 self.external_archive.append(ind)
                 
-    def update_archive(self, poplist):
-        union_list = []
-        union_list.extend(poplist)
-        union_list.extend(self.external_archive)
-        
-        self.external_archive = fast_nondominated_sort(union_list)[0]
-        
-    
+
     def update_reference_point(self, ind):
         tmp = []
         for fit, ref in zip(ind.fitness, self.reference_point):
@@ -154,7 +145,7 @@ class MultiObjectiveEvolutionaryAlgorithmBasedOnDecomposition(object):
         ind1 = self.current_population[ind.index_neighbor[index1]].solution.copy()
         ind2 = self.current_population[ind.index_neighbor[index2]].solution.copy()
         
-        if random.random() < PC:
+        if random.uniform(0, 1) < PC:
             ind1.crossover(ind2)
         
         ind1.mutation()
@@ -163,9 +154,9 @@ class MultiObjectiveEvolutionaryAlgorithmBasedOnDecomposition(object):
         ind1.fitness = ind1.cal_fitness()
         ind2.fitness = ind2.cal_fitness()
         
-        if ind1.is_dominated(ind2):
+        if ind1 >= ind2:
             return ind2
-        elif ind2.is_dominated(ind1):
+        elif ind1 <= ind2:
             return ind1
         else:
             return ind1 if random.random() < 0.5 else ind2
@@ -173,17 +164,8 @@ class MultiObjectiveEvolutionaryAlgorithmBasedOnDecomposition(object):
     def update_neighbor_solution(self, new_solution, ind):
         for i in ind.index_neighbor:
             ind_select = self.current_population[i]
-            # fit1 = ind.cal_fit(new_solution, ind_select.weight_vector,
-            #                    'TF', self.reference_point)
-            #
-            # fit2 = ind.cal_fit(ind_select.solution, ind_select.weight_vector,
-            #                    'TF', self.reference_point)
-
-            fit1 = SubProblem.cal_fit(new_solution, ind_select.weight_vector,
-                                      'WS')
-
-            fit2 = SubProblem.cal_fit(ind_select.solution, ind_select.weight_vector,
-                                      'WS')
+            fit1 = SubProblem.cal_fit(new_solution, ind_select.weight_vector, 'WS')
+            fit2 = SubProblem.cal_fit(ind_select.solution, ind_select.weight_vector, 'WS')
 
             if fit1 < fit2:
                 ind_select.solution = new_solution
@@ -193,31 +175,11 @@ class MultiObjectiveEvolutionaryAlgorithmBasedOnDecomposition(object):
         
         gen = 0
         while gen < MAX_NUMBER_FUNCTION_EVAL:
-            pop_list = []
             for ind in self.current_population:
                 new_solution = self.reproduction(ind)
                 # self.update_reference_point(new_solution)
                 self.update_neighbor_solution(new_solution, ind)
-                pop_list.append(new_solution)
-                self.update_external_archive(new_solution)
-            # self.update_archive(pop_list)
+                self.update_archive(new_solution)
             gen += 1
         
         return self.external_archive
-        
-
-if __name__ == '__main__':
-    import math
-    test = WeightVector(NumOfNeighbor=int(math.sqrt(POPULATION_SIZE)))
-    test.initialize_vector()
-
-    print int(POPULATION_SIZE / 6), int(POPULATION_SIZE / 3), int(POPULATION_SIZE / 2)
-    print int(POPULATION_SIZE * 2 / 3), int(POPULATION_SIZE * 5 / 6)
-    
-    for ii in test.index_neighbor:
-        print ii
-    
-    
-    
-    
-    

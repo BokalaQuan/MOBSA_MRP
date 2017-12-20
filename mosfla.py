@@ -7,7 +7,7 @@
 
 from algorithm.individual import IndividualMRP
 from algorithm.parameter import *
-from algorithm.operator import fast_nondominated_sort, crowding_distance_sort, object_shell_sort
+from algorithm.operator import *
 
 import random
 import copy

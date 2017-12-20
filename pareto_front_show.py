@@ -1,9 +1,9 @@
 from algorithm.util import *
 
-topo = 'topo6'
+topo = 'topo1'
 
 # plot_ps_by_same_algorithm(topo, 'NSGA-II', 5)
 
 if __name__ == '__main__':
-    plot_ps_by_different_algorithm(topo, ['MOEAD-SFLA', 'NSGA-II', 'MOEAD'], topo)
+    plot_ps_by_different_algorithm(topo, ['MOEAD', 'NSGA-II'], topo)
 
