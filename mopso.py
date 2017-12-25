@@ -5,22 +5,14 @@
 '''
 
 from algorithm.individual import IndividualMRP
-from algorithm.parameter import PM, PC, POPULATION_SIZE, EXTERNAL_ARCHIVE_SIZE, MAX_NUMBER_FUNCTION_EVAL
+from algorithm.parameter import *
 from problem.mrp.multicast_routing_problem import MulticastRoutingProblem as MRP
-from algorithm.util import func_trans_V1, func_trans_S1, write_list_to_json, read_json_as_list, write_performance
+from algorithm.util import *
 from algorithm.operator import fast_nondominated_sort
-from algorithm.performance import cal_HV, cal_GD, cal_IGD
 
-import numpy
 import random
-import copy
-import os
-import json
 
-import matplotlib.pyplot as plot
-
-VELM = [-2, 2]
-INF = float('inf')
+VELM = [-2.0, 2.0]
 
 class IndividualParticle(IndividualMRP):
     
@@ -45,8 +37,10 @@ class IndividualParticle(IndividualMRP):
                 random.random() * (self.pbest.chromosome[i] - self.chromosome[i]) + \
                 random.random() * (self.gbest.chromosome[i] - self.chromosome[i])
             
-            if vel_ < VELM[0]: vel_ = VELM[0]
-            elif vel_ > VELM[1]: vel_ = VELM[1]
+            # if vel_ < VELM[0]: vel_ = VELM[0]
+            # elif vel_ > VELM[1]: vel_ = VELM[1]
+
+            if vel_ < VELM[0] or vel_ > VELM[1]: vel_ *= -1
             
             self.vel[i] = vel_
             
@@ -59,9 +53,9 @@ class IndividualParticle(IndividualMRP):
         self.fitness = self.cal_fitness()
         
     def update_pbest(self):
-        if self.is_dominated(self.pbest):
+        if self >= self.pbest:
             return
-        elif self.pbest.is_dominated(self):
+        elif self.pbest >= self:
             self.pbest = self.copy()
         else:
             if random.random() < 0.5:

@@ -38,6 +38,14 @@ class IndividualNSGA(IndividualMRP):
 
         return ind
 
+    def opposition_based_learning(self):
+        chrom = [1 if ch == 0 else 0 for ch in self.chromosome]
+        ind = IndividualNSGA()
+        ind.problem = self.problem
+        ind.chromosome = chrom
+        ind.fitness = ind.cal_fitness()
+        return ind
+
     def clear_dominated_property(self):
         self.num_dominated = 0
         self.dominating_list = []

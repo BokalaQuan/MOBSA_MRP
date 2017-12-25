@@ -12,9 +12,11 @@ from algorithm.operator import fast_nondominated_sort, crowding_distance_sort
 
 import random
 import math
+import numpy as np
+import matplotlib.pyplot as plt
+
 
 class SubProblemEAG(SubProblem):
-    
     def __init__(self, weight_vector=None, index_neighbor=None, solution=None):
         '''
         init instance of SubProblem in EAG-MOEA/D
@@ -28,24 +30,23 @@ class SubProblemEAG(SubProblem):
 
 
 class ExternalArchiveGuidedMOEAD(MOEA):
-    
     def __init__(self, problem=None):
         super(ExternalArchiveGuidedMOEAD, self).__init__(problem)
         self.L = int(math.sqrt(MAX_NUMBER_FUNCTION_EVAL))
 
     def name(self):
         return 'EAG-MOEAD'
-        
+
     def init_population(self):
         vectors = WeightVector(int(math.sqrt(POPULATION_SIZE)))
         vectors.initialize_vector()
         for i in range(POPULATION_SIZE):
             ind = IndividualNSGA()
             ind.init_ind(self.problem)
-            
+
             sub_sol = SubProblemEAG(weight_vector=vectors.weight_vector[i],
-                                 index_neighbor=vectors.index_neighbor[i],
-                                 solution=ind)
+                                    index_neighbor=vectors.index_neighbor[i],
+                                    solution=ind)
 
             self.current_population.append(sub_sol)
             self.external_archive.append(ind.copy())
@@ -54,13 +55,14 @@ class ExternalArchiveGuidedMOEAD(MOEA):
         S_list = []
         for sub in self.current_population:
             S_list.append(sum(sub.set_of_success[gen - self.L:]))
+            sub.set_of_solutions = []
 
         tmp = sum(S_list) + 0.02
-        D_list = [float(s/tmp) for s in S_list]
-        P_list = [sum(D_list[:i+1]) for i in range(POPULATION_SIZE)]
+        D_list = [float(s / tmp) for s in S_list]
+        P_list = [sum(D_list[:i + 1]) for i in range(POPULATION_SIZE)]
 
         return P_list
-    
+
     def select_subproblem(self, p_list):
         select_ind = None
         p_sel = random.uniform(0, 1)
@@ -69,11 +71,9 @@ class ExternalArchiveGuidedMOEAD(MOEA):
             select_ind = self.current_population[0]
         else:
             for i in range(1, POPULATION_SIZE):
-                if p_sel > p_list[i-1] and p_sel <= p_list[i]:
+                if p_sel > p_list[i - 1] and p_sel <= p_list[i]:
                     select_ind = self.current_population[i]
                     break
-
-        select_ind.set_of_solutions = []
 
         return select_ind
 
@@ -81,8 +81,8 @@ class ExternalArchiveGuidedMOEAD(MOEA):
         index1 = 0
         index2 = 0
         while index1 == index2:
-            index1 = random.randint(0, len(ind.index_neighbor)-1)
-            index2 = random.randint(0, len(ind.index_neighbor)-1)
+            index1 = random.randint(0, len(ind.index_neighbor) - 1)
+            index2 = random.randint(0, len(ind.index_neighbor) - 1)
 
         ind1 = self.current_population[ind.index_neighbor[index1]].solution.copy()
         ind2 = self.current_population[ind.index_neighbor[index2]].solution.copy()
@@ -98,23 +98,23 @@ class ExternalArchiveGuidedMOEAD(MOEA):
         elif ind1 <= ind2:
             ind_new = ind1
         else:
-            ind_new = ind1 if random.uniform(0,1) < 0.5 else ind2
+            ind_new = ind1 if random.uniform(0, 1) < 0.5 else ind2
 
         ind.set_of_solutions.append(ind_new)
 
         return ind_new
-                
+
     def update_neighbor_solution(self, ind):
         for i in ind.index_neighbor:
             ind_select = self.current_population[i]
-            
+
             for sol in ind.set_of_solutions:
                 fit1 = ind.cal_fit(sol, ind_select.weight_vector, 'WS')
                 fit2 = ind.cal_fit(ind_select.solution, ind_select.weight_vector, 'WS')
-            
+
                 if fit1 < fit2:
                     ind_select.solution = sol.copy()
-        
+
     def update_archive(self, new_solutions):
         union_set = []
         union_set.extend(new_solutions)
@@ -133,15 +133,18 @@ class ExternalArchiveGuidedMOEAD(MOEA):
                     current = len(self.external_archive)
                     for i in range(POPULATION_SIZE - current):
                         self.external_archive.append(pareto_rank_set[i])
-        
+
         for ind in self.current_population:
             num_success = 0
             for sol in ind.set_of_solutions:
                 if sol in self.external_archive:
                     num_success += 1
             ind.set_of_success.append(num_success)
-        
+
     def run(self):
+        # test
+        plt.figure()
+
         self.init_population()
 
         gen = 0
@@ -159,5 +162,14 @@ class ExternalArchiveGuidedMOEAD(MOEA):
 
             self.update_archive(new_solutions)
             gen += 1
+
+            data = [ind.fitness for ind in self.external_archive]
+            tmp = np.array(data)
+            plt.scatter(tmp[:, 0], tmp[:, 1], alpha=0.5)
+
+        plt.xlabel('Ave_plr (%)', fontsize=12)
+        plt.ylabel('Ave_delay (ms)', fontsize=12)
+        plt.legend('EAG-MOEA/D', fontsize=10)
+        plt.show()
 
         return self.external_archive

@@ -2,6 +2,7 @@ from algorithm.parameter import EXTERNAL_ARCHIVE_SIZE, INF
 
 import random
 import copy
+import numpy as np
 
 
 '''
@@ -90,18 +91,16 @@ def crowding_distance_sort(pareto_rank_set_list):
 class HyperCube(object):
     
     def __init__(self, solution):
-        self.num_grid = None
+        self.coordinate = None
         self.solution = solution.copy()
         
-    def update_cube(self, num_grid):
-        self.num_grid = copy.copy(num_grid)
+    def update_cube(self, coordinate):
+        self.coordinate = copy.copy(coordinate)
 
 class AdaptiveGrid(object):
     
     def __init__(self, grid_size):
         self.grid_size = grid_size
-        self.upper = [0.0, 0.0]
-        self.lower = [INF, INF]
         self.grid = []
         self.p_select = []
         self.archive = []
@@ -112,23 +111,25 @@ class AdaptiveGrid(object):
         self.grid_adjust()
         
     def grid_adjust(self):
-        self.clear_grid_property()
+        f_list = []
         for cube in self.archive:
-            self.upper[0] = cube.solution.fitness[0] if cube.solution.fitness[0] > self.upper[0] \
-                else self.upper[0]
-            self.upper[1] = cube.solution.fitness[1] if cube.solution.fitness[1] > self.upper[1] \
-                else self.upper[1]
-            self.lower[0] = cube.solution.fitness[0] if cube.solution.fitness[0] < self.lower[0] \
-                else self.lower[0]
-            self.lower[1] = cube.solution.fitness[1] if cube.solution.fitness[1] < self.lower[1] \
-                else self.lower[1]
-    
-        mod = [float(self.upper[0] - self.lower[0]) / self.grid_size,
-               float(self.upper[1] - self.lower[1]) / self.grid_size]
-    
+            f_list.append(cube.solution.fitness)
+
+        tmp = np.array(f_list)
+        f_max = [max(tmp[:,0]), max(tmp[:,1])]
+        f_min = [min(tmp[:,0]), min(tmp[:,1])]
+
+        upper = [f_max[0] + (f_max[0] - f_min[0]) * 0.5 / self.grid_size,
+                 f_max[1] + (f_max[1] - f_min[1]) * 0.5 / self.grid_size]
+        lower = [f_min[0] - (f_max[0] - f_min[0]) * 0.5 / self.grid_size,
+                 f_min[1] - (f_max[1] - f_min[1]) * 0.5 / self.grid_size]
+
+        mod = [float(upper[0] - lower[0]) / self.grid_size,
+               float(upper[1] - lower[1]) / self.grid_size]
+
         for cube in self.archive:
-            cube.num_grid = [int((cube.solution.fitness[0] - self.lower[0]) / mod[0]),
-                             int((cube.solution.fitness[1] - self.lower[1]) / mod[1])]
+            cube.num_grid = [int((cube.solution.fitness[0] - lower[0]) / mod[0]),
+                             int((cube.solution.fitness[1] - lower[1]) / mod[1])]
     
         for i in range(self.grid_size):
             for j in range(self.grid_size):
@@ -150,20 +151,18 @@ class AdaptiveGrid(object):
     def update_grid(self, ind):
         flag = 0
         for i in range(len(self.archive)):
-            if ind >=self.archive[i].solution or \
+            if ind >= self.archive[i].solution or \
                     ind == self.archive[i].solution:
                 flag += 1
             elif self.archive[i].solution >= ind:
                 self.archive.pop(i)
                 i -= 1
                 
-        if flag != 0:
+        if flag == 0:
             self.archive.append(HyperCube(ind))
         
         self.grid_adjust()
         
     def clear_grid_property(self):
         self.grid = []
-        self.upper = [0.0, 0.0]
-        self.lower = [INF, INF]
         self.p_select = []

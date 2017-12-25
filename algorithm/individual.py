@@ -196,7 +196,29 @@ class IndividualMRP(Individual):
         for i in range(len(self.chromosome)):
             self.chromosome[i] = 1 - self.chromosome[i] \
                 if random.random() < PM else self.chromosome[i]
-    
+
+    def mutation_1(self):
+        tmp = [1 if random.uniform(0,1) < PM else 0 \
+               for i in range(len(self.chromosome))]
+
+        for i, j in enumerate(tmp):
+            if j:
+                ch = self.chromosome[i]
+                if i == 0:
+                    self.chromosome[i] = self.chromosome[i+1]
+                    self.chromosome[i+1] = ch
+                else:
+                    self.chromosome[i] = self.chromosome[i-1]
+                    self.chromosome[i-1] = ch
+
+    def opposition_based_learning(self):
+        chrom = [1 if ch == 0 else 0 for ch in self.chromosome]
+        ind = IndividualMRP()
+        ind.problem = self.problem
+        ind.chromosome = chrom
+        ind.fitness = ind.cal_fitness()
+        return ind
+
     def to_dict(self):
         return {
             'delay': self.delay,
@@ -260,4 +282,4 @@ class IndividualKP(Individual):
                 weight.pop(id_delete)
                 ratio.pop(id_delete)
                 weight_sum = sum(weight)
-                
+

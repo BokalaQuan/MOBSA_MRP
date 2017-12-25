@@ -1,3 +1,5 @@
+from algorithm.parameter import INF
+
 import json
 import math
 import random
@@ -46,6 +48,59 @@ def func_levy(d):
 
     return 0.01 * r1 * sigma / math.pow(r2, (1 / beta))
 
+'''
+Multi-objective Optimization Algorithms' Performance Indicators 
+'''
+def cal_IGD(pIdeal, pReal):
+    '''
+    Inverted Generational Distance
+    :param pIdeal:
+    :param pReal:
+    :return:
+    '''
+    vol = 0.0
+    for pi in pIdeal:
+        temp = INF
+        for pr in pReal:
+            f1 = pi['delay'] - pr['delay']
+            f2 = pi['loss'] - pr['loss']
+            temp_ = math.sqrt(f1 ** 2 + f2 ** 2)
+            temp = temp_ if temp_ < temp else temp
+        vol += temp
+
+    return vol / len(pIdeal)
+
+def cal_GD(pIdeal, pReal):
+    '''
+    Generational Distance
+    :param pIdeal:
+    :param pReal:
+    :return:
+    '''
+    vol = 0.0
+    for pr in pReal:
+        temp = INF
+        for pi in pIdeal:
+            f1 = pr['delay'] - pi['delay']
+            f2 = pr['loss'] - pi['loss']
+            temp_ = math.sqrt(f1 ** 2 + f2 ** 2)
+            temp = temp_ if temp_ < temp else temp
+        vol += temp ** 2
+
+    return math.sqrt(vol) / len(pReal)
+
+def cal_HV(pReal, ref):
+    '''
+    Hypervolume
+    :param pReal:
+    :param ref:
+    :return:
+    '''
+    hv = (ref[0] - pReal[0]['delay']) * (ref[1] - pReal[0]['loss'])
+    for i in range(1, len(pReal)):
+        hv += (pReal[i - 1]['delay'] - pReal[i]['delay']) * (ref[1] - pReal[i]['loss'])
+
+    return hv
 
 def read_json_as_list(topo, algorithm, runtime=None):
     list_ = []
@@ -121,7 +176,7 @@ def update_ideal_pf(topo, algorithms, runtime=None):
 
 def write_performance(property=None, topo=None, algorithm=None, runtime=None, lst=None):
     path = os.getcwd() + '/solution/' + topo + '/' + property + \
-            '-' + algorithm + str(runtime)  + '.json'
+            '-' + algorithm + '-' + str(runtime)  + '.json'
     with open(path, 'wb') as f:
         f.write(json.dumps(lst, indent=4))
         f.close()
@@ -161,20 +216,6 @@ def func(topo=None, algorithm=None, runtime=None):
 
     return data
 
-def plot_ps_by_same_algorithm(topo=None, algorithm=None, runtime=None):
-    plt.figure()
-    data = func(topo=topo, algorithm=algorithm, runtime=runtime)
-    for i in range(runtime):
-        plt.scatter(data[i][0], data[i][1], alpha=0.5, label=str(i))
-
-    plt.title(algorithm)
-    plt.xlabel('Ave_plr (%)', fontsize=12)
-    plt.ylabel('Ave_delay (ms)', fontsize=12)
-    plt.legend(loc='upper right')
-    plt.savefig("N1.png", dpi=1200)
-    # plt.show()
-
-
 def plot_ps_by_different_algorithm(topo=None, algorithms=None, title=None):
     plt.figure()
     for item in algorithms:
@@ -188,31 +229,5 @@ def plot_ps_by_different_algorithm(topo=None, algorithms=None, title=None):
     plt.savefig(title+".png", dpi=900)
     plt.show()
 
-if __name__ == '__main__':
-    plt.figure()
-    x = np.linspace(-15, 15, 1000)
-    y1 = np.array([func_trans_V1(i) for i in x])
-    y2 = np.array([func_trans_V2(i) for i in x])
-    y3 = np.array([func_trans_V3(i) for i in x])
-    y4 = np.array([func_trans_V4(i) for i in x])
-    y5 = np.array([func_trans_S1(i) for i in x])
-    y6 = np.array([func_trans_S2(i) for i in x])
-    y7 = np.array([func_trans_S3(i) for i in x])
-    y8 = np.array([func_trans_S4(i) for i in x])
-
-    plt.plot(x, y1)
-    plt.plot(x, y2)
-    plt.plot(x, y3)
-    plt.plot(x, y4)
-    plt.plot(x, y5)
-    plt.plot(x, y6)
-    plt.plot(x, y7)
-    plt.plot(x, y8)
-    plt.title('Transfer Function Set')
-    plt.legend(['V1', 'V2', 'V3', 'V4', 'S1', 'S2', 'S3', 'S4'])
-    plt.xlabel('x')
-    plt.ylabel('y')
-    plt.grid()
-    plt.savefig("Transfer-Function.pdf",dpi=900)
-
-    # plt.show()
+def plot_performance_as_boxplot():
+    pass
