@@ -1,6 +1,6 @@
 # Multi-objective evolutionary algorithms in Multicast Routing Optimization
 
-__@version 1.1__
+__@version 1.2__
  
 ## List of Algorithms
 
