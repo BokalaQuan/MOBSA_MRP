@@ -57,7 +57,8 @@ class WeightVector(object):
     def initialize_vector(self):
         self.create_weight_vector()
         self.create_neighborhood()
-    
+
+
 class SubProblem(object):
     
     def __init__(self, weight_vector=None, index_neighbor=None, solution=None):
@@ -90,7 +91,8 @@ class SubProblem(object):
             y = weight_vector[1] * abs(ind.fitness[1] - reference_point[1])
             fit = max(x, y)
         return fit
-    
+
+
 class MultiObjectiveEvolutionaryAlgorithmBasedOnDecomposition(MOEA):
     
     def __init__(self, problem):
@@ -164,6 +166,7 @@ class MultiObjectiveEvolutionaryAlgorithmBasedOnDecomposition(MOEA):
     def update_neighbor_solution(self, new_solution, ind):
         for i in ind.index_neighbor:
             ind_select = self.current_population[i]
+
             fit1 = SubProblem.cal_fit(new_solution, ind_select.weight_vector, 'WS')
             fit2 = SubProblem.cal_fit(ind_select.solution, ind_select.weight_vector, 'WS')
 

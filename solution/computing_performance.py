@@ -2,143 +2,32 @@ import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
 
-# IGD = np.array([
-#         5.387114672726912,
-#         6.303213848017669,
-#         4.046105166150297,
-#         6.661374063279566,
-#         3.148788869214528,
-#         8.180899022033845,
-#         5.5749486085050854,
-#         2.9337404390318036,
-#         7.086821944181505,
-#         6.067063001480307
-#     ])
-# GD = np.array([
-#         4.239309013698846,
-#         5.846414322591553,
-#         7.850483163149577,
-#         1.0198051960830428,
-#         5.144503959627334,
-#         0.5908600222047661,
-#         5.781607385109795,
-#         4.534058599812401,
-#         5.409123474771152,
-#         2.3063261334000957
-#     ])
-# HV = np.array([
-#         11.141552876480954,
-#         11.573529131417088,
-#         11.399458348309228,
-#         11.5600020918742,
-#         11.841836216648948,
-#         11.449421579936029,
-#         11.803852004674695,
-#         11.565861352932775,
-#         11.73133360233872,
-#         11.283447190837146
-#     ])
 
-GD_pso =  [
-        4.9757548130041,
-        4.577515002232707,
-        3.5404361412503045,
-        8.304959862925317,
-        4.474345305973214,
-        4.32194443945767,
-        7.003914936096046,
-        3.1716883138638847,
-        6.957987132835816,
-        1.9689380935595828
-    ]
-GD_bas = [
-        0.8191686517321589,
-        0.8122823688002762,
-        0.7802541742482083,
-        0.8355533107045108,
-        0.8495376626327231,
-        0.7554711552994758,
-        0.8512033429147668,
-        0.7990671368468203,
-        0.8348093350246115,
-        0.8178138109502028
-    ]
-
-IGD_pso = [
-        5.819455433299618,
-        3.4100015778858337,
-        4.1718644924208395,
-        3.0674040102348945,
-        3.8762564211046384,
-        2.3430074943420998,
-        4.504791396568201,
-        3.6102031050131327,
-        2.7621541721678136,
-        2.9525732261251627
-    ]
-IGD_bas = [
-        1.161905225957412,
-        0.6380983467968403,
-        2.409526179378234,
-        1.3238097576582024,
-        0.8952430163774071,
-        1.96190870862217,
-        1.3714299183690488,
-        1.6190482413442449,
-        1.2761918437030013,
-        2.552388466753642
-    ]
-
-HV_pso = [
-        6.733834591186971,
-        6.6281929717464925,
-        6.46087356091512,
-        6.813187478449349,
-        6.3832556386699535,
-        6.3410605524774475,
-        6.518848497404498,
-        7.1467968895614895,
-        6.507235077219652,
-        6.54612188601042
-    ]
-HV_bsa = [
-        7.645642050825647,
-        7.608069263765316,
-        7.5071776503896555,
-        7.6395663719362,
-        7.553976117439781,
-        7.6019451365025645,
-        7.6069484236768945,
-        7.6238929146886765,
-        7.636575187188345,
-        7.464454441893434
-    ]
-
-topo = 'Topo2'
-
-plt.boxplot([GD_bas, GD_pso], labels=['MOBSO', 'MOPSO'])
-plt.xticks(fontsize=15)
-plt.yticks(fontsize=15)
-plt.title(topo,fontsize=20)
-plt.xlabel('Algorithms',fontsize=20)
-plt.ylabel('GD-Metric values',fontsize=20)
-plt.show()
-
-plt.boxplot([IGD_bas, IGD_pso], labels=['MOBSO', 'MOPSO'])
-plt.xticks(fontsize=15)
-plt.yticks(fontsize=15)
-plt.title(topo,fontsize=20)
-plt.xlabel('Algorithms',fontsize=20)
-plt.ylabel('IGD-Metric values',fontsize=20)
-plt.show()
-
-plt.boxplot([HV_bsa, HV_pso], labels=['MOBSO', 'MOPSO'])
-plt.xticks(fontsize=15)
-plt.yticks(fontsize=15)
-plt.title(topo,fontsize=20)
-plt.xlabel('Algorithms',fontsize=20)
-plt.ylabel('HV-Metric values',fontsize=20)
-plt.show()
+# topo = 'Topo2'
+#
+# plt.boxplot([GD_bas, GD_pso], labels=['MOBSO', 'MOPSO'])
+# plt.xticks(fontsize=15)
+# plt.yticks(fontsize=15)
+# plt.title(topo,fontsize=20)
+# plt.xlabel('Algorithms',fontsize=20)
+# plt.ylabel('GD-Metric values',fontsize=20)
+# plt.show()
+#
+# plt.boxplot([IGD_bas, IGD_pso], labels=['MOBSO', 'MOPSO'])
+# plt.xticks(fontsize=15)
+# plt.yticks(fontsize=15)
+# plt.title(topo,fontsize=20)
+# plt.xlabel('Algorithms',fontsize=20)
+# plt.ylabel('IGD-Metric values',fontsize=20)
+# plt.show()
+#
+# plt.boxplot([HV_bsa, HV_pso], labels=['MOBSO', 'MOPSO'])
+# plt.xticks(fontsize=15)
+# plt.yticks(fontsize=15)
+# plt.title(topo,fontsize=20)
+# plt.xlabel('Algorithms',fontsize=20)
+# plt.ylabel('HV-Metric values',fontsize=20)
+# plt.show()
 
 # min_GD = '%.4f' % GD.min()
 # min_IGD = '%.4f' % IGD.min()
@@ -155,3 +44,8 @@ plt.show()
 # print 'mean_IGD', mean_IGD, '   ', 'min_IGD', min_IGD, '   ', 'std_IGD', std_IGD
 # print 'mean_GD', mean_GD, '   ', 'min_GD', min_GD, '   ', 'std_GD', std_GD
 # print "mean_HV", mean_HV, '   ', "min_HV", min_HV, '   ', "std_HV", std_HV
+
+if __name__ == '__main__':
+    topo = 'topo1'
+
+

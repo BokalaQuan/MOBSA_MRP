@@ -11,13 +11,15 @@ from spea2 import StrengthParetoEvolutionaryAlgorithm2 as SPEA2
 from mobsa import MultiObjectiveBeetleSearchAlgorithm as MOBSO
 from eag_moead import ExternalArchiveGuidedMOEAD as EAG_MOEAD
 from moead_sfla import MOEAD_SFLA
+from moead_obl import MOEAD_OBL
+
 
 import time
 import os
 
 if __name__ == '__main__':
 
-    topo = 'topo1'
+    topo = 'topo6'
     problem = MRP()
     problem.initialize(topo)
     #
@@ -25,10 +27,11 @@ if __name__ == '__main__':
     al_list = []
     for i in range(5):
         # test = MOEAD_SFLA(problem)
-        test = MOEAD(problem)
+        # test = MOEAD(problem)
         # test = NSGA2(problem)
         # test = EAG_MOEAD(problem=problem)
         # test = SPEA2(problem=problem)
+        test = MOEAD_OBL(problem=problem)
         start = time.time()
         #
         tmp = test.run()
@@ -38,10 +41,11 @@ if __name__ == '__main__':
         pf_list.extend(tmp)
     #
     # write_list_to_json(topo=topo, algorithm='MOEAD-SFLA', solutions=pf_list)
-    write_list_to_json(topo=topo, algorithm='MOEAD', solutions=pf_list)
+    # write_list_to_json(topo=topo, algorithm='MOEAD', solutions=pf_list)
     # write_list_to_json(topo=topo, algorithm='NSGA-II', solutions=pf_list)
     # write_list_to_json(topo=topo, algorithm='SPEA2', solutions=pf_list)
     # write_list_to_json(topo=topo, algorithm='EAG-MOEAD', solutions=pf_list)
+    write_list_to_json(topo=topo, algorithm='MOEAD-OBL', solutions=pf_list)
     #
     # al_list.append('MOEAD-SFLA')
     # al_list.append('MOEAD')

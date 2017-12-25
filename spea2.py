@@ -5,9 +5,8 @@
 '''
 
 from algorithm.individual import IndividualMRP
-from algorithm.parameter import PM, PC, POPULATION_SIZE, MAX_NUMBER_FUNCTION_EVAL, EXTERNAL_ARCHIVE_SIZE
+from algorithm.parameter import *
 from problem.mrp.multicast_routing_problem import MulticastRoutingProblem as MRP
-from algorithm.performance import cal_IGD, cal_GD, cal_HV
 
 import random
 import copy
@@ -158,18 +157,4 @@ class StrengthParetoEvolutionaryAlgorithm2(object):
             self.selection_evolution()
             gen += 1
 
-
-if __name__ == '__main__':
-    
-    pass
-        
-    
-
-
-
-
-
-
-
-
-
+        return self.external_archive
