@@ -19,19 +19,19 @@ import os
 
 if __name__ == '__main__':
 
-    topo = 'topo6'
+    topo = 'topo1'
     problem = MRP()
     problem.initialize(topo)
     #
     pf_list = []
     al_list = []
-    for i in range(5):
+    for i in range(10):
         # test = MOEAD_SFLA(problem)
         # test = MOEAD(problem)
-        # test = NSGA2(problem)
+        test = NSGA2(problem)
         # test = EAG_MOEAD(problem=problem)
         # test = SPEA2(problem=problem)
-        test = MOEAD_OBL(problem=problem)
+        # test = MOEAD_OBL(problem=problem)
         start = time.time()
         #
         tmp = test.run()
@@ -42,10 +42,10 @@ if __name__ == '__main__':
     #
     # write_list_to_json(topo=topo, algorithm='MOEAD-SFLA', solutions=pf_list)
     # write_list_to_json(topo=topo, algorithm='MOEAD', solutions=pf_list)
-    # write_list_to_json(topo=topo, algorithm='NSGA-II', solutions=pf_list)
+    write_list_to_json(topo=topo, algorithm='NSGA-II', solutions=pf_list)
     # write_list_to_json(topo=topo, algorithm='SPEA2', solutions=pf_list)
     # write_list_to_json(topo=topo, algorithm='EAG-MOEAD', solutions=pf_list)
-    write_list_to_json(topo=topo, algorithm='MOEAD-OBL', solutions=pf_list)
+    # write_list_to_json(topo=topo, algorithm='MOEAD-OBL', solutions=pf_list)
     #
     # al_list.append('MOEAD-SFLA')
     # al_list.append('MOEAD')

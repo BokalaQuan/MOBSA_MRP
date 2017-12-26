@@ -40,7 +40,8 @@ def func_levy(d):
     beta = float(3 / 2)
     pi = math.pi
 
-    theta = (math.gamma(1 + beta) * math.sin(pi * beta / 2) / (math.gamma((1 + beta) / 2) * beta * math.pow(2, ((beta - 1) / 2))))
+    theta = (math.gamma(1 + beta) * math.sin(pi * beta / 2) /
+             (math.gamma((1 + beta) / 2) * beta * math.pow(2, ((beta - 1) / 2))))
     sigma = math.pow(theta, (1 / beta))
 
     r1 = random.random()
@@ -54,17 +55,15 @@ Multi-objective Optimization Algorithms' Performance Indicators
 def cal_IGD(pIdeal, pReal):
     '''
     Inverted Generational Distance
-    :param pIdeal:
-    :param pReal:
-    :return:
     '''
     vol = 0.0
     for pi in pIdeal:
         temp = INF
+        fit_pi = np.array(pi['fit'])
         for pr in pReal:
-            f1 = pi['delay'] - pr['delay']
-            f2 = pi['loss'] - pr['loss']
-            temp_ = math.sqrt(f1 ** 2 + f2 ** 2)
+            fit_pr = np.array(pr['fit'])
+
+            temp_ = np.linalg.norm(fit_pi - fit_pr)
             temp = temp_ if temp_ < temp else temp
         vol += temp
 
@@ -73,17 +72,18 @@ def cal_IGD(pIdeal, pReal):
 def cal_GD(pIdeal, pReal):
     '''
     Generational Distance
-    :param pIdeal:
-    :param pReal:
-    :return:
     '''
     vol = 0.0
     for pr in pReal:
         temp = INF
+        fit_pr = np.array(pr['fit'])
         for pi in pIdeal:
-            f1 = pr['delay'] - pi['delay']
-            f2 = pr['loss'] - pi['loss']
-            temp_ = math.sqrt(f1 ** 2 + f2 ** 2)
+            # f1 = pr['delay'] - pi['delay']
+            # f2 = pr['loss'] - pi['loss']
+            fit_pi = np.array(pi['fit'])
+
+            # temp_ = math.sqrt(f1 ** 2 + f2 ** 2)
+            temp_ = np.linalg.norm(fit_pi - fit_pr)
             temp = temp_ if temp_ < temp else temp
         vol += temp ** 2
 
@@ -91,18 +91,25 @@ def cal_GD(pIdeal, pReal):
 
 def cal_HV(pReal, ref):
     '''
-    Hypervolume
-    :param pReal:
-    :param ref:
-    :return:
+    Hyper-volume.
     '''
-    hv = (ref[0] - pReal[0]['delay']) * (ref[1] - pReal[0]['loss'])
+    # hv = (ref[0] - pReal[0]['delay']) * (ref[1] - pReal[0]['loss'])
+    hv = (ref[0] - pReal[0]['fit'][0]) * (ref[1] - pReal[0]['fit'][1])
     for i in range(1, len(pReal)):
-        hv += (pReal[i - 1]['delay'] - pReal[i]['delay']) * (ref[1] - pReal[i]['loss'])
+        # hv += (pReal[i - 1]['delay'] - pReal[i]['delay']) * (ref[1] - pReal[i]['loss'])
+        hv += (pReal[i - 1]['fit'][0] - pReal[i]['fit'][0]) * \
+              (ref[1] - pReal[i]['fit'][1])
 
     return hv
 
 def read_json_as_list(topo, algorithm, runtime=None):
+    """
+
+    :param topo:
+    :param algorithm:
+    :param runtime:
+    :return:
+    """
     list_ = []
     if runtime is None:
         path = os.getcwd() + '/solution/' + topo + '/PF-' + algorithm + '.json'
@@ -131,6 +138,14 @@ def read_json_as_list(topo, algorithm, runtime=None):
     return list_
 
 def write_list_to_json(topo=None, algorithm=None, runtime=None, solutions=None):
+    """
+
+    :param topo:
+    :param algorithm:
+    :param runtime:
+    :param solutions:
+    :return:
+    """
     if runtime is None:
         path = os.getcwd() + '/solution/' + topo + '/PF-' + algorithm + '.json'
     else:
@@ -144,18 +159,25 @@ def write_list_to_json(topo=None, algorithm=None, runtime=None, solutions=None):
         for sol in solutions:
             solution.append(sol.to_dict())
 
-    solution.sort(cmp=None, key=lambda x:x['loss'], reverse=False)
+    # solution.sort(cmp=None, key=lambda x:x['loss'], reverse=False)
+    solution.sort(cmp=None, key=lambda x:x['fit'][1], reverse=False)
 
-    obj_delay = solution[0]['delay']
-    obj_loss = solution[0]['loss']
+    # obj_delay = solution[0]['delay']
+    obj_delay = solution[0]['fit'][0]
+    # obj_loss = solution[0]['loss']
+    obj_loss = solution[0]['fit'][1]
     for item in solution[:]:
-        if item['delay'] > obj_delay:
+        # if item['delay'] > obj_delay:
+        if item['fit'][0] > obj_delay:
             solution.remove(item)
-        elif item['delay'] == obj_delay and item['loss'] == obj_loss:
+        # elif item['delay'] == obj_delay and item['loss'] == obj_loss:
+        elif item['fit'][0] == obj_delay and item['fit'][1] == obj_loss:
             solution.remove(item)
         else:
-            obj_delay = item['delay']
-            obj_loss = item['loss']
+            # obj_delay = item['delay']
+            obj_delay = item['fit'][0]
+            # obj_loss = item['loss']
+            obj_loss = item['fit'][1]
 
     with open(path, 'wb') as f:
         f.write(json.dumps(solution, indent=4))
@@ -194,8 +216,8 @@ def func(topo=None, algorithm=None, runtime=None):
         with open(tmp, 'r') as f:
             conf = json.load(f)
             for item in conf:
-                x.append(item['loss'])
-                y.append(item['delay'])
+                x.append(item['fit'][0])
+                y.append(item['fit'][1])
         f.close()
         data = [x, y]
     else:
@@ -209,8 +231,8 @@ def func(topo=None, algorithm=None, runtime=None):
             with open(tmp, 'r') as f:
                 conf = json.load(f)
                 for item in conf:
-                    x.append(item['loss'])
-                    y.append(item['delay'])
+                    x.append(item['fit'][0])
+                    y.append(item['fit'][1])
             f.close()
             data.append([x, y])
 
@@ -223,8 +245,8 @@ def plot_ps_by_different_algorithm(topo=None, algorithms=None, title=None):
         plt.scatter(data[0], data[1], alpha=0.7)
 
 
-    plt.xlabel('Ave_plr (%)', fontsize=12)
-    plt.ylabel('Ave_delay (ms)', fontsize=12)
+    plt.xlabel('Arg_plr (%)', fontsize=12)
+    plt.ylabel('Arg_delay (ms)', fontsize=12)
     plt.legend(algorithms, fontsize=10)
     plt.savefig(title+".png", dpi=900)
     plt.show()
