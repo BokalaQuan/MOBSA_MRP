@@ -244,10 +244,10 @@ class IndividualKP(Individual):
     def init_ind(self, problem):
         self.problem = problem
         self.chromosome = Individual.create_chromosome(problem.num_item, 0.5)
-        self.fitness = self.cal_fitness(self.chromosome)
+        self.fitness = self.cal_fitness()
     #
     
-    def cal_fitness(self, chromosome):
+    def cal_fitness(self):
         profits = []
         weights = []
         ratios = []
@@ -256,8 +256,8 @@ class IndividualKP(Individual):
             profit = []
             weight = []
             ratio = []
-            for y in range(len(chromosome)):
-                if chromosome[y]:
+            for y in range(len(self.chromosome)):
+                if self.chromosome[y]:
                     profit.append(self.problem[x]['items'][y]['profit'])
                     weight.append(self.problem[x]['items'][y]['weight'])
                     ratio.append(self.problem[x]['items'][y]['ratio'])
@@ -267,7 +267,7 @@ class IndividualKP(Individual):
             ratios.append(ratio)
             
         capacity = [self.problem[0]['capacity'], self.problem[1]['capacity']]
-        self.greedy_repair_heuristic(profits, weights, ratios, capacity, chromosome)
+        self.greedy_repair_heuristic(profits, weights, ratios, capacity, self.chromosome)
         return [sum(profits[0]), sum(profits[1])]
     
         
@@ -283,3 +283,28 @@ class IndividualKP(Individual):
                 ratio.pop(id_delete)
                 weight_sum = sum(weight)
 
+    def crossover(self, ind):
+        temp = self.create_chromosome(self.problem.num_item, 0.5)
+        for i in range(len(temp)):
+            if temp[i]:
+                obj = self.chromosome[i]
+                self.chromosome[i] = ind.chromosome[i]
+                ind.chromosome[i] = obj
+
+    def mutation(self):
+        for i in range(len(self.chromosome)):
+            self.chromosome[i] = 1 - self.chromosome[i] \
+                if random.random() < PM else self.chromosome[i]
+
+    def opposition_based_learning(self):
+        chrom = [1 if ch == 0 else 0 for ch in self.chromosome]
+        ind = IndividualKP()
+        ind.problem = self.problem
+        ind.chromosome = chrom
+        ind.fitness = ind.cal_fitness()
+        return ind
+
+    def to_dict(self):
+        return {
+            self.fitness
+        }
