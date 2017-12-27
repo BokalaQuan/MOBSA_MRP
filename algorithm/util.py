@@ -157,7 +157,8 @@ def write_list_to_json(topo=None, algorithm=None, runtime=None, solutions=None):
         solution = solutions
     else:
         for sol in solutions:
-            solution.append(sol.to_dict())
+            # solution.append(sol.to_dict())
+            solution.append(sol)
 
     # solution.sort(cmp=None, key=lambda x:x['loss'], reverse=False)
     solution.sort(cmp=None, key=lambda x:x['fit'][1], reverse=False)
@@ -242,7 +243,7 @@ def plot_ps_by_different_algorithm(topo=None, algorithms=None, title=None):
     plt.figure()
     for item in algorithms:
         data = func(topo=topo, algorithm=item)
-        plt.scatter(data[0], data[1], alpha=0.7)
+        plt.scatter(data[0], data[1], alpha=0.5)
 
 
     plt.xlabel('Arg_plr (%)', fontsize=12)
