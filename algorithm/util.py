@@ -78,11 +78,7 @@ def cal_GD(pIdeal, pReal):
         temp = INF
         fit_pr = np.array(pr['fit'])
         for pi in pIdeal:
-            # f1 = pr['delay'] - pi['delay']
-            # f2 = pr['loss'] - pi['loss']
             fit_pi = np.array(pi['fit'])
-
-            # temp_ = math.sqrt(f1 ** 2 + f2 ** 2)
             temp_ = np.linalg.norm(fit_pi - fit_pr)
             temp = temp_ if temp_ < temp else temp
         vol += temp ** 2
@@ -93,10 +89,8 @@ def cal_HV(pReal, ref):
     '''
     Hyper-volume.
     '''
-    # hv = (ref[0] - pReal[0]['delay']) * (ref[1] - pReal[0]['loss'])
     hv = (ref[0] - pReal[0]['fit'][0]) * (ref[1] - pReal[0]['fit'][1])
     for i in range(1, len(pReal)):
-        # hv += (pReal[i - 1]['delay'] - pReal[i]['delay']) * (ref[1] - pReal[i]['loss'])
         hv += (pReal[i - 1]['fit'][0] - pReal[i]['fit'][0]) * \
               (ref[1] - pReal[i]['fit'][1])
 
@@ -139,7 +133,6 @@ def read_json_as_list(topo, algorithm, runtime=None):
 
 def write_list_to_json(topo=None, algorithm=None, runtime=None, solutions=None):
     """
-
     :param topo:
     :param algorithm:
     :param runtime:
@@ -160,24 +153,17 @@ def write_list_to_json(topo=None, algorithm=None, runtime=None, solutions=None):
             # solution.append(sol.to_dict())
             solution.append(sol)
 
-    # solution.sort(cmp=None, key=lambda x:x['loss'], reverse=False)
     solution.sort(cmp=None, key=lambda x:x['fit'][1], reverse=False)
 
-    # obj_delay = solution[0]['delay']
     obj_delay = solution[0]['fit'][0]
-    # obj_loss = solution[0]['loss']
     obj_loss = solution[0]['fit'][1]
     for item in solution[:]:
-        # if item['delay'] > obj_delay:
         if item['fit'][0] > obj_delay:
             solution.remove(item)
-        # elif item['delay'] == obj_delay and item['loss'] == obj_loss:
         elif item['fit'][0] == obj_delay and item['fit'][1] == obj_loss:
             solution.remove(item)
         else:
-            # obj_delay = item['delay']
             obj_delay = item['fit'][0]
-            # obj_loss = item['loss']
             obj_loss = item['fit'][1]
 
     with open(path, 'wb') as f:

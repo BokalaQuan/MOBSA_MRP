@@ -160,8 +160,11 @@ class AdaptiveGrid(object):
                 
         if flag == 0:
             self.archive.append(HyperCube(ind))
-        
-        self.grid_adjust()
+
+        if len(self.archive) > EXTERNAL_ARCHIVE_SIZE:
+            self.grid_adjust()
+        else:
+            pass
         
     def clear_grid_property(self):
         self.grid = []

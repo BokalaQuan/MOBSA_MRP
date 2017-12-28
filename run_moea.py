@@ -18,43 +18,56 @@ import time
 import os
 
 if __name__ == '__main__':
-    topos = ['topo1', 'topo2', 'topo3', 'topo4', 'topo5', 'topo6']
-    for topo in topos:
-        print "TOPO is ", topo
-        problem = MRP()
-        problem.initialize(topo)
+    topo = 'topo4'
+    problem = MRP()
+    problem.initialize(topo)
 
-        for i in range(20):
-            test = NSGA2(problem)
-            start = time.time()
-            tmp = test.run()
-            end = time.time()
-            print "Run ", test.name()," >>>>>> ", i+1, ' ACT = ', end - start, ' s'
+    for i in range(5):
+        test = SPEA2(problem)
+        start = time.time()
+        tmp = test.run()
+        end = time.time()
+        print "Run ", test.name()," >>>>>> ", i+1, ' ACT = ', end - start, ' s'
+
         write_list_to_json(topo, test.name(), i+1, tmp)
 
-        for i in range(20):
-            test = MOEAD(problem)
-            start = time.time()
-            tmp = test.run()
-            end = time.time()
-            print "Run ", test.name()," >>>>>> ", i+1, ' ACT = ', end - start, ' s'
-        write_list_to_json(topo, test.name(), i+1, tmp)
-
-        for i in range(20):
-            test = MOEAD_SFLA(problem)
-            start = time.time()
-            tmp = test.run()
-            end = time.time()
-            print "Run ", test.name()," >>>>>> ", i+1, ' ACT = ', end - start, ' s'
-        write_list_to_json(topo, test.name(), i+1, tmp)
-
-        for i in range(20):
-            test = MOEAD_OBL(problem)
-            start = time.time()
-            tmp = test.run()
-            end = time.time()
-            print "Run ", test.name()," >>>>>> ", i+1, ' ACT = ', end - start, ' s'
-        write_list_to_json(topo, test.name(), i+1, tmp)
+    # topos = ['topo1', 'topo2', 'topo3', 'topo4', 'topo5', 'topo6']
+    # for topo in topos:
+    #     print "TOPO is ", topo
+    #     problem = MRP()
+    #     problem.initialize(topo)
+    #
+    #     for i in range(20):
+    #         test = NSGA2(problem)
+    #         start = time.time()
+    #         tmp = test.run()
+    #         end = time.time()
+    #         print "Run ", test.name()," >>>>>> ", i+1, ' ACT = ', end - start, ' s'
+    #     write_list_to_json(topo, test.name(), i+1, tmp)
+    #
+    #     for i in range(20):
+    #         test = MOEAD(problem)
+    #         start = time.time()
+    #         tmp = test.run()
+    #         end = time.time()
+    #         print "Run ", test.name()," >>>>>> ", i+1, ' ACT = ', end - start, ' s'
+    #     write_list_to_json(topo, test.name(), i+1, tmp)
+    #
+    #     for i in range(20):
+    #         test = MOEAD_SFLA(problem)
+    #         start = time.time()
+    #         tmp = test.run()
+    #         end = time.time()
+    #         print "Run ", test.name()," >>>>>> ", i+1, ' ACT = ', end - start, ' s'
+    #     write_list_to_json(topo, test.name(), i+1, tmp)
+    #
+    #     for i in range(20):
+    #         test = MOEAD_OBL(problem)
+    #         start = time.time()
+    #         tmp = test.run()
+    #         end = time.time()
+    #         print "Run ", test.name()," >>>>>> ", i+1, ' ACT = ', end - start, ' s'
+    #     write_list_to_json(topo, test.name(), i+1, tmp)
 
 
 

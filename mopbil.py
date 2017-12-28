@@ -1,14 +1,12 @@
 from algorithm.individual import IndividualMRP
 from algorithm.parameter import *
-from problem.mrp.multicast_routing_problem import MulticastRoutingProblem as MRP
-from problem.kp.knapsack_problem import MultiObjectiveKnapsackProblem as MOKP
-from algorithm.util import write_list_to_json, write_performance, read_json_as_list
-from algorithm.operator import AdaptiveGrid, fast_nondominated_sort
+from algorithm.operator import *
+from algorithm.moea import MultiObjectiveEvolutionaryAlgorithm as MOEA
 
 
 import random
 import copy
-import numpy
+import numpy as np
 
 class ProbabilityVector(object):
     
@@ -25,22 +23,18 @@ class ProbabilityVector(object):
         return pv
     
     # initialize probability is 0.5.
-    def init(self, length):
-        for i in range(length):
-            self.vector.append(0.5)
+    def init_pv(self, length):
+        self.vector = [0.5 for i in range(length)]
             
     def update_vector(self, chromosome):
         for i in range(len(self.vector)):
             tmp = self.vector[i] * (1 - self.learn_rate) + chromosome[i] * self.learn_rate
-            if random.random() < PM:
+            if random.uniform(0, 1) < PM:
                 tmp = tmp * (1 - self.shift) + random.randint(0, 1) * self.shift
             self.vector[i] = tmp
     
     def generate_chromosome(self):
-        chromosome = []
-        for p in self.vector:
-            chromosome.append(1 if random.random() < p else 0)
-            
+        chromosome = [1 if random.uniform(0, 1) < p else 0 for p in self.vector]
         return chromosome
             
 class SubPopulation(object):
@@ -51,55 +45,49 @@ class SubPopulation(object):
         
     def create_sub_population(self, sub_popsize, problem):
         for i in range(sub_popsize):
-            chromosome = self.pv.generate_chromosome()
             ind = IndividualMRP()
-            ind.initialize(chromosome, problem)
+            ind.init_ind(problem=problem)
             self.population.append(ind)
     
     def update_sub_population(self, problem):
         for ind in self.population:
-            chromosome = []
-            for p in self.pv:
-                chromosome.append(1 if random.random() < p else 0)
-            ind.initialize(chromosome, problem)
-            
+            chromosome = self.pv.generate_chromosome()
+            ind.chromosome = chromosome
+            ind.fitness = ind.cal_fitness()
+
         
 '''
 @author Bureerat, Sujin, et al.
 @title "Population-Based Incremental Learning for Multiobjective Optimisation."
 @date 2007
 '''
-class PopulationBasedIncrementalLearning(object):
+class PopulationBasedIncrementalLearning(MOEA):
     
-    def __init__(self, problem, num_subpop, grid_size):
-        self.problem = problem
-        self.num_subpop = num_subpop
+    def __init__(self, problem, num_sub, grid_size):
+        super(PopulationBasedIncrementalLearning, self).__init__(problem=problem)
+        self.num_sub = num_sub
         self.grid_size = grid_size
         self.sub_populations = []
-        self.current_population = []
-        self.external_archive = None
-    
+
     def name(self):
-        return 'MOPBIL'
+        return 'PBIL'
         
     def init_population(self):
-        for i in range(self.num_subpop):
+        for i in range(self.num_sub):
             pv = ProbabilityVector()
-            pv.init(self.problem.num_link)
+            pv.init_pv(self.problem.num_link)
             sub = SubPopulation(pv)
-            sub.create_sub_population(POPULATION_SIZE / self.num_subpop, self.problem)
+            sub.create_sub_population(POPULATION_SIZE/self.num_sub, self.problem)
             self.sub_populations.append(sub)
             self.current_population.extend(sub.population)
 
-        archive = fast_nondominated_sort(self.current_population)[0]
         self.external_archive = AdaptiveGrid(grid_size=self.grid_size)
-        self.external_archive.init_grid(archive)
+        self.external_archive.init_grid(fast_nondominated_sort(self.current_population)[0])
         
-    
-    def update_archive(self, ind):
-        self.external_archive.update_grid(ind)
-        
-    
+    def update_archive(self):
+        for ind in self.current_population:
+            self.external_archive.update_grid(ind)
+
     def update_pv_by_mean(self):
         select_number = random.randint(1, len(self.external_archive.archive)-2)
         chromosome_set = []
@@ -132,9 +120,16 @@ class PopulationBasedIncrementalLearning(object):
             sub.pv.update_vector(self.external_archive.archive[index_select].chromosome)
     
     def run(self):
-        pass
+        self.init_population()
+
+        gen = 0
+        while gen < MAX_NUMBER_FUNCTION_EVAL:
+            self.update_pv_by_weight_sum()
+            self.update_archive()
+
+            gen += 1
         
-    
+        return self.external_archive.archive
     
     
 '''
@@ -142,22 +137,19 @@ class PopulationBasedIncrementalLearning(object):
 @title "Evolutionary Multi-Objective Optimization in Robot Soccer System for Education."
 @date 2009
 '''
-class MultiObjectivePopulationBasedIncrementalLearning(object):
+class MultiObjectivePopulationBasedIncrementalLearning(MOEA):
     
     def __init__(self, problem):
-        self.problem = problem
-        self.current_population = []
-        self.external_archive = []
+        super(MultiObjectivePopulationBasedIncrementalLearning, self).__init__(problem)
         self.pv_list = []
     
     def init_population(self):
         for i in range(POPULATION_SIZE):
             pv = ProbabilityVector()
-            pv.init(self.problem.num_link)
+            pv.init_pv(self.problem.num_link)
             self.pv_list.append(pv)
-            chromosome = pv.generate_chromosome()
             ind = IndividualMRP()
-            ind.initialize(chromosome, self.problem)
+            ind.init_ind(problem=self.problem)
             self.current_population.append(ind)
             
     def update_archive(self):
@@ -185,6 +177,10 @@ class MultiObjectivePopulationBasedIncrementalLearning(object):
             delete_num = EXTERNAL_ARCHIVE_SIZE - len(self.external_archive)
             for i in range(delete_num):
                 self.external_archive.pop(neighbor_distance_set.index(tmp[i]))
+
+    def update_pv_by_randomly(self):
+        pass
+
             
     def run(self):
         pass
