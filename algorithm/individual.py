@@ -43,7 +43,7 @@ class Individual(object):
         for i, j in zip(self.fitness, other.fitness):
             if i > j:
                 return False
-        if self == other:
+        if self.fitness == other.fitness:
             return False
         return True
 
@@ -51,7 +51,7 @@ class Individual(object):
         for i, j in zip(self.fitness, other.fitness):
             if i < j:
                 return False
-        if self == other:
+        if self.fitness == other.fitness:
             return False
         return True
 
@@ -80,8 +80,8 @@ class Individual(object):
     def create_chromosome(length, probability):
         return [1 if random.uniform(0, 1) < probability else 0 for i in range(length)]
 
-
 class IndividualMRP(Individual):
+
     def __init__(self):
         super(IndividualMRP, self).__init__()
         self.paths = []
@@ -242,7 +242,7 @@ class IndividualKP(Individual):
 
     def init_ind(self, problem):
         self.problem = problem
-        self.chromosome = Individual.create_chromosome(problem.num_item, 0.5)
+        self.chromosome = Individual.create_chromosome(problem.num_item, P_INIT)
         self.fitness = self.cal_fitness()
 
     def cal_fitness(self):

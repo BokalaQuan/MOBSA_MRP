@@ -50,7 +50,7 @@ def func_levy(d):
     return 0.01 * r1 * sigma / math.pow(r2, (1 / beta))
 
 '''
-Multi-objective Optimization Algorithms' Performance Indicators 
+Multi-objective Optimization Algorithms' Performance Indicators
 '''
 def cal_IGD(pIdeal, pReal):
     '''
@@ -95,6 +95,22 @@ def cal_HV(pReal, ref):
               (ref[1] - pReal[i]['fit'][1])
 
     return hv
+
+def cal_C(p_lst1, p_lst2):
+    '''
+    C-Metric
+    :param p_lst1:
+    :param p_lst2:
+    :return:
+    '''
+    lst = set()
+    for ind2 in p_lst2:
+        for ind1 in p_lst1:
+            if ind1['fit'][0] < ind2['fit'][0] and ind1['fit'][1] < ind2['fit'][1]:
+                lst.add(ind2)
+
+    return float(len(lst)) / len(p_lst2)
+
 
 def read_json_as_list(topo, algorithm, runtime=None):
     """
@@ -229,7 +245,7 @@ def plot_ps_by_different_algorithm(topo=None, algorithms=None, title=None):
     plt.figure()
     for item in algorithms:
         data = func(topo=topo, algorithm=item)
-        plt.scatter(data[0], data[1], alpha=0.5)
+        plt.scatter(data[0], data[1], alpha=0.4)
 
 
     plt.xlabel('Arg_plr (%)', fontsize=12)

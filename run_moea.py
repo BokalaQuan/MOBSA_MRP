@@ -12,18 +12,21 @@ from mobsa import MultiObjectiveBeetleSearchAlgorithm as MOBSO
 from eag_moead import ExternalArchiveGuidedMOEAD as EAG_MOEAD
 from moead_sfla import MOEAD_SFLA
 from moead_obl import MOEAD_OBL
+from emoabc import NondominatedSortingArtificialBeeColony as NSABC
 
 
 import time
 import os
 
 if __name__ == '__main__':
-    topo = 'topo4'
+    topo = 'topo1'
     problem = MRP()
     problem.initialize(topo)
 
-    for i in range(5):
-        test = SPEA2(problem)
+    for i in range(1):
+        # test = PBIL(problem, 10, 20)
+        # test = EAG_MOEAD(problem)
+        test = NSABC(problem)
         start = time.time()
         tmp = test.run()
         end = time.time()

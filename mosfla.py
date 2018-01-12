@@ -5,14 +5,14 @@
 @date 2015
 '''
 
-from algorithm.individual import IndividualMRP
 from algorithm.parameter import *
 from algorithm.operator import *
+from nsga2 import IndividualNSGA
 
 import random
 import copy
 
-class IndividualSFLA(IndividualMRP):
+class IndividualSFLA(IndividualNSGA):
     
     def __init__(self):
         super(IndividualSFLA, self).__init__()
@@ -43,8 +43,7 @@ class Memeplex(object):
     def initialize(self, problem):
         for i in range(self.memeplex_size):
             ind = IndividualSFLA()
-            ind.initialize(IndividualSFLA.create_chromosome(problem.num_link),
-                           problem)
+            ind.init_ind(problem)
             self.solutions.append(ind)
         
     def local_search(self):
@@ -63,8 +62,7 @@ class Memeplex(object):
                 self.solutions.append(new_mutate)
             else:
                 new_ind = IndividualSFLA()
-                new_ind.initialize(IndividualSFLA.create_chromosome(ind_worst.problem.num_link),
-                                   ind_worst.problem)
+                new_ind.init_ind(ind_worst.problem)
                 self.solutions.append(new_ind)
                 
         else:
@@ -75,23 +73,8 @@ class Memeplex(object):
                 self.solutions.append(ind_mutate)
             else:
                 new_ind = IndividualSFLA()
-                new_ind.initialize(IndividualSFLA.create_chromosome(ind_worst.problem.num_link),
-                                   ind_worst.problem)
+                new_ind.init_ind(ind_worst.problem)
                 self.solutions.append(new_ind)
-
-def sort_population_by_mofitnesss(poplist):
-    tmp = fast_nondominated_sort(poplist)
-    crowding_distance_sort(tmp)
-    
-    union_list = []
-    for pop in tmp:
-        union_list.extend(pop)
-    
-    for ind in union_list:
-        ind.cal_mofitness()
-    
-    object_shell_sort(union_list, 'mofitness')
-    return union_list
 
 
 class MultiObjectiveShuffledFrogLeapingAlgorithm(object):
@@ -139,13 +122,4 @@ class MultiObjectiveShuffledFrogLeapingAlgorithm(object):
         pass
     
     
-
-
-
-
-
-
-
-
-
 

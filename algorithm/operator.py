@@ -56,31 +56,72 @@ def fast_nondominated_sort(poplist):
 @date 2002.
 '''
 def crowding_distance_sort(pareto_rank_set_list):
-    for pareto_rank_set in pareto_rank_set_list:
-        if pareto_rank_set is not None or len(pareto_rank_set) != 0:
-            if len(pareto_rank_set) == 1:
-                pareto_rank_set[0].crowding_distance = INF
-            elif len(pareto_rank_set) == 2:
-                pareto_rank_set[0].crowding_distance = INF
-                pareto_rank_set[1].crowding_distance = INF
-            else:
-                for obj in range(2):
-                    pareto_rank_set.sort(key=lambda x:x.fitness[obj])
-
+    if type(pareto_rank_set_list[0]) is list:
+        for pareto_rank_set in pareto_rank_set_list:
+            if pareto_rank_set is not None or len(pareto_rank_set) != 0:
+                if len(pareto_rank_set) == 1:
                     pareto_rank_set[0].crowding_distance = INF
-                    pareto_rank_set[-1].crowding_distance = INF
+                elif len(pareto_rank_set) == 2:
+                    pareto_rank_set[0].crowding_distance = INF
+                    pareto_rank_set[1].crowding_distance = INF
+                else:
+                    for obj in range(2):
+                        pareto_rank_set.sort(key=lambda x: x.fitness[obj])
 
-                    min_obj = pareto_rank_set[0].fitness[obj]
-                    max_obj = pareto_rank_set[-1].fitness[obj]
+                        pareto_rank_set[0].crowding_distance = INF
+                        pareto_rank_set[-1].crowding_distance = INF
 
-                    if min_obj == max_obj:
-                        max_obj += 1
+                        min_obj = pareto_rank_set[0].fitness[obj]
+                        max_obj = pareto_rank_set[-1].fitness[obj]
 
-                    for x in range(1, len(pareto_rank_set) - 1):
-                        pareto_rank_set[x].crowding_distance += \
-                            abs(float(pareto_rank_set[x - 1].fitness[obj] - pareto_rank_set[x + 1].fitness[obj]) / (max_obj - min_obj))
+                        if min_obj == max_obj:
+                            max_obj += 1
 
-        pareto_rank_set.sort(key=lambda x:x.crowding_distance, reverse=True)
+                        for x in range(1, len(pareto_rank_set) - 1):
+                            pareto_rank_set[x].crowding_distance += \
+                                abs(float(pareto_rank_set[x - 1].fitness[obj] -
+                                          pareto_rank_set[x + 1].fitness[obj]) /
+                                    (max_obj - min_obj))
+
+            pareto_rank_set.sort(key=lambda x: x.crowding_distance, reverse=True)
+    else:
+        for obj in range(2):
+            pareto_rank_set_list.sort(key=lambda x: x.fitness[obj])
+
+            pareto_rank_set_list[0].crowding_distance = INF
+            pareto_rank_set_list[-1].crowding_distance = INF
+
+            min_obj = pareto_rank_set_list[0].fitness[obj]
+            max_obj = pareto_rank_set_list[-1].fitness[obj]
+
+            if min_obj == max_obj:
+                max_obj += 1
+
+            for x in range(1, len(pareto_rank_set_list) - 1):
+                pareto_rank_set_list[x].crowding_distance += \
+                    abs(float(pareto_rank_set_list[x - 1].fitness[obj] -
+                              pareto_rank_set_list[x + 1].fitness[obj]) /
+                        (max_obj - min_obj))
+
+        pareto_rank_set_list.sort(key=lambda x: x.crowding_distance, reverse=True)
+
+
+def make_new_population(poplist, popsize):
+    new_pop = []
+    pareto_rank_set_list = fast_nondominated_sort(poplist)
+    crowding_distance_sort(pareto_rank_set_list)
+
+    for pareto_rank_set in pareto_rank_set_list:
+        if len(new_pop) < popsize:
+            if (len(pareto_rank_set) + len(new_pop)) <= popsize:
+                for ind in pareto_rank_set:
+                    new_pop.append(ind.copy())
+            else:
+                current = len(new_pop)
+                for i in range(popsize - current):
+                    new_pop.append(pareto_rank_set[i].copy())
+
+    return new_pop
 
 
 '''
@@ -128,14 +169,14 @@ class AdaptiveGrid(object):
                float(upper[1] - lower[1]) / self.grid_size]
 
         for cube in self.archive:
-            cube.num_grid = [int((cube.solution.fitness[0] - lower[0]) / mod[0]),
+            cube.coordinate = [int((cube.solution.fitness[0] - lower[0]) / mod[0]),
                              int((cube.solution.fitness[1] - lower[1]) / mod[1])]
     
         for i in range(self.grid_size):
             for j in range(self.grid_size):
                 cubes = []
                 for index in range(len(self.archive)):
-                    if self.archive[index].num_grid == [i, j]:
+                    if self.archive[index].coordinate == [i, j]:
                         cubes.append(self.archive[index])
             
                 if len(cubes) != 0:

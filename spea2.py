@@ -15,17 +15,17 @@ import math
 import numpy
 
 class IndividualSPEA(IndividualMRP):
-    
+
     def __init__(self):
         super(IndividualSPEA, self).__init__()
-        
+
         self.dominating_list = []
         self.dominated_list = []
         self.k_distance = 0.0
         self.strength = 0
         self.fit = 0.0
-        
-    
+
+
     def clear_dominated_property(self):
         self.dominating_list = []
         self.dominated_list = []
@@ -42,17 +42,24 @@ class IndividualSPEA(IndividualMRP):
         ind.loss = self.loss
         ind.bandwidth = self.bandwidth
         return ind
-        
+
     def cal_fit(self):
         raw_fit = 0
         density = 1.0 / (self.k_distance + 2)
-        
+
         for ind in self.dominated_list:
             raw_fit += ind.strength
-            
-        self.fit = raw_fit + density
+
+        # self.fit = raw_fit + density
+        return raw_fit + density
+
 
 def cal_distance_matrix(poplist):
+    '''
+    calcute the population's distance matrix
+    :param poplist:
+    :return: distance matrix
+    '''
     distance_matrix = []
     for ind0 in poplist:
         distance = []
@@ -64,13 +71,13 @@ def cal_distance_matrix(poplist):
     return numpy.array(distance_matrix)
 
 class StrengthParetoEvolutionaryAlgorithm2(MOEA):
-    
+
     def __init__(self, problem):
         super(StrengthParetoEvolutionaryAlgorithm2, self).__init__(problem)
-        
+
     def name(self):
         return 'SPEA2'
-    
+
     def init_population(self):
         for i in range(POPULATION_SIZE):
             ind = IndividualSPEA()
@@ -93,22 +100,21 @@ class StrengthParetoEvolutionaryAlgorithm2(MOEA):
 
         self.current_population = []
         self.external_archive = []
-        
+
         for ind0 in union_population:
             for ind1 in union_population:
                 if ind0 >= ind1:
-                    ind1.strength += 1
                     ind0.dominated_list.append(ind1)
                 elif ind0 <= ind1:
-                    ind0.strength += 1
                     ind1.dominated_list.append(ind0)
-                    
+            ind0.strength = len(ind0.dominated_list)
+
         for ind in union_population:
-            ind.cal_fit()
-            
+            ind.fit = ind.cal_fit()
+
         union_population.sort(cmp=None, key=lambda x:x.fit, reverse=True)
         return union_population
-    
+
     def environment_select(self, union_list):
         for i in range(len(union_list)-1, -1, -1):
             if union_list[i].fit < 1:
@@ -149,30 +155,6 @@ class StrengthParetoEvolutionaryAlgorithm2(MOEA):
                 dis_mx = numpy.delete(dis_mx, min_index, axis=1)
                 dis_mx = numpy.delete(dis_mx, min_index, axis=0)
 
-    def envrionmental_selection(self, union_list):
-        for i in range(len(union_list)-1, -1, -1):
-            if union_list[i].fit < 1:
-                self.external_archive.append(union_list.pop(i))
-
-        if len(self.external_archive) < POPULATION_SIZE:
-            while len(self.external_archive) < POPULATION_SIZE:
-                self.external_archive.append(union_list.pop(-1))
-        elif len(self.external_archive) > POPULATION_SIZE:
-            N = len(self.external_archive) - POPULATION_SIZE
-            tmp = 0
-            while tmp < N:
-                for index, ind in enumerate(self.external_archive):
-                    for sel in self.external_archive[index+1:]:
-                        if ind == sel and tmp < N:
-                            self.external_archive.remove(sel)
-                            tmp += 1
-
-                        if tmp >= N:
-                            break
-
-                    if tmp >= N:
-                        break
-
     def selection_evolution(self):
         while len(self.current_population) < POPULATION_SIZE:
             index1 = 0
@@ -192,21 +174,21 @@ class StrengthParetoEvolutionaryAlgorithm2(MOEA):
         for i in range(POPULATION_SIZE/2):
             if random.uniform(0, 1) < PC:
                 self.current_population[i].crossover(self.current_population[POPULATION_SIZE-i-1])
-        
+
         for ind in self.current_population:
             ind.mutation()
             ind.fitness = ind.cal_fitness()
-            
+
     def run(self):
         self.init_population()
-        
+
         gen = 0
         while gen < MAX_NUMBER_FUNCTION_EVAL:
             temp_list = self.fitness_assignment()
-            # self.environment_select(temp_list)
-            self.envrionmental_selection(temp_list)
+            self.environment_select(temp_list)
+            # self.envrionmental_selection(temp_list)
             self.selection_evolution()
-            print "Gen = ", gen, " POPSIZE = ", len(self.current_population), " ARCHIVE SIZE = ", len(self.external_archive)
+            # print "Gen = ", gen, " POPSIZE = ", len(self.current_population), " ARCHIVE SIZE = ", len(self.external_archive)
 
             gen += 1
 

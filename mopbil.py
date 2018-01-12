@@ -2,6 +2,7 @@ from algorithm.individual import IndividualMRP
 from algorithm.parameter import *
 from algorithm.operator import *
 from algorithm.moea import MultiObjectiveEvolutionaryAlgorithm as MOEA
+from nsga2 import IndividualNSGA
 
 
 import random
@@ -10,10 +11,10 @@ import numpy as np
 
 class ProbabilityVector(object):
     
-    def __init__(self):
+    def __init__(self, learn_rate=None, shift=None):
         self.vector = []
-        self.learn_rate = None
-        self.shift = None
+        self.learn_rate = learn_rate
+        self.shift = shift
         
     def copy(self):
         pv = ProbabilityVector()
@@ -22,8 +23,8 @@ class ProbabilityVector(object):
         pv.shift = self.shift
         return pv
     
-    # initialize probability is 0.5.
     def init_pv(self, length):
+        # initialize probability is 0.5.
         self.vector = [0.5 for i in range(length)]
             
     def update_vector(self, chromosome):
@@ -36,7 +37,13 @@ class ProbabilityVector(object):
     def generate_chromosome(self):
         chromosome = [1 if random.uniform(0, 1) < p else 0 for p in self.vector]
         return chromosome
-            
+
+
+'''
+@author Bureerat, Sujin, et al.
+@title "Population-Based Incremental Learning for Multiobjective Optimisation."
+@date 2007
+'''
 class SubPopulation(object):
     
     def __init__(self, probability_vector):
@@ -45,7 +52,7 @@ class SubPopulation(object):
         
     def create_sub_population(self, sub_popsize, problem):
         for i in range(sub_popsize):
-            ind = IndividualMRP()
+            ind = IndividualNSGA()
             ind.init_ind(problem=problem)
             self.population.append(ind)
     
@@ -55,12 +62,7 @@ class SubPopulation(object):
             ind.chromosome = chromosome
             ind.fitness = ind.cal_fitness()
 
-        
-'''
-@author Bureerat, Sujin, et al.
-@title "Population-Based Incremental Learning for Multiobjective Optimisation."
-@date 2007
-'''
+
 class PopulationBasedIncrementalLearning(MOEA):
     
     def __init__(self, problem, num_sub, grid_size):
@@ -90,22 +92,17 @@ class PopulationBasedIncrementalLearning(MOEA):
 
     def update_pv_by_mean(self):
         select_number = random.randint(1, len(self.external_archive.archive)-2)
-        chromosome_set = []
-        
-        for i in range(select_number):
-            chromosome_set.append(self.external_archive.archive[i])
-        
-        chromosome_mean = []
-        for i in range(len(self.problem.num_link)):
-            tmp_sum = 0
-            for chrom in chromosome_set:
-                tmp_sum += chrom[i]
-            chromosome_mean.append(float(tmp_sum) / len(chromosome_set))
-            
+        select_lst = np.random.randint(0, len(self.external_archive.archive)-1, size=select_number)
+        means = np.zeros(self.problem.num_link, dtype=int)
+
+        for i in select_lst:
+            means += np.array(self.external_archive.archive[i].chromosome)
+
+        means /= select_number
+
         for sub in self.sub_populations:
-            sub.pv.update_vector(chromosome_mean)
-    
-    
+            sub.pv.update_vector(means)
+
     def update_pv_by_weight_sum(self):
         ran = random.uniform(0,1)
         weight_vector = [ran, 1-ran]
