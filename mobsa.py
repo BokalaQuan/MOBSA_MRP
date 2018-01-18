@@ -7,7 +7,7 @@
 from algorithm.individual import IndividualMRP
 from algorithm.parameter import POPULATION_SIZE, MAX_NUMBER_FUNCTION_EVAL
 from problem.mrp.multicast_routing_problem import MulticastRoutingProblem as MRP
-from algorithm.util import func_trans_S1, write_list_to_json, read_json_as_list, write_performance, func_trans_S2, func_trans_V1
+from algorithm.util import *
 from algorithm.operator import fast_nondominated_sort
 
 import numpy

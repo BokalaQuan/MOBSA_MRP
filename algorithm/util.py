@@ -89,10 +89,15 @@ def cal_HV(pReal, ref):
     '''
     Hyper-volume.
     '''
-    hv = (ref[0] - pReal[0]['fit'][0]) * (ref[1] - pReal[0]['fit'][1])
+    # hv = (ref[0] - pReal[0]['fit'][0]) * (ref[1] - pReal[0]['fit'][1])
+    # for i in range(1, len(pReal)):
+    #     hv += (pReal[i - 1]['fit'][0] - pReal[i]['fit'][0]) * \
+    #           (ref[1] - pReal[i]['fit'][1])
+    hv = 0.0
+    hv += (ref[1] - pReal[0]['fit'][1]) * (ref[0] - pReal[0]['fit'][0])
     for i in range(1, len(pReal)):
-        hv += (pReal[i - 1]['fit'][0] - pReal[i]['fit'][0]) * \
-              (ref[1] - pReal[i]['fit'][1])
+        hv += (ref[1] - pReal[i]['fit'][1]) * \
+              (pReal[i-1]['fit'][0] - pReal[i]['fit'][0])
 
     return hv
 
@@ -111,6 +116,66 @@ def cal_C(p_lst1, p_lst2):
 
     return float(len(lst)) / len(p_lst2)
 
+def cal_metric(topo=None, runtime=None, algorithm=None):
+    pf_ideal = read_json_as_list(topo=topo, algorithm='IDEAL')
+    p0 = pf_ideal[0]['fit']
+    p1 = pf_ideal[len(pf_ideal) - 1]['fit']
+    ref = [p0[0] + 0.1 * abs(p0[0] - p1[0]),
+           p1[1] + 0.1 * abs(p0[1] - p1[1])]
+
+    GD = []
+    IGD = []
+    HV = []
+    pf_lst = []
+    for i in range(runtime):
+        pf = read_json_as_list(topo=topo, algorithm=algorithm, runtime=i+1)
+        pf_lst.append(pf)
+
+    for pf in pf_lst:
+        GD.append(cal_GD(pf_ideal, pf))
+        IGD.append(cal_IGD(pf_ideal, pf))
+        HV.append(cal_HV(pf, ref))
+
+    GD = np.array(GD)
+    IGD = np.array(IGD)
+    HV = np.array(HV)
+
+    min_GD = '%.4f' % GD.min()
+    min_IGD = '%.4f' % IGD.min()
+    min_HV = '%.4f' % HV.min()
+
+    max_GD = '%.4f' % GD.max()
+    max_IGD = '%.4f' % IGD.max()
+    max_HV = '%.4f' % HV.max()
+
+    mean_GD = '%.4f' % GD.mean()
+    mean_IGD = '%.4f' % IGD.mean()
+    mean_HV = '%.4f' % HV.mean()
+
+    std_GD = '%.4f' % GD.std()
+    std_IGD = '%.4f' % IGD.std()
+    std_HV = '%.4f' % HV.std()
+
+    GD_ = {'Max': max_GD,
+           'Min': min_GD,
+           'Mean': mean_GD,
+           'Std': std_GD}
+
+    IGD_ = {'Max': max_IGD,
+           'Min': min_IGD,
+           'Mean': mean_IGD,
+           'Std': std_IGD}
+
+    HV_ = {'Max': max_HV,
+           'Min': min_HV,
+           'Mean': mean_HV,
+           'Std': std_HV}
+
+    METRIC = {'GD': GD_,
+              'IGD': IGD_,
+              'HV': HV_}
+
+    return METRIC, GD, IGD, HV
 
 def read_json_as_list(topo, algorithm, runtime=None):
     """
@@ -134,16 +199,16 @@ def read_json_as_list(topo, algorithm, runtime=None):
             print path, 'not found!'
 
     else:
-        for i in range(runtime):
-            path = os.getcwd() + '/solution/' + topo + '/PF-' + algorithm + \
-                '-' +str(runtime)  + '.json'
-            tmp = []
+        path = os.getcwd() + '/solution/' + topo + '/PF-' + algorithm + \
+               '-' + str(runtime) + '.json'
+        try:
             with open(path, 'r') as f:
                 conf = json.load(f)
                 for item in conf:
-                    tmp.append(item)
+                    list_.append(item)
             f.close()
-            list_.extend(tmp)
+        except IOError:
+            print path, 'not found!'
 
     return list_
 
@@ -166,8 +231,10 @@ def write_list_to_json(topo=None, algorithm=None, runtime=None, solutions=None):
         solution = solutions
     else:
         for sol in solutions:
-            # solution.append(sol.to_dict())
-            solution.append(sol)
+            if type(sol) is dict:
+                solution.append(sol)
+            else:
+                solution.append(sol.to_dict())
 
     solution.sort(cmp=None, key=lambda x:x['fit'][1], reverse=False)
 
@@ -186,24 +253,34 @@ def write_list_to_json(topo=None, algorithm=None, runtime=None, solutions=None):
         f.write(json.dumps(solution, indent=4))
         f.close()
 
-def update_ideal_pf(topo, algorithms, runtime=None):
+def update_ideal_pf(topo, algorithms):
     union_pf = []
     for al in algorithms:
-        if runtime is None:
-            union_pf.extend(read_json_as_list(topo=topo, algorithm=al))
-        else:
-            union_pf.extend(read_json_as_list(topo=topo, algorithm=al, runtime=runtime))
+        union_pf.extend(read_json_as_list(topo=topo, algorithm=al))
 
     union_pf.extend(read_json_as_list(topo=topo, algorithm='IDEAL'))
 
     write_list_to_json(topo=topo, algorithm='IDEAL', solutions=union_pf)
 
+def read_metric_as_json(runtime=None, metric=None):
+    tmp = {'Runtime': runtime,
+           'Metric': metric}
 
-def write_performance(property=None, topo=None, algorithm=None, runtime=None, lst=None):
-    path = os.getcwd() + '/solution/' + topo + '/' + property + \
-            '-' + algorithm + '-' + str(runtime)  + '.json'
-    with open(path, 'wb') as f:
-        f.write(json.dumps(lst, indent=4))
+    return tmp
+
+def write_metric(topo=None, algorithm=None, runtime=None, metric=None):
+    if runtime is None:
+        pass
+    else:
+        path = os.getcwd() + '/solution/' + topo + '/Metric-' + algorithm +  '.json'
+
+        tmp = []
+        for i in range(runtime):
+            tmp.append(read_metric_as_json(runtime=i+1, metric=metric))
+
+        with open(path, 'wb') as f:
+            f.write(json.dumps(tmp, indent=4))
+
         f.close()
 
 def func(topo=None, algorithm=None, runtime=None):
@@ -241,18 +318,23 @@ def func(topo=None, algorithm=None, runtime=None):
 
     return data
 
-def plot_ps_by_different_algorithm(topo=None, algorithms=None, title=None):
+def plot_ps_by_different_algorithm(topo=None, algorithms=None):
     plt.figure()
     for item in algorithms:
         data = func(topo=topo, algorithm=item)
         plt.scatter(data[0], data[1], alpha=0.4)
 
-
-    plt.xlabel('Arg_plr (%)', fontsize=12)
-    plt.ylabel('Arg_delay (ms)', fontsize=12)
+    plt.xlabel('Arg_Delay (ms)', fontsize=12)
+    plt.ylabel('Arg_PLR (%)', fontsize=12)
     plt.legend(algorithms, fontsize=10)
-    plt.savefig(title+".png", dpi=900)
-    plt.show()
+    plt.savefig(topo.title()+"_PF.png", dpi=900)
 
-def plot_performance_as_boxplot():
-    pass
+def plot_performance_as_boxplot(topo=None, metric=None, algorithms=None, lst=None):
+    plt.figure()
+    plt.boxplot(lst, labels=algorithms)
+    plt.xticks(fontsize=5)
+    plt.yticks(fontsize=5)
+    plt.xlabel('Algorithms', fontsize=10)
+    plt.ylabel(metric+'-Metric values', fontsize=10)
+    plt.title(topo.title(), fontsize=10)
+    plt.savefig(topo.title() + '_' + metric + '_Metric.png', dpi=900)

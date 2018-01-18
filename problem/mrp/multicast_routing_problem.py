@@ -15,9 +15,9 @@ class MulticastRoutingProblem(object):
         self.src = None
         self.dst = []
     
-    def initialize(self, filename):
-        SWITCH_PATH = PATH + '/topo_file/' + filename + '/switch_info.json'
-        LINK_PATH = PATH + '/topo_file/' + filename + '/link_info.json'
+    def initialize(self, path, filename):
+        SWITCH_PATH = PATH + path + filename + '/switch_info.json'
+        LINK_PATH = PATH + path + filename + '/link_info.json'
     
         with open(SWITCH_PATH, 'r') as f:
             conf = json.load(f)
@@ -39,7 +39,7 @@ class MulticastRoutingProblem(object):
                 
         f.close()
 
-        print "Topo initialized success!"
+        print "Topo " + filename + " initialized success!"
         print "Number of switches is ", self.num_switch, ", Number of links is ", self.num_link
         print "Source node is", self.src, ", Destination is ", self.dst
         
@@ -58,10 +58,3 @@ class Edge(object):
         self.delay = link["delay"]
         self.loss = link["loss"]
         self.bandwidth = link["bandwidth"]
-                
-
-if __name__ == '__main__':
-    demo = MulticastRoutingProblem()
-    demo.initialize('topo1')
-    print demo.dst, demo.src
-    

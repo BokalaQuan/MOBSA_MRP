@@ -13,7 +13,8 @@ if __name__ == '__main__':
     # for topo in topos:
     #     update_ideal_pf(topo=topo, algorithms=al_lst)
 
-    topo = 'topo1'
-    al = ['EAG-MOEAD', 'NSABC']
-    lst = read_json_as_list(topo=topo, algorithm=al[0], runtime=1)
-    write_list_to_json(topo=topo, algorithm=al[0], solutions=lst)
+    topos = ['topo1', 'topo2', 'topo3', 'topo4', 'topo5', 'topo6']
+    al = ['EAG-MOEAD', 'NSABC', 'MOEAD', 'MOEAD-OBL', 'MOEAD-SFLA', 'NSABC', 'NSGA-II']
+
+    for topo in topos:
+        update_ideal_pf(topo=topo, algorithms=al)

@@ -61,7 +61,7 @@ class ExternalArchiveGuidedMOEAD(MOEA):
         return P_list
 
     def select_subproblem(self, p_list):
-        select_sub = None
+        select_sub = self.current_population[0]
         p_sel = random.uniform(0, 1)
 
         if p_sel <= p_list[0]:

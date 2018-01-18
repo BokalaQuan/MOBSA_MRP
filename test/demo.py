@@ -5,6 +5,7 @@ import json
 import networkx as nx
 import matplotlib.pyplot as plot
 
+
 if __name__ == '__main__':
     
     # graph = nx.waxman_graph(50,alpha=0.4, beta=0.2)
@@ -28,3 +29,5 @@ if __name__ == '__main__':
     print nx.dijkstra_path(graph, source=10, target=6, weight='delay')
     
     nx.draw_networkx(graph)
+    plot.show()
+    

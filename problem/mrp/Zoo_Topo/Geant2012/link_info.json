@@ -1,0 +1,429 @@
+[
+    {
+        "bandwidth": 190, 
+        "delay": 9.392, 
+        "dst": 1, 
+        "loss": 0.003, 
+        "src": 0
+    }, 
+    {
+        "bandwidth": 100, 
+        "delay": 4.592, 
+        "dst": 2, 
+        "loss": 0.073, 
+        "src": 0
+    }, 
+    {
+        "bandwidth": 90, 
+        "delay": 6.575, 
+        "dst": 4, 
+        "loss": 0.099, 
+        "src": 0
+    }, 
+    {
+        "bandwidth": 130, 
+        "delay": 7.517, 
+        "dst": 34, 
+        "loss": 0.032, 
+        "src": 0
+    }, 
+    {
+        "bandwidth": 10, 
+        "delay": 0.837, 
+        "dst": 30, 
+        "loss": 0.081, 
+        "src": 0
+    }, 
+    {
+        "bandwidth": 150, 
+        "delay": 4.254, 
+        "dst": 33, 
+        "loss": 0.021, 
+        "src": 1
+    }, 
+    {
+        "bandwidth": 180, 
+        "delay": 3.478, 
+        "dst": 32, 
+        "loss": 0.012, 
+        "src": 2
+    }, 
+    {
+        "bandwidth": 160, 
+        "delay": 2.309, 
+        "dst": 35, 
+        "loss": 0.071, 
+        "src": 2
+    }, 
+    {
+        "bandwidth": 150, 
+        "delay": 4.383, 
+        "dst": 4, 
+        "loss": 0.016, 
+        "src": 2
+    }, 
+    {
+        "bandwidth": 60, 
+        "delay": 8.655, 
+        "dst": 38, 
+        "loss": 0.033, 
+        "src": 2
+    }, 
+    {
+        "bandwidth": 110, 
+        "delay": 1.724, 
+        "dst": 36, 
+        "loss": 0.056, 
+        "src": 2
+    }, 
+    {
+        "bandwidth": 190, 
+        "delay": 6.468, 
+        "dst": 31, 
+        "loss": 0.007, 
+        "src": 2
+    }, 
+    {
+        "bandwidth": 20, 
+        "delay": 5.113, 
+        "dst": 10, 
+        "loss": 0.079, 
+        "src": 3
+    }, 
+    {
+        "bandwidth": 60, 
+        "delay": 7.58, 
+        "dst": 19, 
+        "loss": 0.024, 
+        "src": 3
+    }, 
+    {
+        "bandwidth": 30, 
+        "delay": 6.657, 
+        "dst": 4, 
+        "loss": 0.037, 
+        "src": 3
+    }, 
+    {
+        "bandwidth": 70, 
+        "delay": 7.976, 
+        "dst": 5, 
+        "loss": 0.046, 
+        "src": 3
+    }, 
+    {
+        "bandwidth": 20, 
+        "delay": 6.681, 
+        "dst": 30, 
+        "loss": 0.086, 
+        "src": 3
+    }, 
+    {
+        "bandwidth": 110, 
+        "delay": 6.699, 
+        "dst": 5, 
+        "loss": 0.094, 
+        "src": 4
+    }, 
+    {
+        "bandwidth": 60, 
+        "delay": 1.935, 
+        "dst": 6, 
+        "loss": 0.083, 
+        "src": 4
+    }, 
+    {
+        "bandwidth": 150, 
+        "delay": 6.077, 
+        "dst": 8, 
+        "loss": 0.051, 
+        "src": 4
+    }, 
+    {
+        "bandwidth": 160, 
+        "delay": 4.876, 
+        "dst": 16, 
+        "loss": 0.013, 
+        "src": 4
+    }, 
+    {
+        "bandwidth": 10, 
+        "delay": 1.69, 
+        "dst": 17, 
+        "loss": 0.057, 
+        "src": 4
+    }, 
+    {
+        "bandwidth": 10, 
+        "delay": 9.861, 
+        "dst": 29, 
+        "loss": 0.027, 
+        "src": 4
+    }, 
+    {
+        "bandwidth": 20, 
+        "delay": 5.379, 
+        "dst": 31, 
+        "loss": 0.099, 
+        "src": 4
+    }, 
+    {
+        "bandwidth": 90, 
+        "delay": 4.2, 
+        "dst": 23, 
+        "loss": 0.054, 
+        "src": 5
+    }, 
+    {
+        "bandwidth": 30, 
+        "delay": 2.022, 
+        "dst": 7, 
+        "loss": 0.1, 
+        "src": 6
+    }, 
+    {
+        "bandwidth": 10, 
+        "delay": 9.698, 
+        "dst": 8, 
+        "loss": 0.091, 
+        "src": 7
+    }, 
+    {
+        "bandwidth": 170, 
+        "delay": 1.497, 
+        "dst": 25, 
+        "loss": 0.017, 
+        "src": 7
+    }, 
+    {
+        "bandwidth": 50, 
+        "delay": 5.621, 
+        "dst": 34, 
+        "loss": 0.037, 
+        "src": 7
+    }, 
+    {
+        "bandwidth": 20, 
+        "delay": 7.288, 
+        "dst": 9, 
+        "loss": 0.03, 
+        "src": 8
+    }, 
+    {
+        "bandwidth": 40, 
+        "delay": 0.336, 
+        "dst": 25, 
+        "loss": 0.082, 
+        "src": 8
+    }, 
+    {
+        "bandwidth": 150, 
+        "delay": 0.933, 
+        "dst": 25, 
+        "loss": 0.068, 
+        "src": 9
+    }, 
+    {
+        "bandwidth": 70, 
+        "delay": 8.112, 
+        "dst": 18, 
+        "loss": 0.068, 
+        "src": 9
+    }, 
+    {
+        "bandwidth": 10, 
+        "delay": 6.078, 
+        "dst": 29, 
+        "loss": 0.076, 
+        "src": 9
+    }, 
+    {
+        "bandwidth": 30, 
+        "delay": 7.157, 
+        "dst": 15, 
+        "loss": 0.04, 
+        "src": 9
+    }, 
+    {
+        "bandwidth": 60, 
+        "delay": 5.237, 
+        "dst": 13, 
+        "loss": 0.004, 
+        "src": 11
+    }, 
+    {
+        "bandwidth": 60, 
+        "delay": 4.908, 
+        "dst": 14, 
+        "loss": 0.089, 
+        "src": 12
+    }, 
+    {
+        "bandwidth": 60, 
+        "delay": 0.254, 
+        "dst": 20, 
+        "loss": 0.08, 
+        "src": 12
+    }, 
+    {
+        "bandwidth": 160, 
+        "delay": 1.039, 
+        "dst": 13, 
+        "loss": 0.026, 
+        "src": 12
+    }, 
+    {
+        "bandwidth": 20, 
+        "delay": 2.029, 
+        "dst": 22, 
+        "loss": 0.053, 
+        "src": 12
+    }, 
+    {
+        "bandwidth": 120, 
+        "delay": 1.395, 
+        "dst": 15, 
+        "loss": 0.056, 
+        "src": 12
+    }, 
+    {
+        "bandwidth": 190, 
+        "delay": 5.493, 
+        "dst": 22, 
+        "loss": 0.088, 
+        "src": 13
+    }, 
+    {
+        "bandwidth": 130, 
+        "delay": 0.992, 
+        "dst": 14, 
+        "loss": 0.035, 
+        "src": 13
+    }, 
+    {
+        "bandwidth": 140, 
+        "delay": 0.634, 
+        "dst": 29, 
+        "loss": 0.031, 
+        "src": 15
+    }, 
+    {
+        "bandwidth": 100, 
+        "delay": 5.354, 
+        "dst": 34, 
+        "loss": 0.091, 
+        "src": 16
+    }, 
+    {
+        "bandwidth": 160, 
+        "delay": 3.849, 
+        "dst": 30, 
+        "loss": 0.077, 
+        "src": 17
+    }, 
+    {
+        "bandwidth": 80, 
+        "delay": 3.493, 
+        "dst": 27, 
+        "loss": 0.084, 
+        "src": 21
+    }, 
+    {
+        "bandwidth": 80, 
+        "delay": 7.859, 
+        "dst": 26, 
+        "loss": 0.042, 
+        "src": 22
+    }, 
+    {
+        "bandwidth": 90, 
+        "delay": 4.813, 
+        "dst": 27, 
+        "loss": 0.084, 
+        "src": 22
+    }, 
+    {
+        "bandwidth": 110, 
+        "delay": 9.143, 
+        "dst": 23, 
+        "loss": 0.019, 
+        "src": 22
+    }, 
+    {
+        "bandwidth": 100, 
+        "delay": 6.44, 
+        "dst": 29, 
+        "loss": 0.019, 
+        "src": 23
+    }, 
+    {
+        "bandwidth": 20, 
+        "delay": 1.028, 
+        "dst": 25, 
+        "loss": 0.032, 
+        "src": 24
+    }, 
+    {
+        "bandwidth": 170, 
+        "delay": 1.018, 
+        "dst": 34, 
+        "loss": 0.014, 
+        "src": 24
+    }, 
+    {
+        "bandwidth": 110, 
+        "delay": 3.922, 
+        "dst": 28, 
+        "loss": 0.081, 
+        "src": 27
+    }, 
+    {
+        "bandwidth": 20, 
+        "delay": 7.238, 
+        "dst": 29, 
+        "loss": 0.09, 
+        "src": 28
+    }, 
+    {
+        "bandwidth": 70, 
+        "delay": 3.165, 
+        "dst": 39, 
+        "loss": 0.019, 
+        "src": 30
+    }, 
+    {
+        "bandwidth": 60, 
+        "delay": 9.423, 
+        "dst": 34, 
+        "loss": 0.067, 
+        "src": 32
+    }, 
+    {
+        "bandwidth": 150, 
+        "delay": 2.026, 
+        "dst": 34, 
+        "loss": 0.047, 
+        "src": 33
+    }, 
+    {
+        "bandwidth": 30, 
+        "delay": 7.884, 
+        "dst": 36, 
+        "loss": 0.085, 
+        "src": 35
+    }, 
+    {
+        "bandwidth": 130, 
+        "delay": 6.004, 
+        "dst": 37, 
+        "loss": 0.022, 
+        "src": 36
+    }, 
+    {
+        "bandwidth": 80, 
+        "delay": 7.017, 
+        "dst": 39, 
+        "loss": 0.041, 
+        "src": 38
+    }
+]

@@ -1,0 +1,82 @@
+[
+    {
+        "attribute": "custom", 
+        "dpid": 0, 
+        "name": "s001"
+    }, 
+    {
+        "attribute": "source", 
+        "dpid": 1, 
+        "name": "s002"
+    }, 
+    {
+        "attribute": "destination", 
+        "dpid": 2, 
+        "name": "s003"
+    }, 
+    {
+        "attribute": "custom", 
+        "dpid": 3, 
+        "name": "s004"
+    }, 
+    {
+        "attribute": "destination", 
+        "dpid": 4, 
+        "name": "s005"
+    }, 
+    {
+        "attribute": "custom", 
+        "dpid": 5, 
+        "name": "s006"
+    }, 
+    {
+        "attribute": "custom", 
+        "dpid": 6, 
+        "name": "s007"
+    }, 
+    {
+        "attribute": "destination", 
+        "dpid": 7, 
+        "name": "s008"
+    }, 
+    {
+        "attribute": "destination", 
+        "dpid": 8, 
+        "name": "s009"
+    }, 
+    {
+        "attribute": "custom", 
+        "dpid": 9, 
+        "name": "s010"
+    }, 
+    {
+        "attribute": "custom", 
+        "dpid": 10, 
+        "name": "s011"
+    }, 
+    {
+        "attribute": "destination", 
+        "dpid": 11, 
+        "name": "s012"
+    }, 
+    {
+        "attribute": "destination", 
+        "dpid": 12, 
+        "name": "s013"
+    }, 
+    {
+        "attribute": "custom", 
+        "dpid": 13, 
+        "name": "s014"
+    }, 
+    {
+        "attribute": "custom", 
+        "dpid": 14, 
+        "name": "s015"
+    }, 
+    {
+        "attribute": "custom", 
+        "dpid": 15, 
+        "name": "s016"
+    }
+]
