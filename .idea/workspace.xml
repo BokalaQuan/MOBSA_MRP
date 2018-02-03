@@ -47,19 +47,62 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="4e3fb606-1abc-432e-b6ce-0360d39d8df0" name="Default" comment="">
-      <change type="MOVED" beforePath="$PROJECT_DIR$/Cost266_GD_Metric.png" afterPath="$PROJECT_DIR$/solution/cost266/Cost266_GD_Metric.png" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/Cost266_HV_Metric.png" afterPath="$PROJECT_DIR$/solution/cost266/Cost266_HV_Metric.png" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/Cost266_IGD_Metric.png" afterPath="$PROJECT_DIR$/solution/cost266/Cost266_IGD_Metric.png" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/Cost266_PF.png" afterPath="$PROJECT_DIR$/solution/cost266/Cost266_PF.png" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/France_GD_Metric.png" afterPath="$PROJECT_DIR$/solution/france/France_GD_Metric.png" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/France_HV_Metric.png" afterPath="$PROJECT_DIR$/solution/france/France_HV_Metric.png" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/France_IGD_Metric.png" afterPath="$PROJECT_DIR$/solution/france/France_IGD_Metric.png" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/France_PF.png" afterPath="$PROJECT_DIR$/solution/france/France_PF.png" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/Geant_GD_Metric.png" afterPath="$PROJECT_DIR$/solution/Geant2012/Geant_GD_Metric.png" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/Geant_HV_Metric.png" afterPath="$PROJECT_DIR$/solution/Geant2012/Geant_HV_Metric.png" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/Geant_IGD_Metric.png" afterPath="$PROJECT_DIR$/solution/Geant2012/Geant_IGD_Metric.png" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/Geant_PF.png" afterPath="$PROJECT_DIR$/solution/Geant2012/Geant_PF.png" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/Germany50_GD_Metric.png" afterPath="$PROJECT_DIR$/solution/germany50/Germany50_GD_Metric.png" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/Germany50_HV_Metric.png" afterPath="$PROJECT_DIR$/solution/germany50/Germany50_HV_Metric.png" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/Germany50_IGD_Metric.png" afterPath="$PROJECT_DIR$/solution/germany50/Germany50_IGD_Metric.png" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/Germany50_PF.png" afterPath="$PROJECT_DIR$/solution/germany50/Germany50_PF.png" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/India35_GD_Metric.png" afterPath="$PROJECT_DIR$/solution/india35/India35_GD_Metric.png" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/India35_HV_Metric.png" afterPath="$PROJECT_DIR$/solution/india35/India35_HV_Metric.png" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/India35_IGD_Metric.png" afterPath="$PROJECT_DIR$/solution/india35/India35_IGD_Metric.png" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/India35_PF.png" afterPath="$PROJECT_DIR$/solution/india35/India35_PF.png" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/Newyork_GD_Metric.png" afterPath="$PROJECT_DIR$/solution/newyork/Newyork_GD_Metric.png" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/Newyork_HV_Metric.png" afterPath="$PROJECT_DIR$/solution/newyork/Newyork_HV_Metric.png" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/Newyork_IGD_Metric.png" afterPath="$PROJECT_DIR$/solution/newyork/Newyork_IGD_Metric.png" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/Newyork_PF.png" afterPath="$PROJECT_DIR$/solution/newyork/Newyork_PF.png" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/Rand1_GD_Metric.png" afterPath="$PROJECT_DIR$/solution/Rand1/Rand1_GD_Metric.png" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/Rand1_HV_Metric.png" afterPath="$PROJECT_DIR$/solution/Rand1/Rand1_HV_Metric.png" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/Rand1_IGD_Metric.png" afterPath="$PROJECT_DIR$/solution/Rand1/Rand1_IGD_Metric.png" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/Rand1_PF.png" afterPath="$PROJECT_DIR$/solution/Rand1/Rand1_PF.png" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/Rand2_GD_Metric.png" afterPath="$PROJECT_DIR$/solution/Rand2/Rand2_GD_Metric.png" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/Rand2_HV_Metric.png" afterPath="$PROJECT_DIR$/solution/Rand2/Rand2_HV_Metric.png" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/Rand2_IGD_Metric.png" afterPath="$PROJECT_DIR$/solution/Rand2/Rand2_IGD_Metric.png" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/Rand2_PF.png" afterPath="$PROJECT_DIR$/solution/Rand2/Rand2_PF.png" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/Rand3_GD_Metric.png" afterPath="$PROJECT_DIR$/solution/Rand3/Rand3_GD_Metric.png" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/Rand3_HV_Metric.png" afterPath="$PROJECT_DIR$/solution/Rand3/Rand3_HV_Metric.png" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/Rand3_IGD_Metric.png" afterPath="$PROJECT_DIR$/solution/Rand3/Rand3_IGD_Metric.png" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/Rand3_PF.png" afterPath="$PROJECT_DIR$/solution/Rand3/Rand3_PF.png" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/Rand4_GD_Metric.png" afterPath="$PROJECT_DIR$/solution/Rand4/Rand4_GD_Metric.png" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/Rand4_HV_Metric.png" afterPath="$PROJECT_DIR$/solution/Rand4/Rand4_HV_Metric.png" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/Rand4_IGD_Metric.png" afterPath="$PROJECT_DIR$/solution/Rand4/Rand4_IGD_Metric.png" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/Rand4_PF.png" afterPath="$PROJECT_DIR$/solution/Rand4/Rand4_PF.png" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/Rand5_GD_Metric.png" afterPath="$PROJECT_DIR$/solution/Rand5/Rand5_GD_Metric.png" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/Rand5_HV_Metric.png" afterPath="$PROJECT_DIR$/solution/Rand5/Rand5_HV_Metric.png" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/Rand5_IGD_Metric.png" afterPath="$PROJECT_DIR$/solution/Rand5/Rand5_IGD_Metric.png" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/Rand5_PF.png" afterPath="$PROJECT_DIR$/solution/Rand5/Rand5_PF.png" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/Rand6_GD_Metric.png" afterPath="$PROJECT_DIR$/solution/Rand6/Rand6_GD_Metric.png" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/Rand6_HV_Metric.png" afterPath="$PROJECT_DIR$/solution/Rand6/Rand6_HV_Metric.png" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/Rand6_IGD_Metric.png" afterPath="$PROJECT_DIR$/solution/Rand6/Rand6_IGD_Metric.png" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/Rand6_PF.png" afterPath="$PROJECT_DIR$/solution/Rand6/Rand6_PF.png" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/Rand7_GD_Metric.png" afterPath="$PROJECT_DIR$/solution/Rand7/Rand7_GD_Metric.png" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/Rand7_HV_Metric.png" afterPath="$PROJECT_DIR$/solution/Rand7/Rand7_HV_Metric.png" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/Rand7_IGD_Metric.png" afterPath="$PROJECT_DIR$/solution/Rand7/Rand7_IGD_Metric.png" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/Rand7_PF.png" afterPath="$PROJECT_DIR$/solution/Rand7/Rand7_PF.png" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/Rand8_GD_Metric.png" afterPath="$PROJECT_DIR$/solution/Rand8/Rand8_GD_Metric.png" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/Rand8_HV_Metric.png" afterPath="$PROJECT_DIR$/solution/Rand8/Rand8_HV_Metric.png" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/Rand8_IGD_Metric.png" afterPath="$PROJECT_DIR$/solution/Rand8/Rand8_IGD_Metric.png" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/Rand8_PF.png" afterPath="$PROJECT_DIR$/solution/Rand8/Rand8_PF.png" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/Ta1_GD_Metric.png" afterPath="$PROJECT_DIR$/solution/ta1/Ta1_GD_Metric.png" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/Ta1_HV_Metric.png" afterPath="$PROJECT_DIR$/solution/ta1/Ta1_HV_Metric.png" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/Ta1_IGD_Metric.png" afterPath="$PROJECT_DIR$/solution/ta1/Ta1_IGD_Metric.png" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/Ta2_GD_Metric.png" afterPath="$PROJECT_DIR$/solution/ta2/Ta2_GD_Metric.png" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/Ta2_HV_Metric.png" afterPath="$PROJECT_DIR$/solution/ta2/Ta2_HV_Metric.png" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/Ta2_IGD_Metric.png" afterPath="$PROJECT_DIR$/solution/ta2/Ta2_IGD_Metric.png" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/algorithm/util.py" afterPath="$PROJECT_DIR$/algorithm/util.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/nsga2.py" afterPath="$PROJECT_DIR$/nsga2.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/run_moea.py" afterPath="$PROJECT_DIR$/run_moea.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/solution/Rand3/PF-NSGA-II-1.json" afterPath="$PROJECT_DIR$/solution/Rand3/PF-NSGA-II-1.json" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/algorithm/operator.py" afterPath="$PROJECT_DIR$/algorithm/operator.py" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -751,7 +794,14 @@
       <option name="project" value="LOCAL" />
       <updated>1517636828976</updated>
     </task>
-    <option name="localTasksCounter" value="13" />
+    <task id="LOCAL-00013" summary="sd">
+      <created>1517644432993</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1517644432993</updated>
+    </task>
+    <option name="localTasksCounter" value="14" />
     <servers />
   </component>
   <component name="TodoView">
@@ -807,7 +857,8 @@
     <MESSAGE value="update of ABC and MOEA/D." />
     <MESSAGE value="Add screens." />
     <MESSAGE value="Update before the deadline." />
-    <option name="LAST_COMMIT_MESSAGE" value="Update before the deadline." />
+    <MESSAGE value="sd" />
+    <option name="LAST_COMMIT_MESSAGE" value="sd" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

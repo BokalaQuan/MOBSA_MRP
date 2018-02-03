@@ -124,6 +124,24 @@ def make_new_population(poplist, popsize):
     return new_pop
 
 
+def select_solution_in_bidding_competition(poplist):
+    length = len(poplist)
+
+    index1, index2 = 0, 0
+    while index1 == index2:
+        index1, index2 = random.randint(0, length-1), random.randint(0, length-1)
+
+    ind1 = poplist[index1]
+    ind2 = poplist[index2]
+
+    if ind1 <= ind2:
+        return ind1
+    elif ind2 <= ind1:
+        return ind2
+    else:
+        return ind1 if random.random() < 0.5 else ind2
+
+
 '''
 @author Joshua Knowles, et al.
 @title "Approximating the non-dominated front using the Pareto Archived Evolution Strategy."
