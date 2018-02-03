@@ -47,7 +47,7 @@ class MOEAD_OBL(MultiObjectiveEvolutionaryAlgorithmBasedOnDecomposition):
     #
         ind_new = ind_worst.copy()
         ind_new.mutation()
-        ind_new.fitness = ind_new.cal_fitness()
+        ind_new.cal_fitness()
         # fit_new = SubProblem.cal_fit(ind_new, ind.weight_vector,
         #                              'TF', self.reference_point)
     #
@@ -58,7 +58,7 @@ class MOEAD_OBL(MultiObjectiveEvolutionaryAlgorithmBasedOnDecomposition):
             return ind_new
         elif not ind_new >= ind_worst:
             ind_new.mutation()
-            ind_new.fitness = ind_new.cal_fitness()
+            ind_new.cal_fitness()
             fit_new = SubProblem.cal_fit(ind_new, ind.weight_vector, 'WS')
             # fit_new = SubProblem.cal_fit(ind_new, sub_worst.weight_vector, 'WS')
     #
@@ -67,13 +67,13 @@ class MOEAD_OBL(MultiObjectiveEvolutionaryAlgorithmBasedOnDecomposition):
             else:
                 ind_new = ind_worst.copy()
                 ind_new.mutation()
-                ind_new.fitness = ind_new.cal_fitness()
+                ind_new.cal_fitness()
                 return ind_new
         else:
             ind1 = ind_worst.copy()
             ind2 = self.external_archive[random.randint(0, len(self.external_archive) - 1)].copy()
             ind1.crossover(ind2)
-            ind1.fitness = ind1.cal_fitness()
+            ind1.cal_fitness()
             return ind1
 
     def elite_opposition_based_learning(self):

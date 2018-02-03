@@ -6,7 +6,7 @@
 from algorithm.individual import IndividualMRP
 from algorithm.moea import MultiObjectiveEvolutionaryAlgorithm as MOEA
 from algorithm.parameter import *
-from algorithm.operator import fast_nondominated_sort, crowding_distance_sort
+from algorithm.operator import *
 
 import random
 import copy
@@ -38,14 +38,6 @@ class IndividualNSGA(IndividualMRP):
 
         return ind
 
-    def opposition_based_learning(self):
-        chrom = [1 if ch == 0 else 0 for ch in self.chromosome]
-        ind = IndividualNSGA()
-        ind.problem = self.problem
-        ind.chromosome = chrom
-        ind.fitness = ind.cal_fitness()
-        return ind
-
     def clear_dominated_property(self):
         self.num_dominated = 0
         self.dominating_list = []
@@ -62,7 +54,7 @@ class NondominatedSortGeneticAlgorithm2(MOEA):
         return 'NSGA-II'
     
     def init_population(self):
-        for i in xrange(POPULATION_SIZE):
+        for i in range(POPULATION_SIZE):
             ind = IndividualNSGA()
             ind.init_ind(problem=self.problem)
             self.current_population.append(ind)
@@ -77,19 +69,19 @@ class NondominatedSortGeneticAlgorithm2(MOEA):
         union_poplist.extend(self.current_population)
         union_poplist.extend(self.external_archive)
         
-        pareto_rank_set_list = fast_nondominated_sort(union_poplist)
-        crowding_distance_sort(pareto_rank_set_list)
+        # pareto_rank_set_list = fast_nondominated_sort(union_poplist)
+        # crowding_distance_sort(pareto_rank_set_list)
         
-        self.current_population = []
-        for pareto_rank_set in pareto_rank_set_list:
-            if len(self.current_population) < POPULATION_SIZE:
-                if (len(pareto_rank_set) + len(self.current_population)) <= POPULATION_SIZE:
-                    for ind in pareto_rank_set:
-                        self.current_population.append(ind.copy())
-                else:
-                    current = len(self.current_population)
-                    for i in range(POPULATION_SIZE - current):
-                        self.current_population.append(pareto_rank_set[i].copy())
+        self.current_population = make_new_population(union_poplist, POPULATION_SIZE)
+        # for pareto_rank_set in pareto_rank_set_list:
+        #     if len(self.current_population) < POPULATION_SIZE:
+        #         if (len(pareto_rank_set) + len(self.current_population)) <= POPULATION_SIZE:
+        #             for ind in pareto_rank_set:
+        #                 self.current_population.append(ind.copy())
+        #         else:
+        #             current = len(self.current_population)
+        #             for i in range(POPULATION_SIZE - current):
+        #                 self.current_population.append(pareto_rank_set[i].copy())
 
     def evolution(self):
         self.current_population = []
@@ -116,7 +108,7 @@ class NondominatedSortGeneticAlgorithm2(MOEA):
         
         for ind in self.current_population:
             ind.mutation()
-            ind.fitness = ind.cal_fitness()
+            ind.cal_fitness()
             
     def run(self):
         self.init_population()

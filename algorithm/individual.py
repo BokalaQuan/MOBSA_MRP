@@ -103,60 +103,61 @@ class IndividualMRP(Individual):
         return ind
 
     def init_ind(self, problem):
-        """
-
-        :param problem: input problem
-        """
         self.problem = problem
-        self.chromosome = Individual.create_chromosome(problem.num_link, P_INIT)
-        self.fitness = self.cal_fitness()
+        self.cal_fitness()
 
-    def cal_fitness(self):
-        self._init_subgraph_by_chromosome(self.problem)
-        return [self.delay, self.loss]
+    def cal_fitness(self, chromosome=None):
+        if chromosome is None:
+            self.chromosome = Individual.create_chromosome(self.problem.num_link, P_INIT)
+        else:
+            self.chromosome = chromosome
 
-    def _init_subgraph_by_chromosome(self, mrp):
+        self._init_subgraph_by_chromosome()
+
+    def _init_subgraph_by_chromosome(self):
         link_select = []
         state = True
         graph = nx.Graph()
 
-        for x in range(mrp.num_link):
+        for x in range(self.problem.num_link):
             if self.chromosome[x]:
-                link_select.append(mrp.links[x])
+                link_select.append(self.problem.links[x])
 
         for link in link_select:
             graph.add_edge(link.src, link.dst, delay=link.delay,
-                           band=link.bandwidth, loss=link.loss)
+                           bandwidth=link.bandwidth, loss=link.loss)
 
         if state:
-            if mrp.src not in graph.node:
+            if self.problem.src not in graph.node:
                 state = False
             else:
-                for dst in mrp.dst:
+                for dst in self.problem.dst:
                     if dst not in graph.node:
                         state = False
 
         if state:
-            for dst in mrp.dst:
-                if not nx.has_path(G=graph, source=mrp.src, target=dst):
+            for dst in self.problem.dst:
+                if not nx.has_path(G=graph, source=self.problem.src, target=dst):
                     state = False
 
         if state:
-            self._init_tree_by_subgraph(self.problem, graph)
+            self._init_tree_by_subgraph(graph)
         else:
-            self.delay = float(800)
-            self.loss = float(1)
+            self.delay = float('inf')
+            self.loss = float('inf')
 
-    def _init_tree_by_subgraph(self, mrp, graph):
+        self.fitness = [self.delay, self.loss]
+
+    def _init_tree_by_subgraph(self, graph):
         self.paths = []
-        weight = 'delay' if random.random() <= 0.5 else 'loss'
-        for dst in mrp.dst:
-            path = nx.dijkstra_path(graph, mrp.src, dst, weight=weight)
+        weight = 'delay' if random.random() < 0.5 else 'loss'
+        for dst in self.problem.dst:
+            path = nx.dijkstra_path(graph, self.problem.src, dst, weight=weight)
             self.paths.append(path)
 
-        self._cal_fitness(mrp, graph)
+        self._cal_fitness(graph)
 
-    def _cal_fitness(self, mrp, graph):
+    def _cal_fitness(self, graph):
         max_delay = 0.0
         max_loss = 0.0
 
@@ -166,26 +167,21 @@ class IndividualMRP(Individual):
             for index in range(len(path) - 1):
                 delay += graph.edges[path[index], path[index + 1]]['delay']
                 loss *= 1 - graph.edges[path[index], path[index + 1]]['loss']
-                if self.bandwidth > graph.edges[path[index], path[index + 1]]['band']:
-                    self.bandwidth = graph.edges[path[index], path[index + 1]]['band']
+                if self.bandwidth > graph.edges[path[index], path[index + 1]]['bandwidth']:
+                    self.bandwidth = graph.edges[path[index], path[index + 1]]['bandwidth']
 
             max_delay += delay
             max_loss += 1 - loss
 
-        self.delay = float(max_delay / len(mrp.dst))
-        self.loss = float(max_loss / len(mrp.dst))
+        self.delay = float(max_delay / len(self.problem.dst))
+        self.loss = float(max_loss / len(self.problem.dst))
 
     def is_feasible(self):
-        if self.fitness != [float(800), float(1)]:
+        if self.fitness != [float('inf'), float('inf')]:
             return True
         return False
 
     def crossover(self, ind):
-        """
-        @function Uniform crossover
-        :param ind:
-        :return:
-        """
         temp = self.create_chromosome(self.problem.num_link, 0.5)
         for i in range(len(temp)):
             if temp[i]:
@@ -213,11 +209,11 @@ class IndividualMRP(Individual):
                     self.chromosome[i - 1] = ch
 
     def opposition_based_learning(self):
-        chrom = [1 if ch == 0 else 0 for ch in self.chromosome]
+        chromosome = [1 if ch == 0 else 0 for ch in self.chromosome]
         ind = IndividualMRP()
         ind.problem = self.problem
-        ind.chromosome = chrom
-        ind.fitness = ind.cal_fitness()
+        ind.chromosome = chromosome
+        ind.cal_fitness()
         return ind
 
     # def to_dict(self):
@@ -243,7 +239,7 @@ class IndividualKP(Individual):
     def init_ind(self, problem):
         self.problem = problem
         self.chromosome = Individual.create_chromosome(problem.num_item, P_INIT)
-        self.fitness = self.cal_fitness()
+        self.cal_fitness()
 
     def cal_fitness(self):
         profits = []
@@ -266,7 +262,7 @@ class IndividualKP(Individual):
 
         capacity = [self.problem[0]['capacity'], self.problem[1]['capacity']]
         self.greedy_repair_heuristic(profits, weights, ratios, capacity, self.chromosome)
-        return [sum(profits[0]), sum(profits[1])]
+        self.fitness = [sum(profits[0]), sum(profits[1])]
 
     def greedy_repair_heuristic(self, profits, weights, ratios, capacity, chromosome):
         for weight, profit, ratio, cap in zip(weights, profits, ratios, capacity):
@@ -298,5 +294,5 @@ class IndividualKP(Individual):
         ind = IndividualKP()
         ind.problem = self.problem
         ind.chromosome = chrom
-        ind.fitness = ind.cal_fitness()
+        ind.cal_fitness()
         return ind

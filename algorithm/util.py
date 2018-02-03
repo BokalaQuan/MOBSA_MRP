@@ -173,18 +173,25 @@ def cal_metric(topo=None, runtime=None, algorithm=None):
 
     METRIC = {'GD': GD_,
               'IGD': IGD_,
-              'HV': HV_}
+              'HV': HV_,
+              'GD_lst': list(GD),
+              'IGD_lst': list(IGD),
+              'HV_lst': list(HV)}
 
     return METRIC, GD, IGD, HV
 
-def read_json_as_list(topo, algorithm, runtime=None):
-    """
+def read_metric(topo=None, algorithm=None):
+    path = os.getcwd() + '/solution/' + topo + '/Metric-' + algorithm + '.json'
 
-    :param topo:
-    :param algorithm:
-    :param runtime:
-    :return:
-    """
+    with open(path, 'r') as f:
+        conf = json.load(f)
+        GD = conf['GD_lst']
+        IGD = conf['IGD_lst']
+        HV = conf['HV_lst']
+
+    return GD, IGD, HV
+
+def read_json_as_list(topo, algorithm, runtime=None):
     list_ = []
     if runtime is None:
         path = os.getcwd() + '/solution/' + topo + '/PF-' + algorithm + '.json'
@@ -206,20 +213,12 @@ def read_json_as_list(topo, algorithm, runtime=None):
                 conf = json.load(f)
                 for item in conf:
                     list_.append(item)
-            f.close()
         except IOError:
             print path, 'not found!'
 
     return list_
 
 def write_list_to_json(topo=None, algorithm=None, runtime=None, solutions=None):
-    """
-    :param topo:
-    :param algorithm:
-    :param runtime:
-    :param solutions:
-    :return:
-    """
     if runtime is None:
         path = os.getcwd() + '/solution/' + topo + '/PF-' + algorithm + '.json'
     else:
@@ -238,20 +237,24 @@ def write_list_to_json(topo=None, algorithm=None, runtime=None, solutions=None):
 
     solution.sort(cmp=None, key=lambda x:x['fit'][1], reverse=False)
 
-    obj_delay = solution[0]['fit'][0]
-    obj_loss = solution[0]['fit'][1]
-    for item in solution[:]:
-        if item['fit'][0] > obj_delay:
+    obj_1 = solution[0]['fit'][0]
+    obj_2 = solution[0]['fit'][1]
+
+    for item in solution[1:]:
+        if item['fit'][0] > obj_1:
             solution.remove(item)
-        elif item['fit'][0] == obj_delay and item['fit'][1] == obj_loss:
+        elif item['fit'][0] == obj_1 and item['fit'][1] == obj_2:
             solution.remove(item)
         else:
-            obj_delay = item['fit'][0]
-            obj_loss = item['fit'][1]
+            obj_1 = item['fit'][0]
+            obj_2 = item['fit'][1]
 
-    with open(path, 'wb') as f:
-        f.write(json.dumps(solution, indent=4))
-        f.close()
+    try:
+        with open(path, 'w+') as f:
+            f.write(json.dumps(solution, indent=4))
+    except Exception:
+        print "Error."
+        pass
 
 def update_ideal_pf(topo, algorithms):
     union_pf = []
@@ -262,26 +265,11 @@ def update_ideal_pf(topo, algorithms):
 
     write_list_to_json(topo=topo, algorithm='IDEAL', solutions=union_pf)
 
-def read_metric_as_json(runtime=None, metric=None):
-    tmp = {'Runtime': runtime,
-           'Metric': metric}
+def write_metric(topo=None, algorithm=None, metric=None):
+    path = os.getcwd() + '/solution/' + topo + '/Metric-' + algorithm + '.json'
 
-    return tmp
-
-def write_metric(topo=None, algorithm=None, runtime=None, metric=None):
-    if runtime is None:
-        pass
-    else:
-        path = os.getcwd() + '/solution/' + topo + '/Metric-' + algorithm +  '.json'
-
-        tmp = []
-        for i in range(runtime):
-            tmp.append(read_metric_as_json(runtime=i+1, metric=metric))
-
-        with open(path, 'wb') as f:
-            f.write(json.dumps(tmp, indent=4))
-
-        f.close()
+    with open(path, 'w+') as f:
+        f.write(json.dumps(metric, indent=4))
 
 def func(topo=None, algorithm=None, runtime=None):
     data = []
@@ -301,33 +289,36 @@ def func(topo=None, algorithm=None, runtime=None):
         f.close()
         data = [x, y]
     else:
-        for i in range(runtime):
-            tmp = os.getcwd() + '/solution/' + topo + '/PF-' + \
-                algorithm + '-' + str(i + 1) + '.json'
+        tmp = os.getcwd() + '/solution/' + topo + '/PF-' + \
+              algorithm + '-' + str(runtime+1) + '.json'
 
-            x = []
-            y = []
+        x = []
+        y = []
 
-            with open(tmp, 'r') as f:
-                conf = json.load(f)
-                for item in conf:
-                    x.append(item['fit'][0])
-                    y.append(item['fit'][1])
-            f.close()
-            data.append([x, y])
+        with open(tmp, 'r') as f:
+            conf = json.load(f)
+            for item in conf:
+                x.append(item['fit'][0])
+                y.append(item['fit'][1])
+        f.close()
+        data = [x, y]
 
     return data
 
 def plot_ps_by_different_algorithm(topo=None, algorithms=None):
     plt.figure()
-    for item in algorithms:
+    styles = ['^', 'x', '*', 's', '>']
+    for item, sty in zip(algorithms, styles):
         data = func(topo=topo, algorithm=item)
+        # plt.plot(data[0], data[1], marker=sty, linewidth=1.0, markersize=2.0)
         plt.scatter(data[0], data[1], alpha=0.4)
 
     plt.xlabel('Arg_Delay (ms)', fontsize=12)
     plt.ylabel('Arg_PLR (%)', fontsize=12)
     plt.legend(algorithms, fontsize=10)
-    plt.savefig(topo.title()+"_PF.png", dpi=900)
+    # plt.savefig(topo.title()+"_PF.png", dpi=900)
+    plt.show()
+
 
 def plot_performance_as_boxplot(topo=None, metric=None, algorithms=None, lst=None):
     plt.figure()

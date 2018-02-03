@@ -177,7 +177,7 @@ class StrengthParetoEvolutionaryAlgorithm2(MOEA):
 
         for ind in self.current_population:
             ind.mutation()
-            ind.fitness = ind.cal_fitness()
+            ind.cal_fitness()
 
     def run(self):
         self.init_population()

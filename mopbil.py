@@ -31,7 +31,7 @@ class ProbabilityVector(object):
         for i in range(len(self.vector)):
             tmp = self.vector[i] * (1 - self.learn_rate) + chromosome[i] * self.learn_rate
             if random.uniform(0, 1) < PM:
-                tmp = tmp * (1 - self.shift) + random.randint(0, 1) * self.shift
+                tmp = tmp * (1 - self.shift) + random.randint(0,1) * self.shift
             self.vector[i] = tmp
     
     def generate_chromosome(self):
@@ -56,39 +56,34 @@ class SubPopulation(object):
             ind.init_ind(problem=problem)
             self.population.append(ind)
     
-    def update_sub_population(self, problem):
+    def update_sub_population(self):
         for ind in self.population:
             chromosome = self.pv.generate_chromosome()
-            ind.chromosome = chromosome
-            ind.fitness = ind.cal_fitness()
+            ind.cal_fitness(chromosome)
 
 
 class PopulationBasedIncrementalLearning(MOEA):
     
-    def __init__(self, problem, num_sub, grid_size):
+    def __init__(self, problem):
         super(PopulationBasedIncrementalLearning, self).__init__(problem=problem)
-        self.num_sub = num_sub
-        self.grid_size = grid_size
+        self.num_sub = 5
         self.sub_populations = []
+        self.grid = AdaptiveGrid(grid_size=int(EXTERNAL_ARCHIVE_SIZE/2))
 
     def name(self):
         return 'PBIL'
         
     def init_population(self):
         for i in range(self.num_sub):
-            pv = ProbabilityVector()
+            pv = ProbabilityVector(learn_rate=0.5, shift=0.02)
             pv.init_pv(self.problem.num_link)
             sub = SubPopulation(pv)
-            sub.create_sub_population(POPULATION_SIZE/self.num_sub, self.problem)
+            sub.create_sub_population(10, self.problem)
             self.sub_populations.append(sub)
             self.current_population.extend(sub.population)
 
-        self.external_archive = AdaptiveGrid(grid_size=self.grid_size)
-        self.external_archive.init_grid(fast_nondominated_sort(self.current_population)[0])
-        
-    def update_archive(self):
-        for ind in self.current_population:
-            self.external_archive.update_grid(ind)
+            for ind in sub.population:
+                self.grid.update_grid(ind)
 
     def update_pv_by_mean(self):
         select_number = random.randint(1, len(self.external_archive.archive)-2)
@@ -96,25 +91,36 @@ class PopulationBasedIncrementalLearning(MOEA):
         means = np.zeros(self.problem.num_link, dtype=int)
 
         for i in select_lst:
-            means += np.array(self.external_archive.archive[i].chromosome)
+            means += np.array(self.grid.archive[i].solution.chromosome)
 
         means /= select_number
 
         for sub in self.sub_populations:
             sub.pv.update_vector(means)
+            sub.update_sub_population()
+
+            for ind in sub.population:
+                self.grid.update_grid(ind)
 
     def update_pv_by_weight_sum(self):
         ran = random.uniform(0,1)
         weight_vector = [ran, 1-ran]
         fit_list = []
-        for ind in self.external_archive.archive:
+        for cube in self.grid.archive:
+            ind= cube.solution
             fit = ind.fitness[0] * weight_vector[0] + ind.fitness[1] * weight_vector[1]
             fit_list.append(fit)
         
         index_select = fit_list.index(min(fit_list))
+        ind_select = self.grid.archive[index_select].solution
         
         for sub in self.sub_populations:
-            sub.pv.update_vector(self.external_archive.archive[index_select].chromosome)
+            sub.pv.update_vector(ind_select.chromosome)
+            sub.update_sub_population()
+
+            for ind in sub.population:
+                self.grid.update_grid(ind)
+
     
     def run(self):
         self.init_population()
@@ -122,11 +128,10 @@ class PopulationBasedIncrementalLearning(MOEA):
         gen = 0
         while gen < MAX_NUMBER_FUNCTION_EVAL:
             self.update_pv_by_weight_sum()
-            self.update_archive()
 
             gen += 1
         
-        return self.external_archive.archive
+        return self.grid.get_solutions()
     
     
 '''

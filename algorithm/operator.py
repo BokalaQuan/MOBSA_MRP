@@ -135,9 +135,6 @@ class HyperCube(object):
         self.coordinate = None
         self.solution = solution.copy()
         
-    def update_cube(self, coordinate):
-        self.coordinate = copy.copy(coordinate)
-
 class AdaptiveGrid(object):
     
     def __init__(self, grid_size):
@@ -149,9 +146,34 @@ class AdaptiveGrid(object):
     def init_grid(self, poplist):
         for ind in poplist:
             self.archive.append(HyperCube(ind))
-        self.grid_adjust()
-        
+
+        if len(poplist) > EXTERNAL_ARCHIVE_SIZE:
+            self.grid_adjust()
+
+    def get_solution(self):
+        if len(self.archive) < EXTERNAL_ARCHIVE_SIZE:
+            index = random.randint(0, len(self.archive)-1)
+            return self.archive[index].solution
+        else:
+            p_lst = []
+            for p in self.p_select:
+                tmp = p/sum(self.p_select)
+                p_lst.append(tmp+sum(p_lst))
+
+            ran = random.random()
+            if ran <= p_lst[0]:
+                return self.grid[0][random.randint(0,len(self.grid[0])-1)].solution
+            else:
+                for j in range(1, len(p_lst)):
+                    if ran > p_lst[j-1] and ran <= p_lst[j]:
+                        return self.grid[j][random.randint(0,len(self.grid[0])-1)].solution
+
+    def get_solutions(self):
+        return [cube.solution for cube in self.archive]
+
     def grid_adjust(self):
+        self.grid = []
+        self.p_select = []
         f_list = []
         for cube in self.archive:
             f_list.append(cube.solution.fitness)
@@ -170,7 +192,7 @@ class AdaptiveGrid(object):
 
         for cube in self.archive:
             cube.coordinate = [int((cube.solution.fitness[0] - lower[0]) / mod[0]),
-                             int((cube.solution.fitness[1] - lower[1]) / mod[1])]
+                               int((cube.solution.fitness[1] - lower[1]) / mod[1])]
     
         for i in range(self.grid_size):
             for j in range(self.grid_size):
@@ -183,30 +205,28 @@ class AdaptiveGrid(object):
                     self.grid.append(cubes)
                     self.p_select.append(len(cubes))
         
-        if len(self.archive) > EXTERNAL_ARCHIVE_SIZE:
-            index_select = max(self.p_select)
-            tmp = random.randint(0, len(self.grid[index_select])-1)
-            self.grid[index_select].pop(tmp)
-        
+        while len(self.archive) > EXTERNAL_ARCHIVE_SIZE:
+            index_select = self.p_select.index(max(self.p_select))
+            tmp = random.randint(0, len(self.grid[index_select]) - 1)
+            ind_del = self.grid[index_select][tmp]
+            del(ind_del)
+            self.p_select[index_select] -= 1
                     
     def update_grid(self, ind):
-        flag = 0
-        for i in range(len(self.archive)):
-            if ind >= self.archive[i].solution or \
-                    ind == self.archive[i].solution:
-                flag += 1
-            elif self.archive[i].solution >= ind:
-                self.archive.pop(i)
-                i -= 1
-                
-        if flag == 0:
+        if len(self.archive) == 0:
             self.archive.append(HyperCube(ind))
 
-        if len(self.archive) > EXTERNAL_ARCHIVE_SIZE:
-            self.grid_adjust()
         else:
-            pass
-        
-    def clear_grid_property(self):
-        self.grid = []
-        self.p_select = []
+            flag = 0
+            for arc in self.archive:
+
+                if ind >= arc.solution or ind == arc.solution:
+                    flag += 1
+                elif arc.solution >= ind:
+                    del(arc)
+
+            if flag == 0:
+                self.archive.append(HyperCube(ind))
+
+            if len(self.archive) > EXTERNAL_ARCHIVE_SIZE:
+                self.grid_adjust()

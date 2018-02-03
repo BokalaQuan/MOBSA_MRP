@@ -48,16 +48,23 @@ class IndividualABC(IndividualNSGA):
         self.pos = [X_MIN + random.uniform(0,1) * (X_MAX - X_MIN) \
                     for i in range(self.problem.num_link)]
 
-        self.chromosome = self.create_chromosome_by_pos(self.pos)
-        self.fitness = self.cal_fitness()
+        chromosome = self.create_chromosome_by_pos(self.pos)
+        self.cal_fitness(chromosome=chromosome)
 
     def create_new_solution(self, ind):
         new_solution = IndividualABC()
         new_solution.problem = self.problem
         new_solution.pos = [x1 + random.uniform(-1,1) * (x1 - x2)  \
                             for x1, x2 in zip(self.pos, ind.pos)]
-        new_solution.chromosome = self.create_chromosome_by_pos(new_solution.pos)
-        new_solution.fitness = new_solution.cal_fitness()
+
+        for x1, x2 in zip(self.pos, ind.pos):
+            x = x1 + random.uniform(-1,1) * (x1-x2)
+            x = X_MIN if x < X_MIN else x
+            x = X_MAX if x > X_MAX else x
+            new_solution.pos.append(x)
+
+        chromosome = self.create_chromosome_by_pos(new_solution.pos)
+        new_solution.cal_fitness(chromosome=chromosome)
         return new_solution
 
     def create_solution_by_generation(self, gen):
@@ -65,8 +72,8 @@ class IndividualABC(IndividualNSGA):
         ind.problem = self.problem
         ind.pos = [x + random.uniform(0,1) * (1 - gen / MAX_NUMBER_FUNCTION_EVAL) \
                    for x in self.pos]
-        ind.chromosome = self.create_chromosome_by_pos(ind.pos)
-        ind.fitness = ind.cal_fitness()
+        chromosome = self.create_chromosome_by_pos(ind.pos)
+        ind.cal_fitness(chromosome=chromosome)
         return ind
 
     def cal_fit(self, T=None, poplist=None):

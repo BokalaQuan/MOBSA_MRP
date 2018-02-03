@@ -153,8 +153,8 @@ class MultiObjectiveEvolutionaryAlgorithmBasedOnDecomposition(MOEA):
         ind1.mutation()
         ind2.mutation()
         
-        ind1.fitness = ind1.cal_fitness()
-        ind2.fitness = ind2.cal_fitness()
+        ind1.cal_fitness()
+        ind2.cal_fitness()
         
         if ind1 >= ind2:
             return ind2
