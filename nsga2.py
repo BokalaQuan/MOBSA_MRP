@@ -68,20 +68,8 @@ class NondominatedSortGeneticAlgorithm2(MOEA):
         union_poplist = []
         union_poplist.extend(self.current_population)
         union_poplist.extend(self.external_archive)
-        
-        # pareto_rank_set_list = fast_nondominated_sort(union_poplist)
-        # crowding_distance_sort(pareto_rank_set_list)
-        
+
         self.current_population = make_new_population(union_poplist, POPULATION_SIZE)
-        # for pareto_rank_set in pareto_rank_set_list:
-        #     if len(self.current_population) < POPULATION_SIZE:
-        #         if (len(pareto_rank_set) + len(self.current_population)) <= POPULATION_SIZE:
-        #             for ind in pareto_rank_set:
-        #                 self.current_population.append(ind.copy())
-        #         else:
-        #             current = len(self.current_population)
-        #             for i in range(POPULATION_SIZE - current):
-        #                 self.current_population.append(pareto_rank_set[i].copy())
 
     def evolution(self):
         self.current_population = []

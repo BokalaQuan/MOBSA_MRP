@@ -62,12 +62,13 @@ if __name__ == '__main__':
     #          'Highwinds', 'HurricaneElectric', 'Internetmci',
     #          'Rediris', 'Tinet', 'Uninett2011', 'Uunet']
 
-    al_lst = ['NSACO', 'PBIL', 'MOPSO', 'NSGA-II', 'MOEAD', 'EAG-MOEAD', 'NSABC', 'SFLA-MOEAD', 'OBL-MOEAD']
+    al_lst = ['NSACO', 'PBIL', 'MOPSO', 'NSGA-II', 'NSABC',
+              'MOEAD', 'EAG-MOEAD', 'SFLA-MOEAD', 'OBL-MOEAD']
 
     for topo in topos[2:3]:
         problem = MRP()
         problem.initialize(path=path, filename=topo)
 
-        for al in al_lst[:1]:
-            run(algorithm=al, runtime=10, problem=problem)
+        for al in al_lst[3:4]:
+            run(algorithm=al, runtime=1, problem=problem)
 

@@ -272,8 +272,6 @@ def write_metric(topo=None, algorithm=None, metric=None):
         f.write(json.dumps(metric, indent=4))
 
 def func(topo=None, algorithm=None, runtime=None):
-    data = []
-
     if runtime is None:
         tmp = os.getcwd() + '/solution/' + topo + '/PF-' + \
             algorithm + '.json'
@@ -313,10 +311,12 @@ def plot_ps_by_different_algorithm(topo=None, algorithms=None):
         # plt.plot(data[0], data[1], marker=sty, linewidth=1.0, markersize=2.0)
         plt.scatter(data[0], data[1], alpha=0.4)
 
-    plt.xlabel('Arg_Delay (ms)', fontsize=12)
-    plt.ylabel('Arg_PLR (%)', fontsize=12)
+    plt.xlabel('Average End-to-End Delay (ms)', fontsize=12)
+    plt.ylabel('Average Package Loss Rate (%)', fontsize=12)
     plt.legend(algorithms, fontsize=10)
-    # plt.savefig(topo.title()+"_PF.png", dpi=900)
+    plt.title(topo.title(), fontsize=10)
+    # fig_path = os.getcwd()+'/solution/'+topo+'/'+topo.title()+'_PF.png'
+    # plt.savefig(fig_path, dpi=900)
     plt.show()
 
 
@@ -328,4 +328,6 @@ def plot_performance_as_boxplot(topo=None, metric=None, algorithms=None, lst=Non
     plt.xlabel('Algorithms', fontsize=10)
     plt.ylabel(metric+'-Metric values', fontsize=10)
     plt.title(topo.title(), fontsize=10)
-    plt.savefig(topo.title() + '_' + metric + '_Metric.png', dpi=900)
+    # fig_path = os.getcwd()+'/solution/'+topo+'/'+topo.title()+'_'+metric+'_Metric.png'
+    # plt.savefig(fig_path, dpi=900)
+    plt.show()
