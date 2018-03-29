@@ -1,6 +1,9 @@
+import math
+
+# Global system's  parameters
 POPULATION_SIZE = 50
 EXTERNAL_ARCHIVE_SIZE = 50
-MAX_NUMBER_FUNCTION_EVAL = 100
+MAX_NUMBER_FUNCTION_EVAL = 200
 
 PC = 0.8
 PM = 0.08
@@ -8,3 +11,20 @@ P_INIT = 0.5
 
 INF = float(65535)
 
+# MOEA/D's parameters
+NUMBER_NEIGHBOR = int(math.sqrt(POPULATION_SIZE))
+
+# EAG's parameters
+L = int(math.sqrt(MAX_NUMBER_FUNCTION_EVAL))
+
+# PBIL
+LEARNING_RATE = 0.5
+SHIFT = 0.02
+SUBGROUP_SIZE = 5
+
+# PSO
+VEL_LIMIT = [-3.0, 3.0]
+GRID_SIZE = int(EXTERNAL_ARCHIVE_SIZE/2)
+
+# ABC
+LIMIT = int(POPULATION_SIZE/10)

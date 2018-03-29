@@ -7,6 +7,7 @@ from algorithm.individual import IndividualMRP
 from algorithm.moea import MultiObjectiveEvolutionaryAlgorithm as MOEA
 from algorithm.parameter import *
 from algorithm.operator import *
+from algorithm.util import *
 
 import random
 import copy
@@ -90,14 +91,20 @@ class NondominatedSortGeneticAlgorithm2(MOEA):
             else:
                 self.current_population.append(ind2.copy())
                 
-        for i in range(POPULATION_SIZE/2):
+        for i in range(int(POPULATION_SIZE/2)):
             if random.uniform(0, 1) < PC:
                 self.current_population[i].crossover(self.current_population[POPULATION_SIZE-i-1])
         
         for ind in self.current_population:
             ind.mutation()
             ind.cal_fitness()
-            
+
+    def show(self):
+        logger.info('NSGA-II initialization is completed. '
+                    'Population size is %s, maximum evolution algebra is %s, '
+                    'cross probability is %s, mutation probability is %s.',
+                    str(POPULATION_SIZE), str(MAX_NUMBER_FUNCTION_EVAL), str(PC), str(PM))
+
     def run(self):
         self.init_population()
         self.copy_current_to_pre()
@@ -108,5 +115,5 @@ class NondominatedSortGeneticAlgorithm2(MOEA):
             self.copy_current_to_pre()
             self.evolution()
             gen += 1
-         
+
         return self.external_archive

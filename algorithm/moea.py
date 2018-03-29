@@ -16,3 +16,6 @@ class MultiObjectiveEvolutionaryAlgorithm(object):
 
     def name(self):
         pass
+
+    def show(self):
+        pass

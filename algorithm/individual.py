@@ -1,4 +1,4 @@
-from parameter import *
+from algorithm.parameter import *
 
 import random
 import copy
@@ -215,14 +215,6 @@ class IndividualMRP(Individual):
         ind.chromosome = chromosome
         ind.cal_fitness()
         return ind
-
-    # def to_dict(self):
-    #     return {
-    #         'delay': self.delay,
-    #         'loss': self.loss,
-    #         'bandwidth': self.bandwidth,
-    #         'paths': str(self.paths)
-    #     }
 
 
 class IndividualKP(Individual):

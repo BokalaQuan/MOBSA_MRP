@@ -74,7 +74,7 @@ def create_topology(path, filename, pattern=None):
         f.write(json.dumps(edge_list, indent=4, sort_keys=True))
         f.close()
 
-    print "Topo ", filename, " create succeed!"
+    print ("Topo ", filename, " create succeed!")
 
 def get_switch_dpid(number):
     prefix = "00"

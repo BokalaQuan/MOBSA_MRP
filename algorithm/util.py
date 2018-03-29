@@ -4,8 +4,15 @@ import json
 import math
 import random
 import os
+import logging
 import numpy as np
 import matplotlib.pyplot as plt
+from scipy.stats.stats import ttest_ind
+
+FORMAT = '%(asctime)s - %(name)s - [%(levelname)s] - %(message)s'
+logger = logging.getLogger(__name__)
+logging.basicConfig(format = FORMAT)
+logger.setLevel(level='INFO')
 
 '''
 "S-shaped versus V-shaped transfer functions for binary Particle Swarm Optimization".
@@ -36,18 +43,21 @@ def func_trans_V3(x):
 def func_trans_V4(x):
     return abs(2 * math.atan(math.pi * x / 2) / math.pi)
 
-def func_levy(d):
-    beta = float(3 / 2)
+def func_levy(d, beta):
+    # beta = float(3 / 2)
+
     pi = math.pi
 
-    theta = (math.gamma(1 + beta) * math.sin(pi * beta / 2) /
-             (math.gamma((1 + beta) / 2) * beta * math.pow(2, ((beta - 1) / 2))))
-    sigma = math.pow(theta, (1 / beta))
+    theta = (np.math.gamma(1 + beta) * np.math.sin(pi * beta / 2) /
+             (np.math.gamma((1 + beta) / 2) * beta * np.math.pow(2, ((beta - 1) / 2))))
+    sigma = np.math.pow(theta, (1 / beta))
 
-    r1 = random.random()
-    r2 = random.random()
+    u = np.random.randn(d) * sigma
+    v = np.random.randn(d)
 
-    return 0.01 * r1 * sigma / math.pow(r2, (1 / beta))
+    step = u / (abs(v) ** (1 / beta))
+
+    return 0.01 * step
 
 '''
 Multi-objective Optimization Algorithms' Performance Indicators
@@ -203,7 +213,7 @@ def read_json_as_list(topo, algorithm, runtime=None):
                     list_.append(item)
             f.close()
         except IOError:
-            print path, 'not found!'
+            logger.info('%s is not found', path)
 
     else:
         path = os.getcwd() + '/solution/' + topo + '/PF-' + algorithm + \
@@ -213,8 +223,9 @@ def read_json_as_list(topo, algorithm, runtime=None):
                 conf = json.load(f)
                 for item in conf:
                     list_.append(item)
+            logger.info('Read solutions successful.')
         except IOError:
-            print path, 'not found!'
+            logger.info('%s is not found', path)
 
     return list_
 
@@ -235,7 +246,7 @@ def write_list_to_json(topo=None, algorithm=None, runtime=None, solutions=None):
             else:
                 solution.append(sol.to_dict())
 
-    solution.sort(cmp=None, key=lambda x:x['fit'][1], reverse=False)
+    solution.sort(key=lambda x:x['fit'][1], reverse=False)
 
     obj_1 = solution[0]['fit'][0]
     obj_2 = solution[0]['fit'][1]
@@ -252,8 +263,10 @@ def write_list_to_json(topo=None, algorithm=None, runtime=None, solutions=None):
     try:
         with open(path, 'w+') as f:
             f.write(json.dumps(solution, indent=4))
+        logger.info('Write solutions successful.')
+
     except Exception:
-        print "Error."
+        logger.info('%s is not found', path)
         pass
 
 def update_ideal_pf(topo, algorithms):
@@ -270,6 +283,7 @@ def write_metric(topo=None, algorithm=None, metric=None):
 
     with open(path, 'w+') as f:
         f.write(json.dumps(metric, indent=4))
+    # logger.info('Write metrics successful.')
 
 def func(topo=None, algorithm=None, runtime=None):
     if runtime is None:
@@ -303,7 +317,7 @@ def func(topo=None, algorithm=None, runtime=None):
 
     return data
 
-def plot_ps_by_different_algorithm(topo=None, algorithms=None):
+def plot_ps_by_different_algorithm(topo=None, algorithms=None, show=False):
     plt.figure()
     styles = ['^', 'x', '*', 's', '>']
     for item, sty in zip(algorithms, styles):
@@ -315,12 +329,15 @@ def plot_ps_by_different_algorithm(topo=None, algorithms=None):
     plt.ylabel('Average Package Loss Rate (%)', fontsize=12)
     plt.legend(algorithms, fontsize=10)
     plt.title(topo.title(), fontsize=10)
-    # fig_path = os.getcwd()+'/solution/'+topo+'/'+topo.title()+'_PF.png'
-    # plt.savefig(fig_path, dpi=900)
-    plt.show()
+    fig_path = os.getcwd()+'/solution/'+topo+'/'+topo.title()+'_PF.png'
+    plt.savefig(fig_path, dpi=900)
 
+    if show:
+        plt.show()
+    else:
+        pass
 
-def plot_performance_as_boxplot(topo=None, metric=None, algorithms=None, lst=None):
+def plot_performance_as_boxplot(topo=None, metric=None, algorithms=None, lst=None, show=False):
     plt.figure()
     plt.boxplot(lst, labels=algorithms)
     plt.xticks(fontsize=5)
@@ -328,6 +345,10 @@ def plot_performance_as_boxplot(topo=None, metric=None, algorithms=None, lst=Non
     plt.xlabel('Algorithms', fontsize=10)
     plt.ylabel(metric+'-Metric values', fontsize=10)
     plt.title(topo.title(), fontsize=10)
-    # fig_path = os.getcwd()+'/solution/'+topo+'/'+topo.title()+'_'+metric+'_Metric.png'
-    # plt.savefig(fig_path, dpi=900)
-    plt.show()
+    fig_path = os.getcwd()+'/solution/'+topo+'/'+topo.title()+'_'+metric+'_Metric.png'
+    plt.savefig(fig_path, dpi=900)
+
+    if show:
+        plt.show()
+    else:
+        pass

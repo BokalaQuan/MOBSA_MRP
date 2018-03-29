@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/MOBSA_MRP.iml" filepath="$PROJECT_DIR$/.idea/MOBSA_MRP.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../Trans/.idea/Trans.iml" filepath="$PROJECT_DIR$/../Trans/.idea/Trans.iml" />
     </modules>
   </component>
 </project>

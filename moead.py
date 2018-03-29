@@ -7,6 +7,7 @@
 from algorithm.individual import IndividualMRP
 from algorithm.moea import MultiObjectiveEvolutionaryAlgorithm as MOEA
 from algorithm.parameter import *
+from algorithm.util import *
 
 import random
 import copy
@@ -98,7 +99,7 @@ class MultiObjectiveEvolutionaryAlgorithmBasedOnDecomposition(MOEA):
     def __init__(self, problem):
         super(MultiObjectiveEvolutionaryAlgorithmBasedOnDecomposition, self).__init__(problem)
         self.reference_point = [INF, INF]
-    
+
     def name(self):
         return 'MOEAD'
     
@@ -172,7 +173,14 @@ class MultiObjectiveEvolutionaryAlgorithmBasedOnDecomposition(MOEA):
 
             if fit1 < fit2:
                 ind_select.solution = new_solution
-    
+
+    def show(self):
+        logger.info('MOEA/D initialization is completed. '
+                    'Population size is %s, maximum evolution algebra is %s, neighbors size is %s, '
+                    'decomposition way is %s, cross probability is %s, mutation probability is %s.',
+                    str(POPULATION_SIZE), str(MAX_NUMBER_FUNCTION_EVAL), str(NUMBER_NEIGHBOR),
+                    str('Weight-sum'), str(PC), str(PM))
+
     def run(self):
         self.init_population()
         
@@ -184,5 +192,5 @@ class MultiObjectiveEvolutionaryAlgorithmBasedOnDecomposition(MOEA):
                 self.update_neighbor_solution(new_solution, ind)
                 self.update_archive(new_solution)
             gen += 1
-        
+
         return self.external_archive

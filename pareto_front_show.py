@@ -9,13 +9,12 @@ Zoo_Topo = ['AttMpls', 'Bellcanada', 'Bellsouth', 'BtNorthAmerica', 'Chinanet',
             'Internetmci', 'Rediris', 'Tinet', 'Uninett2011', 'Uunet']
 """
 
-topo = 'Rand3'
+topo = 'Rand2'
 
 
 if __name__ == '__main__':
     # alst = ['NSACO', 'PBIL', 'MOPSO', 'NSGA-II', 'MOEAD', 'EAG-MOEAD', 'NSABC', 'SFLA-MOEAD', 'OBL-MOEAD']
 
-    alst = ['NSACO', 'NSGA-II']
+    alst = ['Jaya', 'NSGA-II', 'MOEAD']
     plot_ps_by_different_algorithm(topo, alst)
-    # import matplotlib.pyplot as plt
 

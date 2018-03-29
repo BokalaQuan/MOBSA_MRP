@@ -1,3 +1,6 @@
+#!/usr/bin/env python
+# -*-coding:utf-8 -*-
+
 from problem.mrp.multicast_routing_problem import MulticastRoutingProblem as MRP
 from algorithm.util import *
 
@@ -14,13 +17,10 @@ from moead_sfla import MOEAD_SFLA
 from moead_obl import MOEAD_OBL
 from nsabc import NondominatedSortingArtificialBeeColony as NSABC
 from nsaco import NSACO
+from jaya import Jaya
+
 
 import time
-import logging
-
-logger = logging.getLogger(__name__)
-logging.basicConfig(level = logging.INFO,format = '%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-
 
 def run(algorithm=None, runtime=None, problem=None):
     for i in range(runtime):
@@ -28,6 +28,10 @@ def run(algorithm=None, runtime=None, problem=None):
             test = NSGA2(problem)
         elif algorithm == 'MOEAD':
             test = MOEAD(problem)
+        elif algorithm == 'MOPBIL':
+            test = MOPBIL(problem)
+        elif algorithm == 'SPEA2':
+            test = SPEA2(problem)
         elif algorithm == 'EAG-MOEAD':
             test = EAG_MOEAD(problem)
         elif algorithm == 'NSABC':
@@ -42,6 +46,8 @@ def run(algorithm=None, runtime=None, problem=None):
             test = PBIL(problem)
         elif algorithm == 'NSACO':
             test = NSACO(problem)
+        elif algorithm == 'Jaya':
+            test = Jaya(problem)
 
         start = time.time()
         tmp = test.run()
@@ -49,6 +55,8 @@ def run(algorithm=None, runtime=None, problem=None):
         logging.info("Run %s >>>>>> %s , ACT = %s s", test.name(),
                      str(i+1), str('%.2f' % (end - start)))
         write_list_to_json(topo=topo, algorithm=test.name(), runtime=i+1, solutions=tmp)
+
+    test.show()
 
 if __name__ == '__main__':
     path = '/Rand_Topo/'
@@ -62,13 +70,15 @@ if __name__ == '__main__':
     #          'Highwinds', 'HurricaneElectric', 'Internetmci',
     #          'Rediris', 'Tinet', 'Uninett2011', 'Uunet']
 
-    al_lst = ['NSACO', 'PBIL', 'MOPSO', 'NSGA-II', 'NSABC',
-              'MOEAD', 'EAG-MOEAD', 'SFLA-MOEAD', 'OBL-MOEAD']
+    # al_lst = ['NSACO', 'PBIL', 'MOPSO', 'NSGA-II', 'NSABC',
+    #           'MOEAD', 'EAG-MOEAD', 'SFLA-MOEAD', 'OBL-MOEAD']
 
-    for topo in topos[2:3]:
+    al_lst = ['NSGA-II', 'Jaya', 'MOEAD']
+
+    for topo in topos[1:2]:
         problem = MRP()
         problem.initialize(path=path, filename=topo)
 
-        for al in al_lst[3:4]:
-            run(algorithm=al, runtime=1, problem=problem)
+        for al in al_lst[:]:
+            run(algorithm=al, runtime=10, problem=problem)
 

@@ -2,15 +2,13 @@ from nsga2 import IndividualNSGA
 from algorithm.moea import MultiObjectiveEvolutionaryAlgorithm as MOEA
 from algorithm.parameter import *
 from algorithm.operator import *
+from algorithm.util import logger
 from mopbil import ProbabilityVector as PV
 
 import random
 import copy
-import logging
 import networkx as nx
 
-logger = logging.getLogger(__name__)
-logging.basicConfig(level = logging.INFO,format = '%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 
 class Ant(IndividualNSGA):
 
@@ -209,13 +207,20 @@ class NSACO(MOEA):
             for ind in sub.population:
                 self.update_archive(ind)
 
+    def show(self):
+        logger.info('NSACO initialization is completed. '
+                    'Population size is %s, maximum evolution algebra is %s, neighbors size is %s, '
+                    'decomposition way is %s, cross probability is %s, mutation probability is %s.',
+                    str(POPULATION_SIZE), str(MAX_NUMBER_FUNCTION_EVAL), str(NUMBER_NEIGHBOR),
+                    str('Weight-sum'), str(PC), str(PM))
+
     def run(self):
         self.init_phrMatrix()
         self.init_population()
 
         gen = 0
         while gen < 100:
-            # logger.info("Gen >>> %s", str(gen))
+            logger.info("Gen >>> %s", str(gen))
             self.evolution()
 
             gen += 1

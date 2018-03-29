@@ -18,12 +18,14 @@ if __name__ == '__main__':
     # topos = ['topo1', 'topo2', 'topo3', 'topo4', 'topo5', 'topo6']
     # al_lst = ['MOEAD', 'NSGA-II', 'MOEAD-OBL', 'MOEAD-SFLA', 'SPEA2']
 
-    alst = ['NSACO', 'PBIL', 'MOPSO', 'NSGA-II', 'MOEAD', 'EAG-MOEAD',
-            'NSABC', 'SFLA-MOEAD', 'OBL-MOEAD']
+    # alst = ['NSACO', 'PBIL', 'MOPSO', 'NSGA-II', 'MOEAD', 'EAG-MOEAD',
+    #         'NSABC', 'SFLA-MOEAD', 'OBL-MOEAD']
+    alst = ['Jaya', 'NSGA-II', 'MOEAD']
+
     runtime = 10
 
-    for topo in topos[2:3]:
-        for al in alst[:1]:
+    for topo in topos[1:2]:
+        for al in alst[:]:
             lst = []
             for i in range(runtime):
                 lst.extend(read_json_as_list(topo=topo, algorithm=al, runtime=i+1))
