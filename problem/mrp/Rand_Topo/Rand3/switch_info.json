@@ -20,7 +20,7 @@
         "name": "s004"
     }, 
     {
-        "attribute": "destination", 
+        "attribute": "custom", 
         "dpid": 4, 
         "name": "s005"
     }, 
@@ -75,7 +75,7 @@
         "name": "s015"
     }, 
     {
-        "attribute": "custom", 
+        "attribute": "destination", 
         "dpid": 15, 
         "name": "s016"
     }, 
@@ -85,7 +85,7 @@
         "name": "s017"
     }, 
     {
-        "attribute": "custom", 
+        "attribute": "destination", 
         "dpid": 17, 
         "name": "s018"
     }, 
@@ -95,7 +95,7 @@
         "name": "s019"
     }, 
     {
-        "attribute": "destination", 
+        "attribute": "custom", 
         "dpid": 19, 
         "name": "s020"
     }, 
@@ -145,7 +145,7 @@
         "name": "s029"
     }, 
     {
-        "attribute": "custom", 
+        "attribute": "destination", 
         "dpid": 29, 
         "name": "s030"
     }, 
@@ -170,7 +170,7 @@
         "name": "s034"
     }, 
     {
-        "attribute": "destination", 
+        "attribute": "custom", 
         "dpid": 34, 
         "name": "s035"
     }, 
@@ -180,7 +180,7 @@
         "name": "s036"
     }, 
     {
-        "attribute": "destination", 
+        "attribute": "custom", 
         "dpid": 36, 
         "name": "s037"
     }, 
@@ -200,7 +200,7 @@
         "name": "s040"
     }, 
     {
-        "attribute": "custom", 
+        "attribute": "destination", 
         "dpid": 40, 
         "name": "s041"
     }, 
@@ -280,7 +280,7 @@
         "name": "s056"
     }, 
     {
-        "attribute": "custom", 
+        "attribute": "destination", 
         "dpid": 56, 
         "name": "s057"
     }, 
@@ -290,7 +290,7 @@
         "name": "s058"
     }, 
     {
-        "attribute": "destination", 
+        "attribute": "custom", 
         "dpid": 58, 
         "name": "s059"
     }, 
@@ -320,7 +320,7 @@
         "name": "s064"
     }, 
     {
-        "attribute": "source", 
+        "attribute": "custom", 
         "dpid": 64, 
         "name": "s065"
     }, 
@@ -340,7 +340,7 @@
         "name": "s068"
     }, 
     {
-        "attribute": "destination", 
+        "attribute": "custom", 
         "dpid": 68, 
         "name": "s069"
     }, 
@@ -350,7 +350,7 @@
         "name": "s070"
     }, 
     {
-        "attribute": "custom", 
+        "attribute": "destination", 
         "dpid": 70, 
         "name": "s071"
     }, 
@@ -370,12 +370,12 @@
         "name": "s074"
     }, 
     {
-        "attribute": "custom", 
+        "attribute": "source", 
         "dpid": 74, 
         "name": "s075"
     }, 
     {
-        "attribute": "destination", 
+        "attribute": "custom", 
         "dpid": 75, 
         "name": "s076"
     }, 
@@ -400,7 +400,7 @@
         "name": "s080"
     }, 
     {
-        "attribute": "destination", 
+        "attribute": "custom", 
         "dpid": 80, 
         "name": "s081"
     }, 
@@ -425,7 +425,7 @@
         "name": "s085"
     }, 
     {
-        "attribute": "custom", 
+        "attribute": "destination", 
         "dpid": 85, 
         "name": "s086"
     }, 
@@ -450,7 +450,7 @@
         "name": "s090"
     }, 
     {
-        "attribute": "custom", 
+        "attribute": "destination", 
         "dpid": 90, 
         "name": "s091"
     }, 

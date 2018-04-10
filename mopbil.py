@@ -68,7 +68,8 @@ class PopulationBasedIncrementalLearning(MOEA):
         super(PopulationBasedIncrementalLearning, self).__init__(problem=problem)
         self.num_sub = 5
         self.sub_populations = []
-        self.grid = AdaptiveGrid(grid_size=int(EXTERNAL_ARCHIVE_SIZE/2))
+        # self.grid = AdaptiveGrid(grid_size=int(EXTERNAL_ARCHIVE_SIZE/2))
+        self.external_archive = []
 
     def name(self):
         return 'PBIL'
@@ -83,15 +84,32 @@ class PopulationBasedIncrementalLearning(MOEA):
             self.current_population.extend(sub.population)
 
             for ind in sub.population:
-                self.grid.update_grid(ind)
+                # self.grid.update_grid(ind)
+                self.update_archive(ind)
+
+    def update_archive(self, ind):
+        if len(self.external_archive) == 0:
+            self.external_archive.append(ind)
+        else:
+            flag = 0
+            for sol in self.external_archive[:]:
+                if ind <= sol:
+                    self.external_archive.remove(sol)
+                elif ind >= sol or ind == sol:
+                    flag += 1
+            if flag == 0:
+                self.external_archive.append(ind)
 
     def update_pv_by_mean(self):
-        select_number = random.randint(1, len(self.external_archive.archive)-2)
-        select_lst = np.random.randint(0, len(self.external_archive.archive)-1, size=select_number)
+        # select_number = random.randint(1, len(self.external_archive.archive)-2)
+        select_number = random.randint(1, len(self.external_archive)-2)
+        # select_lst = np.random.randint(0, len(self.external_archive.archive)-1, size=select_number)
+        select_lst = np.random.randint(0, len(self.external_archive)-1, size=select_number)
         means = np.zeros(self.problem.num_link, dtype=int)
 
         for i in select_lst:
-            means += np.array(self.grid.archive[i].solution.chromosome)
+            # means += np.array(self.grid.archive[i].solution.chromosome)
+            means += np.array(self.external_archive[i].solution.chromosome)
 
         means /= select_number
 
@@ -100,26 +118,30 @@ class PopulationBasedIncrementalLearning(MOEA):
             sub.update_sub_population()
 
             for ind in sub.population:
-                self.grid.update_grid(ind)
+                # self.grid.update_grid(ind)
+                self.update_archive(ind)
 
     def update_pv_by_weight_sum(self):
         ran = random.uniform(0,1)
         weight_vector = [ran, 1-ran]
         fit_list = []
-        for cube in self.grid.archive:
-            ind= cube.solution
+        # for cube in self.grid.archive:
+        for ind in self.external_archive:
+            # ind= cube.solution
             fit = ind.fitness[0] * weight_vector[0] + ind.fitness[1] * weight_vector[1]
             fit_list.append(fit)
         
         index_select = fit_list.index(min(fit_list))
-        ind_select = self.grid.archive[index_select].solution
-        
+        # ind_select = self.grid.archive[index_select].solution
+        ind_select = self.external_archive[index_select]
+
         for sub in self.sub_populations:
             sub.pv.update_vector(ind_select.chromosome)
             sub.update_sub_population()
 
             for ind in sub.population:
-                self.grid.update_grid(ind)
+                # self.grid.update_grid(ind)
+                self.update_archive(ind)
 
     
     def run(self):
@@ -127,12 +149,14 @@ class PopulationBasedIncrementalLearning(MOEA):
 
         gen = 0
         while gen < MAX_NUMBER_FUNCTION_EVAL:
+            # self.update_pv_by_weight_sum()
             self.update_pv_by_weight_sum()
 
             gen += 1
         
-        return self.grid.get_solutions()
-    
+        # return self.grid.get_solutions()
+        return self.external_archive
+
     
 '''
 @author Jong-Hwan Kim, et al.

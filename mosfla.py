@@ -117,9 +117,11 @@ class MultiObjectiveShuffledFrogLeapingAlgorithm(object):
         
         self.external_archive = []
         self.external_archive.extend(fast_nondominated_sort(union_set)[0])
-        
+
+
     def run(self):
-        pass
+        self.init_population()
+
     
     
 

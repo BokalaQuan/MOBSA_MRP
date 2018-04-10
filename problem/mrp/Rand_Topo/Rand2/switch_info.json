@@ -1,6 +1,6 @@
 [
     {
-        "attribute": "destination", 
+        "attribute": "custom", 
         "dpid": 0, 
         "name": "s001"
     }, 
@@ -10,7 +10,7 @@
         "name": "s002"
     }, 
     {
-        "attribute": "destination", 
+        "attribute": "custom", 
         "dpid": 2, 
         "name": "s003"
     }, 
@@ -35,12 +35,12 @@
         "name": "s007"
     }, 
     {
-        "attribute": "destination", 
+        "attribute": "custom", 
         "dpid": 7, 
         "name": "s008"
     }, 
     {
-        "attribute": "destination", 
+        "attribute": "custom", 
         "dpid": 8, 
         "name": "s009"
     }, 
@@ -50,7 +50,7 @@
         "name": "s010"
     }, 
     {
-        "attribute": "source", 
+        "attribute": "custom", 
         "dpid": 10, 
         "name": "s011"
     }, 
@@ -80,7 +80,7 @@
         "name": "s016"
     }, 
     {
-        "attribute": "custom", 
+        "attribute": "destination", 
         "dpid": 16, 
         "name": "s017"
     }, 
@@ -95,7 +95,7 @@
         "name": "s019"
     }, 
     {
-        "attribute": "destination", 
+        "attribute": "custom", 
         "dpid": 19, 
         "name": "s020"
     }, 
@@ -105,7 +105,7 @@
         "name": "s021"
     }, 
     {
-        "attribute": "custom", 
+        "attribute": "source", 
         "dpid": 21, 
         "name": "s022"
     }, 
@@ -130,7 +130,7 @@
         "name": "s026"
     }, 
     {
-        "attribute": "destination", 
+        "attribute": "custom", 
         "dpid": 26, 
         "name": "s027"
     }, 
@@ -140,7 +140,7 @@
         "name": "s028"
     }, 
     {
-        "attribute": "custom", 
+        "attribute": "destination", 
         "dpid": 28, 
         "name": "s029"
     }, 
@@ -185,7 +185,7 @@
         "name": "s037"
     }, 
     {
-        "attribute": "destination", 
+        "attribute": "custom", 
         "dpid": 37, 
         "name": "s038"
     }, 
@@ -200,7 +200,7 @@
         "name": "s040"
     }, 
     {
-        "attribute": "custom", 
+        "attribute": "destination", 
         "dpid": 40, 
         "name": "s041"
     }, 
@@ -220,7 +220,7 @@
         "name": "s044"
     }, 
     {
-        "attribute": "custom", 
+        "attribute": "destination", 
         "dpid": 44, 
         "name": "s045"
     }, 
@@ -240,7 +240,7 @@
         "name": "s048"
     }, 
     {
-        "attribute": "custom", 
+        "attribute": "destination", 
         "dpid": 48, 
         "name": "s049"
     }, 

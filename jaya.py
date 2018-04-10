@@ -6,6 +6,7 @@ from algorithm.util import *
 
 import random
 import copy
+import networkx as nx
 
 
 class IndividualJaya(IndividualMRP):
@@ -17,6 +18,8 @@ class IndividualJaya(IndividualMRP):
         self.crowding_distance = 0
 
         self.position = []
+
+        self.G = None
 
     def copy(self):
         ind = IndividualJaya()
@@ -36,21 +39,73 @@ class IndividualJaya(IndividualMRP):
 
         ind.position = copy.copy(self.position)
 
+        ind.G = self.G
+
         return ind
 
     def init_position(self):
         self.position = np.random.randn(self.problem.num_link)
 
     def trans_pos_to_chr(self, position):
-        chrom = [1 if func_trans_S2(pos) < random.random() else 0 \
-                 for pos in position]
+        chrom = [1 if func_trans_S1(pos) < random.random() else 0 for pos in position]
         return chrom
 
-    def init_ind(self, problem):
+    def init_ind(self, problem, G):
         self.problem = problem
+        self.G = G
         self.init_position()
         self.chromosome = self.trans_pos_to_chr(self.position)
         self.cal_fitness(chromosome=self.chromosome)
+
+    def _init_subgraph_by_chromosome(self):
+        link_select = []
+        state = True
+        graph = nx.Graph()
+
+        for x in range(self.problem.num_link):
+            if self.chromosome[x]:
+                link_select.append(self.problem.links[x])
+
+        for link in link_select:
+            graph.add_edge(link.src, link.dst, delay=link.delay,
+                           bandwidth=link.bandwidth, loss=link.loss,
+                           phr=self.G[link.src][link.dst]['phr'])
+
+        if state:
+            if self.problem.src not in graph.node:
+                state = False
+            else:
+                for dst in self.problem.dst:
+                    if dst not in graph.node:
+                        state = False
+
+        if state:
+            for dst in self.problem.dst:
+                if not nx.has_path(G=graph, source=self.problem.src, target=dst):
+                    state = False
+
+        if state:
+            self._init_tree_by_subgraph(graph)
+        else:
+            self.delay = float('inf')
+            self.loss = float('inf')
+
+        self.fitness = [self.delay, self.loss]
+
+    def _init_tree_by_subgraph(self, graph):
+        self.paths = []
+
+        for d in self.problem.dst:
+            path = nx.dijkstra_path(G=graph, source=self.problem.src, target=d, weight="phr")
+            self.paths.append(path)
+
+            for index in range(len(path) - 1):
+                src = path[index]
+                dst = path[index + 1]
+
+                self.G[src][dst]['phr'] -= 0.01
+
+        self._cal_fitness(graph)
 
     def update_ind(self, ind_best, ind_worst):
         b_pos = ind_best
@@ -59,7 +114,6 @@ class IndividualJaya(IndividualMRP):
         pos = [i + random.uniform(0,1)*(b-abs(i)) - random.uniform(0,1)*(w-abs(i)) \
                for i, b, w in zip(self.position, b_pos, w_pos)]
 
-        # self.position = [p if p < 3 and p > -3 else -1*p for p in pos]
         self.position = []
         for p in pos:
             if p > 3:
@@ -72,13 +126,20 @@ class IndividualJaya(IndividualMRP):
         self.chromosome = self.trans_pos_to_chr(self.position)
         self.cal_fitness(chromosome=self.chromosome)
 
+    def crowding_operator(self, ind):
+        if ind.pareto_rank > self.pareto_rank:
+            return True
+        elif ind.pareto_rank == self.pareto_rank and \
+                ind.crowding_distance < self.crowding_distance:
+            return True
+        else:
+            return False
+
     def levy_flight(self):
         rnd = func_levy(len(self.position), 1.5)
         self.position *= rnd
         self.chromosome = self.trans_pos_to_chr(self.position)
         self.cal_fitness(chromosome=self.chromosome)
-
-
 
     def clear_dominated_property(self):
         self.num_dominated = 0
@@ -90,54 +151,77 @@ class IndividualJaya(IndividualMRP):
 class Jaya(MOEA):
     def __init__(self, problem):
         super(Jaya, self).__init__(problem)
+        self.G = problem.graph.copy()
 
     def name(self):
-        return 'Jaya'
+        return 'MOEA-PCG'
+
+    def init_phrMatrix(self):
+        for d in self.problem.dst:
+            path_loss = nx.dijkstra_path(G=self.G, source=self.problem.src, target=d, weight="loss")
+            path_delay = nx.dijkstra_path(G=self.G, source=self.problem.src, target=d, weight="delay")
+
+            for index in range(len(path_loss) - 1):
+                src = path_loss[index]
+                dst = path_loss[index + 1]
+
+                self.G[src][dst]['phr'] -= 0.01
+
+            for index in range(len(path_delay) - 1):
+                src = path_delay[index]
+                dst = path_delay[index + 1]
+
+                self.G[src][dst]['phr'] -= 0.01
 
     def init_population(self):
         for i in range(POPULATION_SIZE):
             ind = IndividualJaya()
-            ind.init_ind(problem=self.problem)
+            ind.init_ind(problem=self.problem, G=self.G)
             self.current_population.append(ind)
 
-    def update_archive(self):
-        union_lst = []
-        union_lst.extend(self.current_population)
-        union_lst.extend(self.external_archive)
-
-        first_front = fast_nondominated_sort(union_lst)[0]
-
+    def copy_current_to_pre(self):
         self.external_archive = []
-
-        for ind in first_front:
+        for ind in self.current_population:
             self.external_archive.append(ind.copy())
 
-    def select(self):
+    def make_new_population(self):
         union_poplist = []
         union_poplist.extend(self.current_population)
         union_poplist.extend(self.external_archive)
 
-        pareto_rank_set_list = fast_nondominated_sort(union_poplist)
-        crowding_distance_sort(pareto_rank_set_list)
+        self.current_population = make_new_population(union_poplist, POPULATION_SIZE)
 
-        best_lst = []
-        worst_lst = []
+    def select_(self):
+        best = None
+        worst = None
 
-        best = pareto_rank_set_list[0]
-        worst = pareto_rank_set_list[len(pareto_rank_set_list)-1]
+        index1 = 0
+        index2 = 0
 
-        for i in range(POPULATION_SIZE):
-            best_lst.append(copy.copy(best[random.randint(0, len(best)-1)].position))
-            worst_lst.append(copy.copy(worst[random.randint(0, len(worst)-1)].position))
+        while index1 == index2:
+            index1 = random.randint(0, POPULATION_SIZE-1)
+            index2 = random.randint(0, POPULATION_SIZE-1)
 
-        return best_lst, worst_lst
+        ind1 = self.external_archive[index1]
+        ind2 = self.external_archive[index2]
 
-    def evolution(self):
-        best_lst, worst_lst = self.select()
+        if ind1.crowding_operator(ind2):
+            best = ind1
+            worst = ind2
+        else:
+            best = ind2
+            worst = ind1
 
-        for ind, best, worst in zip(self.current_population, best_lst, worst_lst):
+        return copy.copy(best.position), copy.copy(worst.position)
+
+
+    def evolution(self, gen):
+        for ind in self.current_population:
+            best, worst = self.select_()
             ind.update_ind(ind_best=best, ind_worst=worst)
 
+            if random.random() < gen / MAX_NUMBER_FUNCTION_EVAL:
+                ind.levy_flight()
 
     def show(self):
         logger.info('Jaya initialization is completed. '
@@ -145,38 +229,16 @@ class Jaya(MOEA):
                     str(POPULATION_SIZE), str(MAX_NUMBER_FUNCTION_EVAL))
 
     def run(self):
+        self.init_phrMatrix()
         self.init_population()
-        self.update_archive()
+        self.copy_current_to_pre()
 
         gen = 0
         while gen < MAX_NUMBER_FUNCTION_EVAL:
-            self.evolution()
-            self.update_archive()
+            self.make_new_population()
+            self.copy_current_to_pre()
+            self.evolution(gen)
             gen += 1
 
         return self.external_archive
 
-
-if __name__ == '__main__':
-    from problem.mrp.multicast_routing_problem import MulticastRoutingProblem as MRP
-    from algorithm.individual import IndividualMRP
-
-    problem = MRP()
-    problem.initialize(path='/Rand_Topo/', filename='Rand1')
-
-    num_Jaya = 0
-    num_Origin = 0
-
-    D = [float('inf'), float('inf')]
-
-    for i in range(50):
-
-        ind = IndividualJaya()
-        ind.init_ind(problem)
-
-        print("Jaya >>> " ,ind.fitness)
-
-        ind = IndividualMRP()
-        ind.init_ind(problem)
-
-        print("Origin >>> ", ind.fitness)

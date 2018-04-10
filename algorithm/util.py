@@ -22,26 +22,34 @@ Seyedali Mirjalili.
 def func_trans_S1(x):
     return 1 / (1 + math.exp(-2 * x))
 
+
 def func_trans_S2(x):
     return 1 / (1 + math.exp(-x))
+
 
 def func_trans_S3(x):
     return 1 / (1 + math.exp(-x / 2))
 
+
 def func_trans_S4(x):
     return 1 / (1 + math.exp(-x / 3))
+
 
 def func_trans_V1(x):
     return abs(math.erf(math.sqrt(math.pi) * x / 2))
 
+
 def func_trans_V2(x):
     return abs(math.tanh(x))
+
 
 def func_trans_V3(x):
     return abs(x / math.sqrt(1 + x * x))
 
+
 def func_trans_V4(x):
     return abs(2 * math.atan(math.pi * x / 2) / math.pi)
+
 
 def func_levy(d, beta):
     # beta = float(3 / 2)
@@ -59,8 +67,16 @@ def func_levy(d, beta):
 
     return 0.01 * step
 
+
+
+
 '''
-Multi-objective Optimization Algorithms' Performance Indicators
+Multi-objective Optimization Algorithms' Performance Indicators.
+
+Convergence Metrics: GD, Epsilon
+Diversity Metrics: Spread, OS
+Complex: IGD, HV
+
 '''
 def cal_IGD(pIdeal, pReal):
     '''
@@ -79,21 +95,6 @@ def cal_IGD(pIdeal, pReal):
 
     return vol / len(pIdeal)
 
-def cal_GD(pIdeal, pReal):
-    '''
-    Generational Distance
-    '''
-    vol = 0.0
-    for pr in pReal:
-        temp = INF
-        fit_pr = np.array(pr['fit'])
-        for pi in pIdeal:
-            fit_pi = np.array(pi['fit'])
-            temp_ = np.linalg.norm(fit_pi - fit_pr)
-            temp = temp_ if temp_ < temp else temp
-        vol += temp ** 2
-
-    return math.sqrt(vol) / len(pReal)
 
 def cal_HV(pReal, ref):
     '''
@@ -111,20 +112,65 @@ def cal_HV(pReal, ref):
 
     return hv
 
-def cal_C(p_lst1, p_lst2):
-    '''
-    C-Metric
-    :param p_lst1:
-    :param p_lst2:
-    :return:
-    '''
-    lst = set()
-    for ind2 in p_lst2:
-        for ind1 in p_lst1:
-            if ind1['fit'][0] < ind2['fit'][0] and ind1['fit'][1] < ind2['fit'][1]:
-                lst.add(ind2)
 
-    return float(len(lst)) / len(p_lst2)
+def cal_GD(pIdeal, pReal):
+    '''
+    Generational Distance
+    '''
+    vol = 0.0
+    for pr in pReal:
+        temp = INF
+        fit_pr = np.array(pr['fit'])
+        for pi in pIdeal:
+            fit_pi = np.array(pi['fit'])
+            temp_ = np.linalg.norm(fit_pi - fit_pr)
+            temp = temp_ if temp_ < temp else temp
+        vol += temp ** 2
+
+    return math.sqrt(vol) / len(pReal)
+
+def cal_Epsilon(pIdeal, pReal):
+    solution = []
+
+    for rel in pReal:
+        I = []
+        for ide in pIdeal:
+            I.append(max(rel['fit'][0]/ide['fit'][0], rel['fit'][1]/ide['fit'][1]))
+
+        solution.append(np.min(I))
+
+    return np.max(solution)
+
+
+def cal_Spread(pIdeal, pReal):
+    len_Real = len(pReal)
+    len_Ideal = len(pIdeal)
+
+    df = np.linalg.norm(np.array(pIdeal[0]['fit']) - np.array(pReal[0]['fit']))
+    dl = np.linalg.norm(np.array(pIdeal[len_Ideal-1]['fit']) - np.array(pReal[len_Real-1]['fit']))
+
+    d_lst = []
+    for index in range(len_Real-1):
+        d_lst.append(np.linalg.norm(np.array(pReal[index]['fit']) -
+                                    np.array(pReal[index+1]['fit'])))
+
+    D_lst = np.array(d_lst)
+    mean = D_lst.mean()
+    tmp = abs(D_lst - mean)
+
+    return (df + dl + tmp.sum()) / (df + dl + (len_Real-1) * mean)
+
+
+def cal_OS(pIdeal, pReal):
+    rel_top = pReal[0]['fit']
+    rel_low = pReal[len(pReal)-1]['fit']
+
+    ide_top = pIdeal[0]['fit']
+    ide_low = pIdeal[len(pIdeal)-1]['fit']
+
+    return (abs(rel_low[0]-rel_top[0])*abs(rel_low[1]-rel_top[1])) \
+           / (abs(ide_low[0]-ide_top[0])*abs(ide_low[1]-ide_top[1]))
+
 
 def cal_metric(topo=None, runtime=None, algorithm=None):
     pf_ideal = read_json_as_list(topo=topo, algorithm='IDEAL')
@@ -136,6 +182,10 @@ def cal_metric(topo=None, runtime=None, algorithm=None):
     GD = []
     IGD = []
     HV = []
+    Epsilon = []
+    Spread = []
+
+
     pf_lst = []
     for i in range(runtime):
         pf = read_json_as_list(topo=topo, algorithm=algorithm, runtime=i+1)
@@ -145,50 +195,57 @@ def cal_metric(topo=None, runtime=None, algorithm=None):
         GD.append(cal_GD(pf_ideal, pf))
         IGD.append(cal_IGD(pf_ideal, pf))
         HV.append(cal_HV(pf, ref))
+        Epsilon.append(cal_Epsilon(pf_ideal, pf))
+        Spread.append(cal_Spread(pf_ideal, pf))
 
     GD = np.array(GD)
     IGD = np.array(IGD)
     HV = np.array(HV)
+    Epsilon = np.array(Epsilon)
+    Spread = np.array(Spread)
 
-    min_GD = '%.4f' % GD.min()
-    min_IGD = '%.4f' % IGD.min()
-    min_HV = '%.4f' % HV.min()
+    mean_GD = '%.2f' % GD.mean()
+    mean_IGD = '%.2f' % IGD.mean()
+    mean_HV = '%.2f' % HV.mean()
+    mean_E = '%.2f' % Epsilon.mean()
+    mean_S = '%.2f' % Spread.mean()
 
-    max_GD = '%.4f' % GD.max()
-    max_IGD = '%.4f' % IGD.max()
-    max_HV = '%.4f' % HV.max()
+    std_GD = '%.2f' % GD.std()
+    std_IGD = '%.2f' % IGD.std()
+    std_HV = '%.2f' % HV.std()
+    std_E = '%.2f' % Epsilon.std()
+    std_S = '%.2f' % Spread.std()
 
-    mean_GD = '%.4f' % GD.mean()
-    mean_IGD = '%.4f' % IGD.mean()
-    mean_HV = '%.4f' % HV.mean()
 
-    std_GD = '%.4f' % GD.std()
-    std_IGD = '%.4f' % IGD.std()
-    std_HV = '%.4f' % HV.std()
-
-    GD_ = {'Max': max_GD,
-           'Min': min_GD,
-           'Mean': mean_GD,
+    GD_ = {'Mean': mean_GD,
            'Std': std_GD}
 
-    IGD_ = {'Max': max_IGD,
-           'Min': min_IGD,
-           'Mean': mean_IGD,
+    IGD_ = {'Mean': mean_IGD,
            'Std': std_IGD}
 
-    HV_ = {'Max': max_HV,
-           'Min': min_HV,
-           'Mean': mean_HV,
+    HV_ = {'Mean': mean_HV,
            'Std': std_HV}
+
+    Epsilon_ = {'Mean': mean_E,
+           'Std': std_E}
+
+    Spread_ = {'Mean': mean_S,
+           'Std': std_S}
+
 
     METRIC = {'GD': GD_,
               'IGD': IGD_,
               'HV': HV_,
+              'Epsilon': Epsilon_,
+              'Spread': Spread_,
               'GD_lst': list(GD),
               'IGD_lst': list(IGD),
-              'HV_lst': list(HV)}
+              'HV_lst': list(HV),
+              'Epsilon_lst': list(Epsilon),
+              'Spread_': list(Spread)}
 
-    return METRIC, GD, IGD, HV
+    return METRIC
+
 
 def read_metric(topo=None, algorithm=None):
     path = os.getcwd() + '/solution/' + topo + '/Metric-' + algorithm + '.json'
@@ -198,8 +255,19 @@ def read_metric(topo=None, algorithm=None):
         GD = conf['GD_lst']
         IGD = conf['IGD_lst']
         HV = conf['HV_lst']
+        Epsilon = conf['Epsilon_lst']
+        Spread = conf['Spread_']
 
-    return GD, IGD, HV
+
+    return GD, IGD, HV, Epsilon, Spread
+
+
+def write_metric(topo=None, algorithm=None, metric=None):
+    path = os.getcwd() + '/solution/' + topo + '/Metric-' + algorithm + '.json'
+
+    with open(path, 'w+') as f:
+        f.write(json.dumps(metric, indent=4))
+
 
 def read_json_as_list(topo, algorithm, runtime=None):
     list_ = []
@@ -223,11 +291,12 @@ def read_json_as_list(topo, algorithm, runtime=None):
                 conf = json.load(f)
                 for item in conf:
                     list_.append(item)
-            logger.info('Read solutions successful.')
+            # logger.info('Read solutions successful.')
         except IOError:
             logger.info('%s is not found', path)
 
     return list_
+
 
 def write_list_to_json(topo=None, algorithm=None, runtime=None, solutions=None):
     if runtime is None:
@@ -263,11 +332,12 @@ def write_list_to_json(topo=None, algorithm=None, runtime=None, solutions=None):
     try:
         with open(path, 'w+') as f:
             f.write(json.dumps(solution, indent=4))
-        logger.info('Write solutions successful.')
+        # logger.info('Write solutions successful.')
 
     except Exception:
         logger.info('%s is not found', path)
         pass
+
 
 def update_ideal_pf(topo, algorithms):
     union_pf = []
@@ -278,12 +348,8 @@ def update_ideal_pf(topo, algorithms):
 
     write_list_to_json(topo=topo, algorithm='IDEAL', solutions=union_pf)
 
-def write_metric(topo=None, algorithm=None, metric=None):
-    path = os.getcwd() + '/solution/' + topo + '/Metric-' + algorithm + '.json'
 
-    with open(path, 'w+') as f:
-        f.write(json.dumps(metric, indent=4))
-    # logger.info('Write metrics successful.')
+
 
 def func(topo=None, algorithm=None, runtime=None):
     if runtime is None:
@@ -302,7 +368,7 @@ def func(topo=None, algorithm=None, runtime=None):
         data = [x, y]
     else:
         tmp = os.getcwd() + '/solution/' + topo + '/PF-' + \
-              algorithm + '-' + str(runtime+1) + '.json'
+              algorithm + '-' + str(runtime) + '.json'
 
         x = []
         y = []
@@ -317,38 +383,75 @@ def func(topo=None, algorithm=None, runtime=None):
 
     return data
 
-def plot_ps_by_different_algorithm(topo=None, algorithms=None, show=False):
+
+def plot_ps_by_different_algorithm(topo=None, algorithms=None, runtime=None, show=False,
+                                   title=None):
+    labels = ['A1', 'A2', 'A3', 'A4', 'A5', 'A6']
+
     plt.figure()
-    styles = ['^', 'x', '*', 's', '>']
-    for item, sty in zip(algorithms, styles):
-        data = func(topo=topo, algorithm=item)
-        # plt.plot(data[0], data[1], marker=sty, linewidth=1.0, markersize=2.0)
+    for item in algorithms:
+        data = func(topo=topo, algorithm=item, runtime=runtime)
         plt.scatter(data[0], data[1], alpha=0.4)
 
-    plt.xlabel('Average End-to-End Delay (ms)', fontsize=12)
-    plt.ylabel('Average Package Loss Rate (%)', fontsize=12)
-    plt.legend(algorithms, fontsize=10)
-    plt.title(topo.title(), fontsize=10)
+    # plt.xlabel('Average End-to-End Delay (ms)', fontsize=12)
+    plt.xlabel('Average End-to-End Delay (ms)')
+    # plt.ylabel('Average Package Loss Rate (%)', fontsize=12)
+    plt.ylabel('Average Package Loss Rate (%)')
+    # plt.legend(algorithms, fontsize=10)
+    plt.legend(labels)
+    # plt.title(topo.title(), fontsize=10)
+    plt.title(title)
     fig_path = os.getcwd()+'/solution/'+topo+'/'+topo.title()+'_PF.png'
-    plt.savefig(fig_path, dpi=900)
+    plt.savefig(fig_path, dpi=600)
 
     if show:
         plt.show()
     else:
         pass
+
 
 def plot_performance_as_boxplot(topo=None, metric=None, algorithms=None, lst=None, show=False):
     plt.figure()
     plt.boxplot(lst, labels=algorithms)
-    plt.xticks(fontsize=5)
-    plt.yticks(fontsize=5)
-    plt.xlabel('Algorithms', fontsize=10)
-    plt.ylabel(metric+'-Metric values', fontsize=10)
-    plt.title(topo.title(), fontsize=10)
+    plt.xticks()
+    plt.yticks()
+    plt.xlabel('Algorithms')
+    plt.ylabel(metric+'-Metric values')
+    plt.title(topo.title())
     fig_path = os.getcwd()+'/solution/'+topo+'/'+topo.title()+'_'+metric+'_Metric.png'
-    plt.savefig(fig_path, dpi=900)
+    plt.savefig(fig_path, dpi=600)
 
     if show:
         plt.show()
     else:
         pass
+
+
+def boxplot(filename=None, lst=None, titles=None, labels=None):
+    # labels = ['A1', 'A2', 'A3', 'A4', 'A5', 'A6']
+
+    plt.figure(dpi=600)
+    fig, axes = plt.subplots(2, 2)
+    ax1 = axes[0, 0]
+    ax2 = axes[0, 1]
+    ax3 = axes[1, 0]
+    ax4 = axes[1, 1]
+    #
+    ax1.boxplot(lst[0], labels=labels)
+    ax2.boxplot(lst[1], labels=labels)
+    ax3.boxplot(lst[2], labels=labels)
+    ax4.boxplot(lst[3], labels=labels)
+
+    ax1.set_title(titles[0])
+    ax2.set_title(titles[1])
+    ax3.set_title(titles[2])
+    ax4.set_title(titles[3])
+
+
+    # plt.show()
+
+    plt.tight_layout(pad=1.0)
+
+    fig_path = os.getcwd()+'/solution/'+filename.title()+'_Metric.png'
+    plt.savefig(fig_path, dpi=600)
+    #

@@ -42,14 +42,14 @@ class MulticastRoutingProblem(object):
                 self.links.append(link)
                 self.num_link += 1
 
-                self.graph.add_edge(link.src, link.dst, phr=10.0, delay=link.delay,
+                self.graph.add_edge(link.src, link.dst, phr=100000.0, delay=link.delay,
                                 loss=link.loss, bandwidth=link.bandwidth)
                 
-        # logger.info("Topo %s initialized successfully!", filename)
-        # logger.info("Number of switches is %s , Number of links is %s .",
-        #             str(self.num_switch), str(self.num_link))
-        # logger.info("Source node is %s , Destinations are %s",
-        #             str(self.src), str(self.dst))
+        logger.info("Topo %s initialized successfully!", filename)
+        logger.info("Number of switches is %s , Number of links is %s .",
+                    str(self.num_switch), str(self.num_link))
+        logger.info("Source node is %s , Destinations are %s",
+                    str(self.src), str(self.dst))
 
         
 class Node(object):

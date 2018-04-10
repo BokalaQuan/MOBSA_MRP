@@ -44,7 +44,7 @@ class IndividualParticle(IndividualMRP):
             
             self.chromosome[i] = 0 if random.random() > func_trans_S1(vel_) else 1
         
-        pm = 1 - gen / MAX_NUMBER_FUNCTION_EVAL
+        pm = gen / MAX_NUMBER_FUNCTION_EVAL
         if random.random() < pm:
             self.mutation()
         
@@ -70,7 +70,9 @@ class MultiObjectiveParticleSwarmOptimization(MOEA):
     def __init__(self, problem):
         super(MultiObjectiveParticleSwarmOptimization, self).__init__(problem)
         self.problem = problem
-        self.grid = AdaptiveGrid(int(EXTERNAL_ARCHIVE_SIZE/2))
+        # self.grid = AdaptiveGrid(int(EXTERNAL_ARCHIVE_SIZE/5))
+
+        self.external_archive = []
         
     def name(self):
         return 'MOPSO'
@@ -80,8 +82,22 @@ class MultiObjectiveParticleSwarmOptimization(MOEA):
             ind = IndividualParticle()
             ind.init_ind(self.problem)
             self.current_population.append(ind)
+            self.update_archive(ind)
+            # self.grid.update_grid(ind)
 
-            self.grid.update_grid(ind)
+
+    def update_archive(self, ind):
+        if len(self.external_archive) == 0:
+            self.external_archive.append(ind)
+        else:
+            flag = 0
+            for sol in self.external_archive[:]:
+                if ind <= sol:
+                    self.external_archive.remove(sol)
+                elif ind >=sol or ind == sol:
+                    flag += 1
+            if flag == 0:
+                self.external_archive.append(ind)
 
     def run(self):
         self.initialize_population()
@@ -90,10 +106,13 @@ class MultiObjectiveParticleSwarmOptimization(MOEA):
         while gen < MAX_NUMBER_FUNCTION_EVAL:
             # print "Gen >>> ", gen
             for ind in self.current_population:
-                ind.update_gbest(self.grid.get_solution())
+                # ind.update_gbest(self.grid.get_solution())
+                ind.update_gbest(self.external_archive[random.randint(0, len(self.external_archive))])
                 ind.update_particle(0.4, gen)
                 ind.update_pbest()
-                self.grid.update_grid(ind)
+                self.update_archive(ind)
+                # self.grid.update_grid(ind)
             gen += 1
 
-        return self.grid.get_solutions()
+        # return self.grid.get_solutions()
+        return self.external_archive

@@ -1,6 +1,6 @@
 [
     {
-        "attribute": "destination", 
+        "attribute": "custom", 
         "dpid": 0, 
         "name": "s001"
     }, 
@@ -50,7 +50,7 @@
         "name": "s010"
     }, 
     {
-        "attribute": "destination", 
+        "attribute": "custom", 
         "dpid": 10, 
         "name": "s011"
     }, 
@@ -70,7 +70,7 @@
         "name": "s014"
     }, 
     {
-        "attribute": "custom", 
+        "attribute": "destination", 
         "dpid": 14, 
         "name": "s015"
     }, 
@@ -95,7 +95,7 @@
         "name": "s019"
     }, 
     {
-        "attribute": "custom", 
+        "attribute": "destination", 
         "dpid": 19, 
         "name": "s020"
     }, 
@@ -125,7 +125,7 @@
         "name": "s025"
     }, 
     {
-        "attribute": "destination", 
+        "attribute": "custom", 
         "dpid": 25, 
         "name": "s026"
     }, 
@@ -150,12 +150,12 @@
         "name": "s030"
     }, 
     {
-        "attribute": "destination", 
+        "attribute": "custom", 
         "dpid": 30, 
         "name": "s031"
     }, 
     {
-        "attribute": "custom", 
+        "attribute": "destination", 
         "dpid": 31, 
         "name": "s032"
     }, 
@@ -180,7 +180,7 @@
         "name": "s036"
     }, 
     {
-        "attribute": "custom", 
+        "attribute": "destination", 
         "dpid": 36, 
         "name": "s037"
     }, 
@@ -200,7 +200,7 @@
         "name": "s040"
     }, 
     {
-        "attribute": "destination", 
+        "attribute": "custom", 
         "dpid": 40, 
         "name": "s041"
     }, 
@@ -210,7 +210,7 @@
         "name": "s042"
     }, 
     {
-        "attribute": "custom", 
+        "attribute": "source", 
         "dpid": 42, 
         "name": "s043"
     }, 
@@ -245,7 +245,7 @@
         "name": "s049"
     }, 
     {
-        "attribute": "custom", 
+        "attribute": "destination", 
         "dpid": 49, 
         "name": "s050"
     }, 
@@ -295,7 +295,7 @@
         "name": "s059"
     }, 
     {
-        "attribute": "destination", 
+        "attribute": "custom", 
         "dpid": 59, 
         "name": "s060"
     }, 
@@ -320,7 +320,7 @@
         "name": "s064"
     }, 
     {
-        "attribute": "source", 
+        "attribute": "destination", 
         "dpid": 64, 
         "name": "s065"
     }, 
@@ -335,12 +335,12 @@
         "name": "s067"
     }, 
     {
-        "attribute": "custom", 
+        "attribute": "destination", 
         "dpid": 67, 
         "name": "s068"
     }, 
     {
-        "attribute": "destination", 
+        "attribute": "custom", 
         "dpid": 68, 
         "name": "s069"
     }, 
@@ -355,7 +355,7 @@
         "name": "s071"
     }, 
     {
-        "attribute": "destination", 
+        "attribute": "custom", 
         "dpid": 71, 
         "name": "s072"
     }, 
@@ -365,7 +365,7 @@
         "name": "s073"
     }, 
     {
-        "attribute": "destination", 
+        "attribute": "custom", 
         "dpid": 73, 
         "name": "s074"
     }, 
@@ -390,7 +390,7 @@
         "name": "s078"
     }, 
     {
-        "attribute": "custom", 
+        "attribute": "destination", 
         "dpid": 78, 
         "name": "s079"
     }, 
@@ -400,7 +400,7 @@
         "name": "s080"
     }, 
     {
-        "attribute": "destination", 
+        "attribute": "custom", 
         "dpid": 80, 
         "name": "s081"
     }, 
@@ -415,7 +415,7 @@
         "name": "s083"
     }, 
     {
-        "attribute": "destination", 
+        "attribute": "custom", 
         "dpid": 83, 
         "name": "s084"
     }, 
@@ -430,7 +430,7 @@
         "name": "s086"
     }, 
     {
-        "attribute": "custom", 
+        "attribute": "destination", 
         "dpid": 86, 
         "name": "s087"
     }, 
@@ -455,7 +455,7 @@
         "name": "s091"
     }, 
     {
-        "attribute": "custom", 
+        "attribute": "destination", 
         "dpid": 91, 
         "name": "s092"
     }, 
@@ -480,7 +480,7 @@
         "name": "s096"
     }, 
     {
-        "attribute": "destination", 
+        "attribute": "custom", 
         "dpid": 96, 
         "name": "s097"
     }, 
