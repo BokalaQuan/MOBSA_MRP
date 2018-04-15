@@ -204,11 +204,11 @@ def cal_metric(topo=None, runtime=None, algorithm=None):
     Epsilon = np.array(Epsilon)
     Spread = np.array(Spread)
 
-    mean_GD = '%.2f' % GD.mean()
-    mean_IGD = '%.2f' % IGD.mean()
-    mean_HV = '%.2f' % HV.mean()
-    mean_E = '%.2f' % Epsilon.mean()
-    mean_S = '%.2f' % Spread.mean()
+    mean_GD = '%.4f' % GD.mean()
+    mean_IGD = '%.4f' % IGD.mean()
+    mean_HV = '%.4f' % HV.mean()
+    mean_E = '%.4f' % Epsilon.mean()
+    mean_S = '%.4f' % Spread.mean()
 
     std_GD = '%.2f' % GD.std()
     std_IGD = '%.2f' % IGD.std()

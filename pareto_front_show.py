@@ -1,21 +1,36 @@
 from algorithm.util import *
 
 """
-Rand_Topo = ['Rand1', 'Rand2', 'Rand3', 'Rand4', 'Rand5', 'Rand6', 'Rand7', 'Rand8']
-SNDlib_Topo = ['cost266', 'france', 'geant', 'germany50', 'india35', 'newyork', 
-               'pioro40', 'ta1', 'ta2', 'zib54']
-Zoo_Topo = ['AttMpls', 'Bellcanada', 'Bellsouth', 'BtNorthAmerica', 'Chinanet', 
-            'Dfn', 'Geant2012', 'HiberniaGlobal', 'Highwinds', 'HurricaneElectric', 
-            'Internetmci', 'Rediris', 'Tinet', 'Uninett2011', 'Uunet']
-"""
+Topology list:
 
+--------------------------------------------
+| Rand_Topo | SNDlib_Topo | Zoo_Topo       |
+--------------------------------------------
+| Rand1     | germany50   | AttpMpls       |
+| Rand2     | india35     | BtNorthAmerica |
+| Rand3     | ta1         | Chinanet |
+| Rand4     | ta2         | Tinet          |
+| Rand5     |-------------------------------
+| Rand6     |
+| Rand7     |
+| Rand8     |
+-------------
+
+Algorithms list:
+
+----------------------------------------------------
+| NSGA-II | MOEA/D | SPEA2 | MOPSO | PBIL1 | PBIL2 |
+|NSABC | EAG-MOEAD | NSACO | Jaya |
+----------------------------------------------------
+
+"""
 # topo = 'Rand4'
 
 
 if __name__ == '__main__':
     # topo_lst = ['Rand1', 'Rand2', 'Rand3', 'Rand4', 'Rand5', 'Rand6', 'Rand7', 'Rand8']
     # topo_lst = ['germany50', 'india35', 'ta1', 'ta2']
-    topo_lst = ['AttMpls', 'BtNorthAmerica', 'HiberniaGlobal', 'Tinet']
+    topo_lst = ['AttMpls', 'BtNorthAmerica', 'Chinanet', 'Tinet']
 
     alst = ['NSABC', 'MOEA-PCGG', 'SPEA2', 'MOEAD', 'EAG-MOEAD', 'MOSFLA']
 

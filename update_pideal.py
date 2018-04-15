@@ -10,7 +10,7 @@ Topology list:
 --------------------------------------------
 | Rand1     | germany50   | AttpMpls       |
 | Rand2     | india35     | BtNorthAmerica |
-| Rand3     | ta1         | HiberniaGlobal |
+| Rand3     | ta1         | Chinanet |
 | Rand4     | ta2         | Tinet          |
 | Rand5     |-------------------------------
 | Rand6     |
@@ -35,15 +35,14 @@ if __name__ == '__main__':
 
     # topo_lst = ['Rand1', 'Rand2', 'Rand3', 'Rand4', 'Rand5', 'Rand6', 'Rand7', 'Rand8']
     # topo_lst = ['germany50', 'india35', 'ta1', 'ta2']
-    topo_lst = ['AttMpls', 'BtNorthAmerica', 'HiberniaGlobal', 'Tinet']
+    topo_lst = ['AttMpls', 'BtNorthAmerica', 'Chinanet', 'Tinet']
 
-    alst = ['NSABC', 'MOEA-PCGG', 'SPEA2', 'MOEAD',
-            'EAG-MOEAD', 'MOPSO', 'MOSFLA', 'PBIL']
+    alst = ['NSABC', 'MOEA-PCGG', 'SPEA2', 'MOEAD', 'EAG-MOEAD', 'MOSFLA']
 
     runtime = 20
     # runtime = 10
 
-    for topo in topo_lst[:]:
+    for topo in topo_lst[2:3]:
         for al in alst[:]:
             lst = []
             for i in range(runtime):

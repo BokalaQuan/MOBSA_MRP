@@ -3,18 +3,34 @@ from algorithm.util import *
 from scipy.stats.stats import ttest_ind
 
 """
-Rand_Topo = ['Rand1', 'Rand2', 'Rand3', 'Rand4', 'Rand5', 'Rand6', 'Rand7', 'Rand8']
-SNDlib_Topo = ['cost266', 'france', 'geant', 'germany50', 'india35', 'newyork', 
-               'pioro40', 'ta1', 'ta2']
-Zoo_Topo = ['AttMpls', 'Bellcanada', 'Bellsouth', 'BtNorthAmerica', 'Chinanet', 
-            'Dfn', 'Geant2012', 'HiberniaGlobal', 'Highwinds', 'HurricaneElectric', 
-            'Internetmci', 'Rediris', 'Tinet', 'Uninett2011', 'Uunet']
+Topology list:
+
+--------------------------------------------
+| Rand_Topo | SNDlib_Topo | Zoo_Topo       |
+--------------------------------------------
+| Rand1     | germany50   | AttpMpls       |
+| Rand2     | india35     | BtNorthAmerica |
+| Rand3     | ta1         | Chinanet |
+| Rand4     | ta2         | Tinet          |
+| Rand5     |-------------------------------
+| Rand6     |
+| Rand7     |
+| Rand8     |
+-------------
+
+Algorithms list:
+
+----------------------------------------------------
+| NSGA-II | MOEA/D | SPEA2 | MOPSO | PBIL1 | PBIL2 |
+|NSABC | EAG-MOEAD | NSACO | Jaya |
+----------------------------------------------------
+
 """
 
 if __name__ == '__main__':
     # topo_lst = ['Rand1', 'Rand2', 'Rand3', 'Rand4', 'Rand5', 'Rand6', 'Rand7', 'Rand8']
     # topo_lst = ['germany50', 'india35', 'ta1', 'ta2']
-    topo_lst = ['AttMpls', 'BtNorthAmerica', 'HiberniaGlobal', 'Tinet']
+    topo_lst = ['AttMpls', 'BtNorthAmerica', 'Chinanet', 'Tinet']
 
     alst = ['NSABC', 'MOEA-PCGG', 'SPEA2', 'MOEAD', 'EAG-MOEAD', 'MOSFLA']
     # alst = ['MOEA-PCGG', 'NSGA-II', 'ENS-NDT']
@@ -34,7 +50,7 @@ if __name__ == '__main__':
     Spread_lst = []
 
 
-    for topo in topo_lst[:]:
+    for topo in topo_lst[2:3]:
         GD_ = []
         IGD_ = []
         HV_ = []
@@ -42,6 +58,7 @@ if __name__ == '__main__':
         Spread_ = []
 
         for al in alst[:]:
+            print(topo, ' >>> ', al)
             GD, IGD, HV, Epsilon, Spread = read_metric(topo=topo, algorithm=al)
             GD_.append(GD)
             IGD_.append(IGD)
@@ -58,38 +75,56 @@ if __name__ == '__main__':
 
 
 
-        # print(topo)
-        # print('IGD')
-        # print(ttest_ind(IGD_[0], IGD_[1]))
-        # print(ttest_ind(IGD_[0], IGD_[2]))
-        # print(ttest_ind(IGD_[0], IGD_[3]))
-        # print(ttest_ind(IGD_[0], IGD_[4]))
-        # print(ttest_ind(IGD_[0], IGD_[5]))
-        #
-        # print(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>")
-        #
-        # print(ttest_ind(IGD_[1], IGD_[2]))
-        # print(ttest_ind(IGD_[1], IGD_[3]))
-        # print(ttest_ind(IGD_[1], IGD_[4]))
-        # print(ttest_ind(IGD_[1], IGD_[5]))
-        # print(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>")
-        # print(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>")
-        # print(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>")
-        #
-        # print("HV")
-        # print(ttest_ind(HV_[0], HV_[1]))
-        # print(ttest_ind(HV_[0], HV_[2]))
-        # print(ttest_ind(HV_[0], HV_[3]))
-        # print(ttest_ind(HV_[0], HV_[4]))
-        # print(ttest_ind(HV_[0], HV_[5]))
-        #
-        # print(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>")
-        #
-        #
-        # print(ttest_ind(HV_[1], HV_[2]))
-        # print(ttest_ind(HV_[1], HV_[3]))
-        # print(ttest_ind(HV_[1], HV_[4]))
-        # print(ttest_ind(HV_[1], HV_[5]))
+        print(topo)
+        print('IGD')
+        print(ttest_ind(IGD_[0], IGD_[1]))
+        print(np.mean(IGD_[0]), '          ', np.mean(IGD_[1]))
+        print(ttest_ind(IGD_[0], IGD_[2]))
+        print(np.mean(IGD_[0]), '          ', np.mean(IGD_[2]))
+        print(ttest_ind(IGD_[0], IGD_[3]))
+        print(np.mean(IGD_[0]), '          ', np.mean(IGD_[3]))
+        print(ttest_ind(IGD_[0], IGD_[4]))
+        print(np.mean(IGD_[0]), '          ', np.mean(IGD_[4]))
+        print(ttest_ind(IGD_[0], IGD_[5]))
+        print(np.mean(IGD_[0]), '          ', np.mean(IGD_[5]))
+
+        print(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>")
+
+        print(ttest_ind(IGD_[1], IGD_[2]))
+        print(np.mean(IGD_[1]), '          ', np.mean(IGD_[2]))
+        print(ttest_ind(IGD_[1], IGD_[3]))
+        print(np.mean(IGD_[1]), '          ', np.mean(IGD_[3]))
+        print(ttest_ind(IGD_[1], IGD_[4]))
+        print(np.mean(IGD_[1]), '          ', np.mean(IGD_[4]))
+        print(ttest_ind(IGD_[1], IGD_[5]))
+        print(np.mean(IGD_[1]), '          ', np.mean(IGD_[5]))
+        print(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>")
+        print(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>")
+        print(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>")
+
+        print("HV")
+        print(ttest_ind(HV_[0], HV_[1]))
+        print(np.mean(HV_[0]), '          ', np.mean(HV_[1]))
+        print(ttest_ind(HV_[0], HV_[2]))
+        print(np.mean(HV_[0]), '          ', np.mean(HV_[2]))
+        print(ttest_ind(HV_[0], HV_[3]))
+        print(np.mean(HV_[0]), '          ', np.mean(HV_[3]))
+        print(ttest_ind(HV_[0], HV_[4]))
+        print(np.mean(HV_[0]), '          ', np.mean(HV_[4]))
+        print(ttest_ind(HV_[0], HV_[5]))
+        print(np.mean(HV_[0]), '          ', np.mean(HV_[5]))
+
+        print(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>")
+
+
+        print(ttest_ind(HV_[1], HV_[2]))
+        print(np.mean(HV_[1]), '          ', np.mean(HV_[2]))
+        print(ttest_ind(HV_[1], HV_[3]))
+        print(np.mean(HV_[1]), '          ', np.mean(HV_[3]))
+        print(ttest_ind(HV_[1], HV_[4]))
+        print(np.mean(HV_[1]), '          ', np.mean(HV_[4]))
+        print(ttest_ind(HV_[1], HV_[5]))
+        print(np.mean(HV_[1]), '          ', np.mean(HV_[5]))
 
 
 
@@ -128,11 +163,11 @@ if __name__ == '__main__':
     # boxplot(filename='S-Epsilon', lst=Epsilon_lst, titles=titles, labels=labels)
     # boxplot(filename='S-Spread', lst=Spread_lst, titles=titles, labels=labels)
 
-    boxplot(filename='Z-Epsilon', lst=Epsilon_lst, titles=titles, labels=labels)
-    boxplot(filename='Z-Spread', lst=Spread_lst, titles=titles, labels=labels)
+    # boxplot(filename='Z-Epsilon', lst=Epsilon_lst, titles=titles, labels=labels)
+    # boxplot(filename='Z-Spread', lst=Spread_lst, titles=titles, labels=labels)
 
-
-    # for topo in topo_lst[:]:
+    #
+    # for topo in topo_lst[2:3]:
     #
     #     for al in alst[:]:
     #         print(topo, al)
